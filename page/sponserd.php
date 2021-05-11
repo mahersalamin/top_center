@@ -9,14 +9,20 @@
 
 
 <?php 
+$i = 0 ; 
 
 
 $spom = $db->getSponserdJobs();
 
 
 foreach($spom as $row){
-    ?>
+ 
+  if ($i == 6){
+    break ;
 
+  }
+  else{
+    ?>
 
 
   <div class="card m-3 shadow   bg-body rounded">
@@ -44,7 +50,7 @@ foreach($spom as $row){
 
 
           
-    <?php } ?>
+    <?php  $i++; }} ?>
  
 
     </div>

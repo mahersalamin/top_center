@@ -3,18 +3,32 @@
 <?php require 'header.php'; ?>
 
 
+
+
+
+<?php 
+$rr = $_COOKIE['role'] ; 
+
+
+if ($rr == 1){}
+else
+{
+  header("location:singin.php");  
+}
+
+?>
+
+
 <div class="b-example-divider">
    
-
-<br>
-<br>
-<br>
-
-
 
 <! --------------------------->
 <! List all not Approve jobs>
 <! --------------------------->
+
+<br>
+<br>
+<br>
 
 <h4 class=" text-info  text-center  "> List all not Approve jobs</h4>
 <br>
@@ -32,6 +46,7 @@
       <th scope="col">Company name</th>
       <th scope="col">Post date</th>
       <th scope="col">category</th>
+      <th scope="col">posted by</th>
       <th scope="col">Aprove</th>
       <th scope="col">Delete</th>
 
@@ -44,7 +59,8 @@
   $ApproveJ = $db->getaNotApproveJobs();
 foreach($ApproveJ as $row){
 
-    ?>
+  ?>
+
 
 
     <tr>
@@ -53,6 +69,8 @@ foreach($ApproveJ as $row){
       <td> <?php echo $row['company_name']; ?></td>
       <td> <?php echo $row['post_date']; ?></td>
       <td> <?php echo $row['cname']; ?></td>
+      <td> <?php echo $row['Puser']; ?></td>
+
       <td>
       <form  method = "POST" action="../AproveJob.php">
                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
@@ -62,6 +80,8 @@ foreach($ApproveJ as $row){
 
 
           <td>
+
+          
           <form  method = "POST" action="../DeleteJob.php">
                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
@@ -117,9 +137,9 @@ foreach($ApproveJ as $row){
 
         <div class="col">
             <div class="card h-100">
-                <a href="details/b1.html">
+               
                     <img src="<?php echo $row['image']; ?>" class="card-img-top " style=" width: 100%; height: 16vw;object-fit: cover;" alt="...">
-                </a>
+                
                 <div class="card-body">
                     <h5 class="card-title"> <?php echo $row['title']; ?></h5>
                     <p class="card-text"><?php echo $row['description']; ?></p>
@@ -238,13 +258,18 @@ foreach($ApproveJ as $row){
 <br>
 
 
+
 <div class="container  shadow p-3  bg-body rounded">
 
 
+<input type="text" name="search" class="form-control shadow" id="search_text"  placeholder="search for user">
 
-<table class="table table-hover  table-dark ">
+<br>
+
+
+<table class="table table-hover  table-dark " id="table_data">
   <thead>
-    <tr>
+    <tr > 
       <th scope="col">#</th>
       <th scope="col">User name</th>
       <th scope="col">Email</th>
@@ -252,22 +277,23 @@ foreach($ApproveJ as $row){
       <th scope="col">Telephone</th>
       <th scope="col">Role</th>
       <th scope="col">Delete</th>
+      <th scope="col">Change Role </th>
       
 
     </tr>
   </thead>
-  <tbody>
+  <tbody >
 
 
 <?php 
 $ApproveJ = $db->getAllUsers();
 foreach($ApproveJ as $row){
 
-    ?>
+    ?> 
 
 
-    <tr>
-      <th scope="row"><?php echo $row['id']; ?></th>
+    <tr >
+      <th  scope="row"><?php echo $row['id']; ?></th>
       <td> <?php echo $row['user_name']; ?></td>
       <td> <?php echo $row['email']; ?></td>
       <td> <?php echo $row['address']; ?></td>
@@ -293,6 +319,7 @@ foreach($ApproveJ as $row){
       ?></td>
 
 
+
       <td>
       
       <form  method = "POST" action="../DeleteUser.php">
@@ -300,14 +327,31 @@ foreach($ApproveJ as $row){
                 <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
           </form>
       </td>
+      <td>
       
-        
+
+<?php   if ($row['role'] == 0 || $row['role'] == 2 ){ ?>
+
+      <form  method = "POST" action="../MakeAdmin.php">
+                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <input type="hidden" name="role" value="<?php echo $row['role']; ?>">
+                <button type="submit" class="btn btn-info"><i class="fas fa-user-shield"></i> Admin</button>
+          </form>
+      </td>
+
+<?php }else { ?>
+  <form  method = "POST" action="../MakeAdmin.php">
+                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                <input type="hidden" name="role" value="<?php echo $row['role']; ?>">
+                <button type="submit" class="btn btn-info"><i class="fas fa-user"></i> User</button>
+          </form>
+      </td>
+
+      <?php }?>
+      
 
 
     </tr>
-
-
-
  <?php } ?>
   </tbody>
 </table>
@@ -315,6 +359,29 @@ foreach($ApproveJ as $row){
 <br>
 <br>
 <br>
+
+<script type= "text/javascript">
+
+$(document).ready(function(){
+$("#search_text").keyup(function(){
+var serch = $(this).val();
+$.ajax({
+  url: 'search.php', 
+  method : 'POST', 
+  data  : {query:search}, 
+  success : function (response){
+
+    $("table_data").html(responce);
+  }
+
+
+});
+
+});
+});
+
+</script>
+
 
 
 
@@ -350,6 +417,8 @@ foreach($ApproveJ as $row){
   </div>
 
 
+
+  
 </form>
 
 </div>

@@ -1,22 +1,25 @@
-<?php require '../dbconnection.php'; ?>
 <?php require 'header.php'; ?>
 
 
 <div class="b-example-divider">
+<br>
+<br>
 
 
 <?php 
 
 
 
+if ($myAnno = $db->getUserJob($_COOKIE['id'])){
 
-$myAnno = $db->getUserPostJobs();
-foreach($myAnno as $row){
+  foreach($myAnno as $row){
+}
+
     ?>
 
 
 
-<div class="row m-5 jobs ">
+<div class="row m-5 ">
     <div class="col-md-2 shadow p-3  bg-body rounded">
     <img class="img-fluid " src="<?php echo $row['image']; ?>" alt="">
  
@@ -36,7 +39,11 @@ foreach($myAnno as $row){
 
 
                 <p class="card-text" style="color : green">
-                    <?php if ($row['sponsored'] == 1 ){echo "sponsored"; } else { echo "not sponsored"; } ?> 
+                    <?php
+                     if ($row['sponsored'] == 1 )
+                     {echo "sponsored"; }
+                      else
+                       { echo "not sponsored"; } ?> 
                 </p>
 
 
@@ -45,7 +52,7 @@ foreach($myAnno as $row){
         <h6 style="color : blue"> 
           <i class="fas fa-location"></i>  location : <?php echo $row['location']; ?> 
         | <i class="fas fa-calendar-week"></i>  Post date :  <?php echo $row['post_date']; ?>  
-        | <i class="fas fa-eye"></i> view :  <?php echo $row['visited']; ?></h6>
+        | <i class="fas fa-eye"></i> view cont :  <?php echo $row['visited']; ?></h6>
     </div>
 
 
@@ -62,18 +69,20 @@ foreach($myAnno as $row){
 
   
 </div>
+
 <?php
 }
- 
+else {
 ?>
 
+   <div class="row m-5 justify-content-center">
+     <div class="col-md-10 shadow p-3  bg-dark rounded ">
+         <h1 class="text-center text-white"> you dont have posted jobs ! ,
+          <a href="postJob.php">Post a new Job now  </a>😍 </h1>
+     </div>
+   </div>
 
-
- 
-
-
-
-
+<?php } ?>
 
 
 

@@ -1,20 +1,27 @@
 <?php 
 
-
-require 'dbconnection.php'; 
-
+require "MyDB.php";
 
 $user_name =  $_POST['user_name'] ;
 $email = $_POST['email'] ;
 $password =  $_POST['password'] ;
 $address =  $_POST['address'] ;
 $telephone = $_POST['telephone'] ;
+$photo = $_POST['photo'] ;
+$role = $_POST['role'] ;
 
 
-$query = "INSERT INTO users (user_name,email,password,address,telephone) VALUES ('$user_name','$email','$password','$address','$telephone')";
 
 
-$result =  mysqli_query($conn , $query);
+$db = new MyDB ();
+
+if ($db->CheckExist($email)){
+  header("location:page/singup.php?error=$email");
+}
+else{
+  $result =  $db->AddUser($user_name,$email,$password,$address,$telephone,$role,$photo);
+  
+}
 
 
 if($result){
@@ -23,13 +30,8 @@ if($result){
 
 }
 else {
-
     echo "error" ; 
-    echo mysqli_error ($conn);
 }
-
-
-
 
 
 ?>

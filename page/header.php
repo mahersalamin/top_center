@@ -26,7 +26,8 @@ $db = new MyDB();
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/fontawesome.css" integrity="sha384-eHoocPgXsiuZh+Yy6+7DsKAerLXyJmu2Hadh4QYyt+8v86geixVYwFqUvMU8X90l" crossorigin="anonymous"/>
 
 
-
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 
 <!-- google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -45,20 +46,60 @@ $db = new MyDB();
 
 
 
+<?php 
+if (!isset($_COOKIE['id'])){
+    header("location:singin.php");  
+}
+
+?>
+
+
+
+
+
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand " href="homeAdmin.php"><img style="width: 50px; height: 70p; "
-                    src="https://i.ibb.co/1qNQN1b/xjob.png" alt=""></a>
+            <a class="navbar-brand  " ><img style="width: 5%; "
+                    src="https://i.ibb.co/1qNQN1b/xjob.png" alt="">  <?php  echo "Welcome " . $_COOKIE['name'] ; ?>  </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
+
                     <li class="nav-item"> <a class="nav-link active" aria-current="page" href="bodyHomeUser.php">Home</a></li>
+                   
+                    <?php
+
+                 if ($_COOKIE['role'] == 0 || $_COOKIE['role'] == 1 ){
+                     ?>
+
+                    <li class="nav-item"> <a class="nav-link active" aria-current="page" href="userProfile.php">Profile</a></li>
+
+
+                    <?php
+
+                 }
+                 if ($_COOKIE['role'] == 2 || $_COOKIE['role'] == 1 ){
+                     ?>
+
                     <li class="nav-item"> <a class="nav-link" href="postJob.php"> post a job</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="#">log out</a> </li>
+                    <li class="nav-item"> <a class="nav-link" href="MyAnnouncements.php">My Announce</a></li>
+<?php } ?>
+
+<?php
+
+if ( $_COOKIE['role'] == 1 ){
+    ?>
+
+   <li class="nav-item"> <a class="nav-link" href="homeAdmin.php">Control Panel</a></li>
+<?php } ?>
+
+
+                    
+                    <li class="nav-item"> <a class="nav-link" href="../logout.php">log out</a> </li>
                     
                 </ul>
             </div>
@@ -74,7 +115,7 @@ $db = new MyDB();
 
 <div class="px-4 pt-5 my-5 text-center">
   <img class="d-block mx-auto mb-2 "  src="https://i.ibb.co/XxShZJx/xjob-BLACK.png" alt=""  width="100" height="100">
-  <h1 class="display-5 fw-bold">WELCOM TO XJOBS</h1>
+  <h1 class="display-5 fw-bold"> <?php  echo  $_COOKIE['name'] ; ?> WELCOM TO XJOBS</h1>
   <div class="col-lg-6 mx-auto">
     <p class="lead mb-4" >We help you choose the best suitable job for you in all fields. We are happy and appreciative of your choice of our company XJobs We hope that you will find your dream job opportunity with us.</p>
    

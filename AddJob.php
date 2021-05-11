@@ -1,40 +1,35 @@
 <?php 
 
-
-require 'dbconnection.php'; 
-
+require "MyDB.php";
 
 $user_id =  $_POST['user_id'] ;
 $title = $_POST['title'] ;
 $description =  $_POST['description'] ;
 $salary =  $_POST['salary'] ;
 $location = $_POST['location'] ;
-$contact_tele =  $_POST['contact_tele'] ;
 $categorie_id = $_POST['category'] ;
+$company_name = $_POST['company_name'];
+$contact_tele =  $_POST['contact_tele'] ;
 $type =  $_POST['type'] ;
 $contact_email = $_POST['contact_email'] ;
-$company_name = $_POST['company_name'];
 $image = $_POST['image'] ;
 
 
 
-$query = "INSERT INTO jobs (user_id,title,description,salary,location,categorie_id,company_name,contact_tele,type,contact_email,image) VALUES ($user_id,'$title','$description',$salary,'$location',$categorie_id,'$company_name','$contact_tele',$type,'$contact_email','$image')";
+
+$db = new MyDB ();
 
 
-$result =  mysqli_query($conn , $query);
+$result =  $db->AddJob($user_id,$title,$description,$salary,$location,$categorie_id,$company_name,$contact_tele,$type,$contact_email,$image);
 
 
 if($result){
-
   header('location:page/bodyHomeUser.php');
-
 }
 else {
-
     echo "error" ; 
-    echo mysqli_error ($conn);
-}
 
+}
 
 
 
