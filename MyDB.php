@@ -9,7 +9,7 @@ class MyDB{
 
     public function connect(){
         if (!isset(self::$connection)){
-            self::$connection = new mysqli("localhost" , "root" , "" ,"xjobdata");
+            self::$connection = new mysqli("localhost" , "root" , "" ,"xjobs");
         }
         if (self::$connection == false){
             echo "no connection".self::$connection->connect_error; 
@@ -19,14 +19,19 @@ class MyDB{
 
 
 
-    public function getApproveJobs(){
+    public function getApproveJobs($j){
 
-                  $query = "SELECT jobs.* , categories.name AS cname 
-                  FROM jobs
-                  INNER JOIN categories 
-                  ON jobs.categorie_id = categories.id
-                  WHERE jobs.approve = 1 
-                 ORDER BY post_date DESC";
+      if ($j==0){
+         $query = "SELECT *  FROM jobs WHERE jobs.approve = 1 ORDER BY post_date DESC"; 
+      }
+
+      $jobs = self::getAllCatrgories();
+      foreach($jobs as $row){
+      if($j == $row['id']){
+         $query = "SELECT *  FROM jobs WHERE jobs.approve = 1 AND categorie_id = $j  ORDER BY post_date DESC"; 
+      }
+   }
+
 
                  $conn = $this->connect();
                  $result = $conn->query($query);
@@ -166,6 +171,61 @@ class MyDB{
            return $rows;  
            }
     
+
+           
+
+       public function getAllcounties(){
+         $query = "SELECT location FROM jobs";
+       
+            $conn = $this->connect();
+            $result = $conn->query($query); 
+            $rows = array();
+         
+            while($row = $result-> fetch_assoc()){
+               $rows[]=$row;   
+            }
+            
+            return $rows;  
+            }
+
+            
+       public function SearchJob($search){
+         $query = "SELECT * FROM jobs
+          WHERE title LIKE '%$search%'";
+       
+            $conn = $this->connect();
+            $result = $conn->query($query); 
+            $rows = array();
+         
+            while($row = $result-> fetch_assoc()){
+               $rows[]=$row;   
+            }
+            
+            return $rows;  
+            }
+
+
+            public function SearchUser($search){
+               $query = "SELECT * FROM users
+                WHERE user_name LIKE '%$search%' OR email LIKE '%$search%' ";
+             
+                  $conn = $this->connect();
+                  $result = $conn->query($query); 
+                  $rows = array();
+               
+                  while($row = $result-> fetch_assoc()){
+                     $rows[]=$row;   
+                  }
+                  
+                  return $rows;  
+                  }
+
+
+
+     
+ 
+
+
 
 
 

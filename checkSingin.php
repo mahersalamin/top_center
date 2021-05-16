@@ -12,8 +12,12 @@ if (isset($_POST['email']) && isset($_POST['password']) ){
 $email = $_POST['email'] ;
 $password =  $_POST['password'] ;
 
+
+$Semail= mysqli_real_escape_string($conn, $email);
+$Spassword = mysqli_real_escape_string($conn, $password);
+
   
-$query = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+$query = "SELECT * FROM users WHERE email='$Semail' AND password='$Spassword'";
 
   $result = mysqli_query($conn, $query);
   

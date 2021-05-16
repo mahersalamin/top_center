@@ -1,5 +1,5 @@
 
-<?php require '../dbconnection.php'; ?>
+
 <?php require 'header.php'; ?>
 
 <div class="b-example-divider"></div>

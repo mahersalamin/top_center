@@ -2,7 +2,20 @@
 
 <?php 
 
-$jj = $db->getApproveJobs();
+ require 'bodyHomeUser.php'; 
+
+
+
+$j = 0 ; 
+
+if (isset($_POST['category'])){
+
+    $j=$_POST['category'] ; 
+
+
+}
+
+$jj = $db->getApproveJobs($j);
 
 foreach($jj as $row){
 ?>
@@ -36,3 +49,9 @@ foreach($jj as $row){
 }
  
 ?>
+
+
+
+
+
+<?php require 'footer.php'; ?>

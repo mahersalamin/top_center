@@ -115,7 +115,7 @@ if ( $_COOKIE['role'] == 1 ){
 
 <div class="px-4 pt-5 my-5 text-center">
   <img class="d-block mx-auto mb-2 "  src="https://i.ibb.co/XxShZJx/xjob-BLACK.png" alt=""  width="100" height="100">
-  <h1 class="display-5 fw-bold"> <?php  echo  $_COOKIE['name'] ; ?> WELCOM TO XJOBS</h1>
+  <h1 class="display-5 fw-bold text-info"> <?php  echo  $_COOKIE['name'] ; ?> Welcom to XJOBS</h1>
   <div class="col-lg-6 mx-auto">
     <p class="lead mb-4" >We help you choose the best suitable job for you in all fields. We are happy and appreciative of your choice of our company XJobs We hope that you will find your dream job opportunity with us.</p>
    

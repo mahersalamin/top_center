@@ -3,7 +3,7 @@
 $servername = "localhost"; 
 $username = "root";
 $password = "";
-$database = "xjobdata";
+$database = "xjobs";
 
 
 
