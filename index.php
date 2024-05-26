@@ -4,7 +4,7 @@ require 'dbconnection.php';
 
 
 
-$query = "select * from jobs"; 
+$query = "select * from teacher"; 
 $result = mysqli_query($conn , $query); 
 
 if (mysqli_error($conn)){
@@ -15,7 +15,7 @@ if (mysqli_error($conn)){
 
 else {
 
-    header('page/bodyHome.php');
+    header('location:page/signin.php');
 }
 
 

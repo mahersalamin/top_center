@@ -1,430 +1,306 @@
+<?php
 
-<?php require '../dbconnection.php'; ?>
-<?php require 'header.php'; ?>
+require 'header.php';
+$db = new MyDB();
 
+if (!isset($_COOKIE['id'])) {
 
-
-
-
-<?php 
-$rr = $_COOKIE['role'] ; 
-
-
-if ($rr == 1){}
-else
-{
-  header("location:singin.php");  
+    header("location:signin.php");
 }
-
 ?>
 
-
-<div class="b-example-divider">
-   
-
-<! --------------------------->
-<! List all not Approve jobs>
-<! --------------------------->
-
-<br>
-<br>
-<br>
-
-<h4 class=" text-info  text-center  "> List all not Approve jobs</h4>
-<br>
+<div class=" text-right">
 
 
-<div class="container  shadow p-3  bg-body rounded">
+    <?php
+    if (isset($_GET['message']) && isset($_GET['status'])) {
+        // Get the message and status from the query parameters
+        $message = $_GET['message'];
+        $status = $_GET['status'];
 
+        // Display the message based on the status
+        if ($status === "success") {
+            echo '<div class="alert alert-success alert-dismissible" role="alert">' . $message . '<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>' . '</div>';
+        } elseif ($status === "error") {
+            echo '<div class="alert alert-danger alert-dismissible" role="alert">' . $message . '<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>' . '</div>';
+        }
+    }
+    ?>
+    <div class="container text-center mt-5 color-white">
+        <h1>الحصص الجارية</h1>
+    </div>
 
+    <?php
+    $opensec = $db->getAllOpenSessions($_COOKIE['id']);
 
-<table class="table table-hover  ">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Title</th>
-      <th scope="col">Company name</th>
-      <th scope="col">Post date</th>
-      <th scope="col">category</th>
-      <th scope="col">posted by</th>
-      <th scope="col">Aprove</th>
-      <th scope="col">Delete</th>
+    if (!count($opensec)) {
+        ?>
+        <div class="container text-center">
+            <div class="alert alert-info ">
+                <h5>لا توجد حصص جارية</h5>
+            </div>
+        </div>
+        <?php
 
-    </tr>
-  </thead>
-  <tbody>
+    } else {
 
+        foreach ($opensec as $row) {
+            ?>
+            <div class="row m-5 ">
+                <div class="col-md-2 shadow p-3  bg-body rounded">
+                    <img class="img-fluid" src="../upload/<?php echo $row['img']; ?> " alt="">
+                </div>
+                <div class="col-md-10 shadow p-3  bg-body rounded  panel panel-default ">
+                    <div class="row m-5">
+                        <div class="col-md-5">
+                            <h3>أسماء الطلبة:  </h3>
+                            <ul>
+                            <?php
+                            $studentsNames = explode(',',$row['student_names']);
+                            foreach ($studentsNames as $stName){
+                                echo '<li>'.$stName.'</li>';
+                            }
+                            ?>
+                            </ul>
+                            <p style="color:gray">اسم المعلم: <?php echo $row['teacher_name']; ?> </p>
+                        </div>
+                        <div class="col-md-5">
 
-<?php 
-  $ApproveJ = $db->getaNotApproveJobs();
-foreach($ApproveJ as $row){
+                            <h5 style="color : green"> وقت بدء الحصة: <?php echo $row['enter']; ?> </h5>
+                            <br>
+                            <h5 style="color : green"> الحصة: <?php echo $row['session_name']; ?> </h5>
 
-  ?>
+                            <form action="singleRequest.php" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="<?php echo $row['tec_id']; ?>">
+                                <button type="submit" value="3" name="status"
+                                        class="btn btn-outline-info text-center">
+                                    تفاصيل→
+                                </button>
+                            </form>
 
-
-
-    <tr>
-      <th scope="row"><?php echo $row['id']; ?></th>
-      <td> <?php echo $row['title']; ?></td>
-      <td> <?php echo $row['company_name']; ?></td>
-      <td> <?php echo $row['post_date']; ?></td>
-      <td> <?php echo $row['cname']; ?></td>
-      <td> <?php echo $row['Puser']; ?></td>
-
-      <td>
-      <form  method = "POST" action="../AproveJob.php">
-               <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-              <button type="submit" class="btn btn-success"> <i class="fas fa-globe-europe"></i> Approve</button>
-          </form>
-          </td>
-
-
-          <td>
-
-          
-          <form  method = "POST" action="../DeleteJob.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
-          </form>
-          </td>
-
-
-    </tr>
-
-
-
- <?php } ?>
-  </tbody>
-</table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<! --------------------------->
-<! All Jobs>
-<! --------------------------->
-
-
-
-<div class="contanier text-center mt-5">
-    <h1> All Jobs </h1>
-</div>
-
-
-
-
-<div class="container  shadow p-3  bg-body rounded my-5" >
-<div class="row row-cols-1 row-cols-md-3 g-4 ">
-
-
-
-<?php 
-$ApproveJ = $db->getAllJobs();
-foreach($ApproveJ as $row){
-
-
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+    }
     ?>
 
-        <div class="col">
-            <div class="card h-100">
-               
-                    <img src="<?php echo $row['image']; ?>" class="card-img-top " style=" width: 100%; height: 16vw;object-fit: cover;" alt="...">
-                
-                <div class="card-body">
-                    <h5 class="card-title"> <?php echo $row['title']; ?></h5>
-                    <p class="card-text"><?php echo $row['description']; ?></p>
+    <?php
+    $tec_id = $_COOKIE['id'];
+    $rr = $_COOKIE['role'];
+    if ($rr == 1) {
+    } else {
+        header("location:signin.php");
+    }
+    ?>
+
+    <div class=" text-right" dir="rtl">
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <h1 class="text-center" style="font-family: Cairo">الطلاب والمعلمين</h1>
+        <br>
+        <br>
+
+        <ul class="nav nav-tabs justify-content-center mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" id="students-tab" data-toggle="tab" href="#students" role="tab"
+                   aria-controls="students" aria-selected="true">قائمة الطلاب</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="teachers-tab" data-toggle="tab" href="#teachers" role="tab"
+                   aria-controls="teachers" aria-selected="false">قائمة المعلمين</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
+                <div class="row justify-content-center">
+                    <div class="ml-3 col-md-auto mb-3  ">
+                        <div class="card" style="width:15rem;">
+                            <div class="card-header">
+                                <img style="height: 220px; object-fit: cover; border-radius: 2%;" class="card-img-top"
+                                     src="../upload/student.jpg" alt="Card image cap">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-family: 'Cairo'">
+                                    <a style="
+                                        overflow: hidden;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 1; /* number of lines to show */
+                                        line-clamp: 1;
+                                        -webkit-box-orient: vertical;
+                                        font-family: 'Cairo';
+                                        color : blue
+                                        "> إضافة طالب جديد</a>
+                                </h5>
+                                <a href="newMission.php" class="btn btn-success">إضافة</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php
+                    $students = $db->getAllStudents($tec_id);
+                    foreach ($students as $student) {
+                        $teacher_names = explode(',', $student['teacher_names']); // Split teacher names by comma
+                        $BOD = $student['class']; // Assuming BOD is the column name for the Date of Birth
+                        $InSess = $student['InSess']; // Assuming InSess is the column name for the In Session status
+                        ?>
+                        <div class="ml-3 col-md-auto mb-3  ">
+                            <div class="card" style="width:15rem;">
+                                <div class="card-header">
+                                    <img style="height: 220px; object-fit: cover; border-radius: 2%;"
+                                         class="card-img-top"
+                                         src="../upload/<?php echo $student['img']; ?>  " alt="Card image cap">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title" style="font-family: 'Cairo'">
+                                        <a style="
+                                            overflow: hidden;
+                                            display: -webkit-box;
+                                            -webkit-line-clamp: 1; /* number of lines to show */
+                                            line-clamp: 1;
+                                            -webkit-box-orient: vertical;
+                                            font-family: 'Cairo';
+                                            color : blue
+                                            "> <?php echo $student['name']; ?></a>
+                                    </h5>
+                                    <p style="
+                                        overflow: hidden;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 1; /* number of lines to show */
+                                        line-clamp: 1;
+                                        -webkit-box-orient: vertical;
+                                        font-family: 'Cairo'" class="card-text">رقم
+                                        الهاتف: <?php echo $student['phone']; ?>
+                                    </p>
+                                    <hr>
+                                    <p class="card-text">الصف: <?php echo $BOD; ?></p>
+                                    <hr>
+                                    <p class="card-text">في الحصة: <?php echo $InSess == 1 ? 'نعم' : 'لا'; ?></p>
+                                    <hr>
+                                    <p class="card-text">المعلمون:
+                                    <ol>
+                                        <?php foreach ($teacher_names as $teacher_name) { ?>
+                                            <li><?php echo $teacher_name; ?></li>
+                                        <?php } ?>
+                                    </ol>
+                                    </p>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-auto">
+                                            <form action="editStudent.php" method="POST" enctype="multipart/form-data">
+                                                <input type="hidden" name="id" value="<?php echo $student['id']; ?>">
+                                                <button type="submit" value="3" name="status"
+                                                        class="btn btn-outline-info text-center">تفاصيل→
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="teachers" role="tabpanel" aria-labelledby="teachers-tab">
+                <div class="row justify-content-center">
+                    <div class="ml-3 col-md-auto mb-3  ">
+                        <div class="card" style="width:15rem;">
+                            <div class="card-header">
+                                <img style="height: 220px; object-fit: cover; border-radius: 2%;" class="card-img-top"
+                                     src="../upload/super.jpg" alt="Card image cap">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-family: 'Cairo'">
+                                    <a style="
+                                        overflow: hidden;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 1; /* number of lines to show */
+                                        line-clamp: 1;
+                                        -webkit-box-orient: vertical;
+                                        font-family: 'Cairo';
+                                        color : blue
+                                        "> إضافة معلم جديد</a>
+                                </h5>
+                                <a href="newMission.php" class="btn btn-success">إضافة</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <?php
+                    $teachers = $db->getAllTeachers();
+
+                    foreach ($teachers as $teacher) {
+                        $teacher_specializations = $db->getTeacherSpecializationsNames($teacher['id']);
+                        $InSess = $teacher['att_id'];
+                        ?>
+                        <div class="ml-3 col-md-auto mb-3  ">
+                            <div class="card" style="width:15rem;">
+                                <div class="card-header">
+                                    <img style="height: 220px; object-fit: cover; border-radius: 2%;"
+                                         class="card-img-top"
+                                         src="../upload/<?php echo $teacher['img']; ?>  " alt="Card image cap">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title" style="font-family: 'Cairo'">
+                                        <a style="
+                                            overflow: hidden;
+                                            display: -webkit-box;
+                                            -webkit-line-clamp: 1; /* number of lines to show */
+                                            line-clamp: 1;
+                                            -webkit-box-orient: vertical;
+                                            font-family: 'Cairo';
+                                            color : blue
+                                            "> <?php echo $teacher['name']; ?></a>
+                                    </h5>
+                                    <p style="
+                                        overflow: hidden;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 1; /* number of lines to show */
+                                        line-clamp: 1;
+                                        -webkit-box-orient: vertical;
+                                        font-family: 'Cairo'" class="card-text">الايميل: <?php echo $teacher['user']; ?>
+                                    </p>
+                                    <hr>
+                                    <p> التخصصات
+                                    <ol>
+                                        <?php
+                                        foreach ($teacher_specializations as $teacher_spec) {
+                                            ?>
+                                            <li> <?php echo $teacher_spec['spec_name']; ?></li>
+
+                                            <?php
+                                        }
+                                        ?>
+                                    </ol>
+                                    </p>
+                                    <hr>
+                                    <p class="card-text">في الحصة: <?php echo $InSess == 1 ? 'نعم' : 'لا'; ?></p>
+
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-auto">
+                                            <form action="editTeacher.php" method="POST" enctype="multipart/form-data">
+                                                <input type="hidden" name="id" value="<?php echo $teacher['id']; ?>">
+                                                <button type="submit" value="3" name="status"
+                                                        class="btn btn-outline-info text-center">تفاصيل→
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
                 </div>
 
-
-
-                <div class="card-footer">
-
-<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-<p class="card-text" style="color : green">
-                      <?php if ($row['approve'] == 1 ){echo "approve"; } else { echo "not approve"; } ?> |
-                    </p>
-                    <p class="card-text" style="color : blue">
-                    <?php if ($row['sponsored'] == 1 ){echo "sponsored"; } else { echo "not sponsored"; } ?> |
-                </p>
-                <p class="card-text" style="color : gray">
-                    <?php echo $row['post_date'] ;?> |
-                </p>
-                <p class="card-text" style="color : gray"> <i class="fas fa-eye"></i>
-                    <?php echo $row['visited'] ;?>
-                </p>
-
-              
-
-</div>
-</div>
-
-
-
-
-
-
-
-          <div class="card-footer">
-
-                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <form  method = "POST" action="singleJob.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <button type="submit" class="btn btn-info"><i class="fas fa-eye"></i>  View</button>
-            </form>
-          
-          <form  method = "POST" action="../DeleteJob.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
-          </form>
-
-          <form  method = "POST" action="../AproveJob.php">
-               <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-              <button type="submit" class="btn btn-success"> <i class="fas fa-globe-europe"></i> Approve</button>
-          </form>
-
-          <form  method = "POST" action="../sponsoreJob.php">
-               <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-              <button type="submit" class="btn btn-warning"><i class="fas fa-arrow-alt-circle-up"></i> Sponsored</button>
-          </form>
-
-        </div>
-<br>
-
-        <div class="card-footer">
-
-<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-
-<form  method = "POST" action="../AproveJob.php">
-<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-<button type="submit" class="btn btn-secondary"><i class="fas fa-lock"></i> Unapprove</button>
-</form>
-
-<form  method = "POST" action="../sponsoreJob.php">
-<input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-
-<button type="submit" class="btn btn-dark"><i class="fas fa-arrow-alt-circle-down"></i>  Unsponsored</button>
-</form>
-
-</div>
-</div>
-                
-
-
-
-
-
-                </div>
             </div>
         </div>
 
-
-
-
-
-
-<?php
-}
- 
-?>
-
-</div>
-</div>
-
-
-<br>
-
-
-<div class="dropdown-divider"></div>
-
-<br>
-<br>
-
-
-<! --------------------------->
-<! List all user>
-<! --------------------------->
-
-<h4 class=" text-info  text-center   "> List all users</h4>
-<br>
-
-
-
-<div class="container  shadow p-3  bg-body rounded">
-
-
-<input type="text" name="search" class="form-control shadow" id="search_text"  placeholder="search for user">
-
-
-<br>
-
-
-<table class="table table-hover  table-dark " id="table_data">
-  <thead>
-    <tr > 
-      <th scope="col">#</th>
-      <th scope="col">User name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Address</th>
-      <th scope="col">Telephone</th>
-      <th scope="col">Role</th>
-      <th scope="col">Delete</th>
-      <th scope="col">Change Role </th>
-      
-
-    </tr>
-  </thead>
-  <tbody >
-
-
-<?php 
-$ApproveJ = $db->getAllUsers();
-foreach($ApproveJ as $row){
-
-    ?> 
-
-
-    <tr >
-      <th  scope="row"><?php echo $row['id']; ?></th>
-      <td> <?php echo $row['user_name']; ?></td>
-      <td> <?php echo $row['email']; ?></td>
-      <td> <?php echo $row['address']; ?></td>
-      <td> <?php echo $row['telephone']; ?></td>
-      <td> <?php
-      
-      
-      if($row['role'] == 1){
-          
-        echo "Admin";
-      }  
-      else if ($row['role'] == 2){
-        echo "Business owner";
-
-      }
-      else{
-        echo "User";
-
-
-      }
-      
-      
-      ?></td>
-
-
-
-      <td>
-      
-      <form  method = "POST" action="../DeleteUser.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete</button>
-          </form>
-      </td>
-      <td>
-      
-
-<?php   if ($row['role'] == 0 || $row['role'] == 2 ){ ?>
-
-      <form  method = "POST" action="../MakeAdmin.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <input type="hidden" name="role" value="<?php echo $row['role']; ?>">
-                <button type="submit" class="btn btn-info"><i class="fas fa-user-shield"></i> Admin</button>
-          </form>
-      </td>
-
-<?php }else { ?>
-  <form  method = "POST" action="../MakeAdmin.php">
-                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                <input type="hidden" name="role" value="<?php echo $row['role']; ?>">
-                <button type="submit" class="btn btn-info"><i class="fas fa-user"></i> User</button>
-          </form>
-      </td>
-
-      <?php }?>
-      
-
-
-    </tr>
- <?php } ?>
-  </tbody>
-</table>
-</div>
-<br>
-<br>
-<br>
-
-<script type= "text/javascript">
-
-$(document).ready(function(){
-$("#search_text").keyup(function(){
-var serch = $(this).val();
-$.ajax({
-  url: 'search.php', 
-  method : 'POST', 
-  data  : {query:search}, 
-  success : function (response){
-
-    $("table_data").html(responce);
-  }
-
-
-});
-
-});
-});
-
-</script>
-
-
-
-
-
-
-
-
-
-
-<! --------------------------->
-<! add catigory>
-<! --------------------------->
-
-
-
-<div class="container  shadow p-3  bg-body rounded mb-4 text-center">
-<h4 class=" text-info  text-center   "> Add Catigory</h4>
-<br>
-
-<form action="../AddCategory.php" method="POST">
-
-
-
-
-<div class="form-row-md-6 ">
-                                    
-<div class="form-group  ">
-    <input required type="text" name="name" class="form-control " aria-describedby="emailHelp" placeholder="Catigory name">
-</div>
-
-<button  type="submit" class="btn btn-success  text-white  ">Add</button>
-
-  </div>
-
-
-
-  
-</form>
-
-</div>
-
-
-
-
-<?php require 'footer.php'; ?>
+        <?php require 'footer.php'; ?>

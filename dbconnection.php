@@ -3,7 +3,9 @@
 $servername = "localhost"; 
 $username = "root";
 $password = "";
-$database = "xjobs";
+$database = "top_data";
+
+
 
 
 
@@ -13,7 +15,6 @@ if (!$conn){
 
     die("can't connect to database " . mysqli_connect_error());
 }
-
 
 
 ?> 

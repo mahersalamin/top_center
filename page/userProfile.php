@@ -1,61 +1,25 @@
-<?php require 'header.php'; ?>
+<?php require 'header.php'; $db = new MyDB(); ?>
 
-
-<?php 
-$photo = $db->getUserPhoto($_COOKIE['id']);
-foreach($photo as $row){          
+<?php
+$user = $db->getSingleTeacher($_COOKIE['id']);
+foreach ($user as $row) {
     ?>
 
-    
+    <div class="container mt-5">
 
-
-
-
-<div class="  text-center ">
-
-    <img  src="<?php echo $row['photo']; ?>"  class="shadow   bg-body rounded" style="width: 20%; "    alt="">
-
+        <div class="text-center mt-3">
+            <h1><?php echo $row['name']; ?></h1>
+        </div>
+        <div class="text-center mt-2">
+            <h3><?php echo $row['user']; ?></h3>
+        </div>
+        <div class="text-center mt-4">
+            <li class="list-group-item">
+                <button class="btn btn-outline-info">
+                    <a href="changePassword.php">🔑تغيير كلمة المرور</a>
+                </button>
+            </li>
+        </div>
     </div>
 
-
 <?php } ?>
-
-<form action="../" method="POST">
-
-<div class="container  shadow p-3  bg-body rounded">
-<h2> Choose your interests </h2>
-
-<?php 
-$jobs = $db->getAllCatrgories();
-foreach($jobs as $row){
-               
-    ?>
-
-
-<div class="custom-control custom-checkbox">
-  <input type="checkbox" class="custom-control-input" id="<?php echo $row['id']; ?>" value ="<?php echo $row['id']; ?>">
-  <label class="custom-control-label" for="<?php echo $row['id']; ?>"><?php echo $row['name']; ?></label>
-</div>
-
-                    
-<?php }?>
-
-<br>
-<button  class="btn btn-success "> done </button>
-</form>
-
-<?php 
-$jobs = $db->getAllCatrgories();
-foreach($jobs as $row){
-               
-    ?>
-
-
-                 
-<?php }?>
-
-
-
-
-
-</div>
