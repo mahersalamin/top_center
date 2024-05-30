@@ -288,7 +288,7 @@ if (!isset($_COOKIE['id'])) {
                                         <div class="col-md-auto">
                                             <form action="editTeacher.php" method="POST" enctype="multipart/form-data">
                                                 <input type="hidden" name="id" value="<?php echo $teacher['id']; ?>">
-                                                <button type="submit" value="3" name="status"
+                                                <button type="submit"
                                                         class="btn btn-outline-info text-center">تفاصيل→
                                                 </button>
                                             </form>

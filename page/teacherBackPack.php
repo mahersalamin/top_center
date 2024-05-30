@@ -98,32 +98,7 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $monthlySession['session_name']; ?></h5>
                             </div>
-                            <ul class="list-group list-group-flush">
-                                الطلاب:
-                                <?php
-                                $studentNames = explode(',', $monthlySession['student_names']);
-                                if (count($studentNames) == 1) {
-                                    echo '<li class="list-group-item">' . $studentNames[0] . '</li>';
-                                } else {
 
-                                    foreach ($studentNames as $name) {
-
-                                        ?>
-                                        <li class="list-group-item">
-                                            <div class="row justify-content-between">
-                                                <input id="<?php echo $name ?>" class="form-check-input"
-                                                       value="<?php echo $name ?>" checked
-                                                       type="checkbox" name="student_names[]">
-                                                <label class="form-check-label"
-                                                       for="<?php echo $name ?>"><?php echo $name ?></label>
-                                            </div>
-                                        </li>
-                                        <?php
-
-                                    }
-                                }
-                                ?>
-                            </ul>
                             <!--                            material-->
                             <div class="card-body">
                                 <ul class="list-group list-group-flush">
@@ -139,9 +114,7 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                                         ?>
 
                                     </select>
-                                    <!--                                    <li class="list-group-item">-->
-                                    <!--                                        السعر: --><?//=$monthlySession['price']?>
-                                    <!--                                    </li>-->
+
                                 </ul>
                             </div>
                             <div class="card-body">
@@ -151,9 +124,7 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                                 <input type="hidden" name="teacher_id" value="<?php echo $_COOKIE['id']; ?>">
                                 <input type="hidden" name="type" value="<?php echo $type ?>">
 
-                                <input <?php
-                                count($studentNames) !== 1 ? print "disabled": print "";
-                                ?> type="hidden"
+                                <input type="hidden"
                                    name="student_name"
                                    value="<?php echo $monthlySession['student_names']; ?>">
                                 <input type="hidden" name="pSessionID" value="<?php echo $monthlySession['id']; ?>">
@@ -170,3 +141,8 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
 
 
 <?php require 'footer.php'; ?>
+
+
+
+
+

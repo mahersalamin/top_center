@@ -132,7 +132,7 @@ foreach ($user
                         </div>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" aria-current="page" href="userProfile.php">المالية</a>
+                    <li class="nav-item"><a class="nav-link" aria-current="page" href="finance.php">المالية</a>
                     </li>
                 <?php }
                 if ($_COOKIE['role'] == 2) { ?>

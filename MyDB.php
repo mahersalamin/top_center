@@ -41,16 +41,31 @@ class MyDB
 
     public function getTeacherPrivateSessions($id, $type)
     {
-        $query = "SELECT s.*, st.teacher_id, ss.*, GROUP_CONCAT(DISTINCT stu.name) AS student_names, t.name AS teacher_name,
-                   GROUP_CONCAT(DISTINCT spc.name) AS materials
-                    FROM sessions s
-                    LEFT JOIN session_teachers st ON s.id = st.session_id
-                    LEFT JOIN session_students ss ON s.id = ss.session_id
-                    LEFT JOIN students stu ON ss.student_id = stu.id
-                    LEFT JOIN teacher t ON st.teacher_id = t.id
-                    LEFT JOIN spc ON FIND_IN_SET(spc.id, s.material) > 0
-                    WHERE t.id = $id AND s.type = '$type'
-                    GROUP BY s.id";
+        $query = "SELECT 
+                        s.*, 
+                        st.teacher_id, 
+                        ss.*, 
+                        GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
+                        t.name AS teacher_name,
+                        GROUP_CONCAT(DISTINCT spc.name) AS materials
+                    FROM 
+                        sessions s
+                    LEFT JOIN 
+                        session_teachers st ON s.id = st.session_id
+                    LEFT JOIN 
+                        session_students ss ON s.id = ss.session_id
+                    LEFT JOIN 
+                        students stu ON ss.student_id = stu.id
+                    LEFT JOIN 
+                        teacher t ON st.teacher_id = t.id
+                    LEFT JOIN 
+                        spc ON FIND_IN_SET(spc.id, s.material) > 0
+                    WHERE 
+                        st.teacher_id = $id -- Filter by teacher_id
+                        AND s.type = '$type' -- Filter by session type
+                    GROUP BY 
+                        s.id
+        ";
 //        var_dump($query);die();
         $conn = $this->connect();
         $result = $conn->query($query);
@@ -83,7 +98,30 @@ class MyDB
     }
 
 
-    public function getAllatt()
+    function getEnrolledSessionsForStudent($studentIds) {
+        $conn = $this->connect();
+        $sql = "
+        SELECT DISTINCT s.id, s.session_name
+        FROM sessions s
+        JOIN session_students ss ON s.id = ss.session_id
+        WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
+    ";
+
+        $result = $conn->query($sql);
+        $sessions = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $sessions[] = $row;
+            }
+            $result->free();
+        }
+        return $sessions;
+    }
+
+
+
+
+    public function getApprovedAttendances()
     {
 
         $query = "SELECT att.* , teacher.name AS tname , students.name as sname 
@@ -861,25 +899,7 @@ GROUP BY students.id
         return $rows;
     }
 
-    public function getAllStds($id)
-    {
-        $query = "SELECT students.*,
-            GROUP_CONCAT(teacher.name) AS teacher_names
-            FROM students
-            LEFT JOIN teacher ON FIND_IN_SET(teacher.id, REPLACE(REPLACE(students.tec_id, '[', ''), ']', '')) > 0
-            GROUP BY students.id;
-        ";
-        $conn = $this->connect();
-        $result = $conn->query($query);
-        $rows = array();
-        while ($row = $result->fetch_assoc()) {
-            $rows[] = $row;
-        }
 
-        return $rows;
-
-
-    }
 
     public function getTeacherOpenSessions($id)
     {
@@ -993,9 +1013,6 @@ GROUP BY students.id
         return $sessions;
     }
 
-
-
-
     public function totalPayments($id)
     {
         $conn = $this->connect();
@@ -1023,7 +1040,6 @@ GROUP BY students.id
         // Return an array containing the total number of sessions and the total price
         return array('total_sessions' => $totalSessions, 'total_price' => $totalPrice);
     }
-
 
     public function getTeacherSessions($id)
     {
@@ -1067,9 +1083,6 @@ GROUP BY students.id
         return $totalPrice;
     }
 
-
-
-
     public function CheckExist($email)
     {
 
@@ -1083,10 +1096,6 @@ GROUP BY students.id
             return false;
         }
     }
-
-
-
-
 
     public function OpenATT($sessionId, $teacherId, $sNames, $material)
     {
@@ -1213,7 +1222,6 @@ GROUP BY students.id
         return true;
     }
 
-
     public function AddST(
         $name,
         $phone,
@@ -1236,4 +1244,48 @@ GROUP BY students.id
 
     }
 
+    // Method to get all incomes
+    public function getAllIncomes() {
+        $conn = $this->connect();
+        $query = "SELECT * FROM income ORDER BY date DESC";
+        $result = $conn->query($query);
+
+        $incomes = [];
+        while ($row = $result->fetch_assoc()) {
+            $incomes[] = $row;
+        }
+
+        return $incomes;
+    }
+
+    public function getAllOutcomes() {
+        $conn = $this->connect();
+        $query = "SELECT * FROM outcome ORDER BY date DESC";
+        $result = $conn->query($query);
+
+        $outcomes = [];
+        while ($row = $result->fetch_assoc()) {
+            $outcomes[] = $row;
+        }
+
+        return $outcomes;
+    }
+
+    public function getIncomeStatistics() {
+        $conn = $this->connect();
+        $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM income";
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc();
+    }
+
+    public function getOutcomeStatistics() {
+        $conn = $this->connect();
+        $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM outcome";
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc();
+    }
+
 }
+
