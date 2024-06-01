@@ -97,6 +97,25 @@ class MyDB
         return $rows;
     }
 
+    function getStudentSessions($studentId){
+        $conn = $this->connect();
+        $sql = "
+            SELECT  s.*
+            FROM sessions AS s
+            JOIN session_students AS ss ON s.id = ss.session_id
+            WHERE ss.student_id =$studentId
+        ";
+
+        $result = $conn->query($sql);
+        $sessions = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $sessions[] = $row;
+            }
+            $result->free();
+        }
+        return $sessions;
+    }
 
     function getEnrolledSessionsForStudent($studentIds) {
         $conn = $this->connect();
@@ -795,10 +814,8 @@ GROUP BY students.id
 
     public function getTeacherData($id)
     {
-        $query = "SELECT t.*, s.name AS spec_name
+        $query = "SELECT t.*
                     FROM teacher AS t
-                    JOIN teacher_specializations AS ts ON t.id = ts.teacher_id
-                    JOIN spc AS s ON ts.spec = s.id
                     WHERE t.id =$id ";
 
         $conn = $this->connect();

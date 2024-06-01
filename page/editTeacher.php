@@ -8,8 +8,9 @@ $id = $_POST['id'];
 $db = new MyDB();
 
 $teacher = $db->getTeacherData($id);
-echo json_encode($teacher);die();
 $teacher = $teacher[0];
+//echo json_encode($teacher);die();
+
 
 if ($teacher) {
     ?>
@@ -52,7 +53,7 @@ if ($teacher) {
                                     }
                                 }
                                 ?>
-                                <div class="form-check form-check-inline">
+                                <div class="form-check row ">
                                     <input class="form-check-input" type="checkbox"
                                            name="specs[<?php echo $spec['id']; ?>][id]"
                                            value="<?php echo $spec['id']; ?>"
@@ -63,9 +64,12 @@ if ($teacher) {
                                     $price = $db->getSpecializationPriceForTeacher($teacher['id'], $spec['id']);
                                     ?>
                                     <label>
-                                        <input type="number" class="form-control"
-                                               name="specs[<?php echo $spec['id']; ?>][price]" placeholder="السعر"
-                                               value="<?php echo $price; ?>" >
+                                        <select name="specs[<?php echo $spec['id']; ?>][price]" class="form-control">
+                                            <option value="50" <?php $price==50? print "selected":'' ;?> >ثابت</option>
+                                            <option value="75" <?php $price==75? print "selected":'' ;?> >حسب
+                                                الطلب</option>
+                                        </select>
+
                                     </label>
                                 </div>
                                 <?php
