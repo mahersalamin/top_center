@@ -2,7 +2,7 @@
 require 'MyDB.php'; // Include the database connection class
 
 $db = new MyDB();
-
+$conn = $db->connect();
 
 
 // Handle form submission for incomes
@@ -16,10 +16,10 @@ if (isset($_POST['income_submit'])) {
     $notes = $_POST['income_notes'];
 
     $query = "INSERT INTO income (date, cashier, amount, payer, student_id, session_id, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $db->connect()->prepare($query);
+    $stmt = $conn->prepare($query);
 
     if (!$stmt) {
-        die('Error in preparing SQL statement: ' . $db->connect()->error);
+        die('Error in preparing SQL statement: ' . $db->error);
     }
 
     $bindResult = $stmt->bind_param('ssdssss', $date, $cashier, $amount, $payer, $studentId, $sessionId, $notes);
@@ -34,7 +34,57 @@ if (isset($_POST['income_submit'])) {
 
     $stmt->close();
 
-    // Redirect back to page/finance.php after successful submission
+// Fetch current total_payments and session_cost
+    $query = "SELECT total_payments, session_cost FROM session_students WHERE student_id = ? AND session_id = ?";
+    $stmt = $conn->prepare($query);
+
+    if (!$stmt) {
+        die('Error in preparing SQL statement: ' . $db->error);
+    }
+
+    $bindResult = $stmt->bind_param('ss', $studentId, $sessionId);
+    if (!$bindResult) {
+        die('Error in binding parameters: ' . $stmt->error);
+    }
+
+    $executeResult = $stmt->execute();
+    if (!$executeResult) {
+        die('Error in executing SQL query: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    $currentTotalPayments = $row['total_payments'];
+    $sessionCost = $row['session_cost'];
+
+    $newTotalPayments = $currentTotalPayments + $amount;
+    $newPaymentStatus = ($newTotalPayments >= $sessionCost) ? 'paid' : 'partially paid';
+
+    $stmt->close();
+
+// Update total_payments and payment_status
+    $query = "UPDATE session_students SET total_payments = ?, payment_status = ? WHERE student_id = ? AND session_id = ?";
+    $stmt = $conn->prepare($query);
+
+    if (!$stmt) {
+        die('Error in preparing SQL statement: ' . $db->error);
+    }
+
+    $bindResult = $stmt->bind_param('dsss', $newTotalPayments, $newPaymentStatus, $studentId, $sessionId);
+    if (!$bindResult) {
+        die('Error in binding parameters: ' . $stmt->error);
+    }
+
+    $executeResult = $stmt->execute();
+    if (!$executeResult) {
+        die('Error in executing SQL query: ' . $stmt->error);
+    }
+
+//    $stmt->close();
+//    $db->close();
+
+// Redirect back to page/finance.php after successful submission
     header('Location: page/finance.php');
     exit();
 }

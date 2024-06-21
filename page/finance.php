@@ -70,7 +70,20 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             <label for="income_session">الدورة</label>
                             <select class="form-control" id="income_session" name="income_session" required>
                                 <!-- Options will be populated dynamically via AJAX -->
+                                <option disabled selected>اختر طالب لعرض الدورات</option>
                             </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="session_cost">سعر الدورة</label>
+                                    <input class="form-control" id="session_cost" type="number" readonly>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="total_payments">المدفوع</label>
+                                    <input class="form-control" id="total_payments" type="number" readonly>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="income_amount">القيمة</label>
@@ -93,6 +106,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             <th>التاريخ</th>
                             <th>المستلم</th>
                             <th>الدافع</th>
+                            <th>الطالب</th>
                             <th>القيمة</th>
                             <th>ملاحظات</th>
                         </tr>
@@ -107,6 +121,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             echo "<td>{$income['date']}</td>";
                             echo "<td>{$income['cashier']}</td>";
                             echo "<td>{$income['payer']}</td>";
+                            echo "<td>{$income['student']}</td>";
 
                             echo "<td>{$income['amount']}</td>";
                             echo "<td>{$income['notes']}</td>";
@@ -215,11 +230,27 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             <p>المبلغ الكلي: <?php echo $incomeStats['total_amount']; ?></p>
                         </div>
                     </div>
-                    <div class="card mt-4">
-                        <div class="card-body">
-                            <h5 class="card-title">المصاريف</h5>
-                            <p>عدد الدفعات الصادرة: <?php echo $outcomeStats['count']; ?></p>
-                            <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
+                    <div class="row">
+                        <div class="card col-md-4 mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">كل المصاريف</h5>
+                                <p>عدد الدفعات الصادرة: <?php echo $outcomeStats['count']; ?></p>
+                                <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
+                            </div>
+                        </div>
+                        <div class="card col-md-4 mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">المصاريف</h5>
+                                <p>عدد الدفعات الصادرة للمعلمين: <?php echo $outcomeStats['count']; ?></p>
+                                <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
+                            </div>
+                        </div>
+                        <div class="card col-md-4 mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">المصاريف</h5>
+                                <p>عدد الدفعات الصادرة الى جهات خارجية: <?php echo $outcomeStats['count']; ?></p>
+                                <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
+                            </div>
                         </div>
                     </div>
                     <div class="card mt-4">
@@ -235,6 +266,8 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
 </div>
 <script>
     $(document).ready(function() {
+        var sessionData = {}; // Define sessionData in the outer scope
+
         $('#income_student').change(function() {
             var studentId = $(this).val();
             $.ajax({
@@ -244,10 +277,31 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                 dataType: 'json',
                 success: function(response) {
                     $('#income_session').empty();
+                    sessionData = {}; // Re-initialize sessionData for the new student
+
                     $.each(response, function(index, session) {
-                        $('#income_session').append('<option value="' + session.id + '">' + session.session_name +
-                            '</option>');
+                        $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
+                        sessionData[session.id] = {
+                            price: session.price,
+                            total_payments: session.total_payments
+                        };
                     });
+
+                    // Unbind the previous change event handler to avoid stacking
+                    $('#income_session').off('change').change(function() {
+                        var selectedSessionId = $(this).val();
+                        if (selectedSessionId) {
+                            var selectedSession = sessionData[selectedSessionId];
+                            $('#session_cost').val(selectedSession.price);
+                            $('#total_payments').val(selectedSession.total_payments);
+                        } else {
+                            $('#session_cost').val('');
+                            $('#total_payments').val('');
+                        }
+                    });
+
+                    // Trigger change to update fields for the initially selected option
+                    $('#income_session').trigger('change');
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
