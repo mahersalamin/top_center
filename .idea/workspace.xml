@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="major updates">
-      <change afterPath="$PROJECT_DIR$/finance_endpoint.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/get_enrolled_sessions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/homeAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/homeAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/teacherBackPack.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherBackPack.php" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix edit student and teacher">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/assignPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,22 +33,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/motz&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Laravel.SettingsForm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/PhpstormProjects/practice_app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Laravel.SettingsForm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\top" />
@@ -82,7 +80,8 @@
       <workItem from="1714666774895" duration="53880000" />
       <workItem from="1715313632510" duration="81201000" />
       <workItem from="1716520136880" duration="41252000" />
-      <workItem from="1717090602869" duration="3833000" />
+      <workItem from="1717090602869" duration="17534000" />
+      <workItem from="1718866829700" duration="44000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -91,7 +90,28 @@
       <option name="project" value="LOCAL" />
       <updated>1716735514567</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add finance">
+      <created>1717094578214</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1717094578214</updated>
+    </task>
+    <task id="LOCAL-00003" summary="commit unversioned files">
+      <created>1717095325540</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1717095325540</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix edit student and teacher">
+      <created>1717247461757</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717247461757</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,7 +130,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="major updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="major updates" />
+    <MESSAGE value="add finance" />
+    <MESSAGE value="commit unversioned files" />
+    <MESSAGE value="fix edit student and teacher" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix edit student and teacher" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

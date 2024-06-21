@@ -120,11 +120,12 @@ class MyDB
     function getEnrolledSessionsForStudent($studentIds) {
         $conn = $this->connect();
         $sql = "
-        SELECT DISTINCT s.id, s.session_name
-        FROM sessions s
-        JOIN session_students ss ON s.id = ss.session_id
-        WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
-    ";
+            SELECT DISTINCT s.*, ss.total_payments
+            FROM sessions s
+            JOIN session_students ss ON s.id = ss.session_id
+            WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
+            AND ss.payment_status != 'paid';
+        ";
 
         $result = $conn->query($sql);
         $sessions = [];
@@ -738,7 +739,9 @@ GROUP BY students.id
         SELECT DISTINCT 
             students.*, 
             att.enter, 
-            att.session_id
+            att.session_id,
+            sessions.session_name,
+            sessions.type
         FROM 
             students
         INNER JOIN 
@@ -747,10 +750,12 @@ GROUP BY students.id
             session_teachers st ON att.session_id = st.session_id
         INNER JOIN 
             teacher t ON t.att_id = att.id
+        INNER JOIN 
+            sessions ON att.session_id = sessions.id
         WHERE 
             students.InSess = 1 
             AND students.att_id != 0
-            AND t.id = ?
+            AND t.id = ?;
     ";
 
         $stmt = $conn->prepare($query);
@@ -1264,7 +1269,11 @@ GROUP BY students.id
     // Method to get all incomes
     public function getAllIncomes() {
         $conn = $this->connect();
-        $query = "SELECT * FROM income ORDER BY date DESC";
+        $query = "SELECT i.*, s.name AS student
+                    FROM students s
+                    JOIN income i ON i.student_id = s.id
+                    ORDER BY date DESC"
+        ;
         $result = $conn->query($query);
 
         $incomes = [];

@@ -1,20 +1,9 @@
 <?php require 'header.php'; ?>
 <style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 250px;
-        overflow-y: auto;
-        border: 1px solid #ddd;
-        z-index: 1;
+    .list-group{
+        padding-right: 0;
     }
-
     .dropdown-content label {
         display: block;
         margin: 3px 0;
@@ -48,6 +37,7 @@ $teacherMaterials = $db->getTeacherSpecializations($_COOKIE['id']);
 $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
 //echo json_encode($teacherMaterialsNames);die();
 ?>
+<button onclick="history.go(-1);">رجوع</button>
 <div class="container text-center">
     <h1>الدورات الخاصة</h1>
 
@@ -60,7 +50,7 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                 <th scope='col'>اسم الطالب</th>
                 <th scope='col'>رقم الهاتف</th>
                 <th scope='col'>وقت البدء</th>
-                <th scope='col'></th> <!-- Empty column for buttons -->
+                <th scope='col'><?php echo $activeAttendanceStudents[0]['session_name'].' - '.$activeAttendanceStudents[0]['type'] ?></th> <!-- Empty column for buttons -->
             </tr>
             </thead>
             <tbody>
@@ -141,7 +131,7 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                             <div class="col-md-3">
                                 <div class="card">
                                     <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
-                                        <div class="card-body">
+                                        <div class="card-header">
                                             <h5 class="card-title"><?php echo $pSessions['session_name']; ?></h5>
                                         </div>
                                         <ul class="list-group list-group-flush">
@@ -206,7 +196,7 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                                 <div class="col-md-3">
                                     <div class="card">
                                         <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
-                                            <div class="card-body">
+                                            <div class="card-header">
                                                 <h5 class="card-title"><?php echo $pSessions['session_name']; ?></h5>
                                             </div>
                                             <ul class="list-group list-group-flush">
@@ -219,16 +209,29 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                                             </ul>
                                             <!-- Material -->
                                             <div class="card-body">
-                                                <ul class="list-group list-group-flush">
-                                                    المادة: <?php echo $pSessions['materials']; ?>
-                                                </ul>
+                                                <?php $materials = explode(',', $pSessions['materials']); ?>
+                                                المادة:
+                                                <select class="mb-3 form-select" name="material">
+                                                    <?php
+                                                    foreach ($materials as $material) {
+                                                        echo '<option value="' . $material . '">' . $material . '</option>';
+                                                    }
+                                                    ?>
+                                                </select>
                                             </div>
                                             <div class="card-body">
                                                 <button <?php echo $activeAttendanceStudents ? 'disabled' : ''; ?> type="submit" class="btn btn-outline-info text-center">بدء</button>
-                                                <input type="hidden" name="teacher_id" value="<?php echo $_COOKIE['id']; ?>">
-                                                <input type="hidden" name="type" value="<?php echo $pSessions['type']; ?>">
-                                                <input <?php echo count($studentNames) !== 1 ? 'disabled' : ''; ?> type="hidden" name="student_name" value="<?php echo $pSessions['student_names']; ?>">
-                                                <input type="hidden" name="pSessionID" value="<?php echo $pSessions['id']; ?>">
+                                                <input type="hidden" name="teacher_id"
+                                                       value="<?php echo $_COOKIE['id']; ?>">
+                                                <input type="hidden" name="type"
+                                                       value="<?php echo $pSessions['type']; ?>">
+                                                <input <?php echo count($studentNames) !== 1 ? 'disabled' : ''; ?>
+                                                        type="hidden" name="student_name"
+                                                        value="<?php echo $pSessions['student_names']; ?>">
+                                                <input type="hidden" name="pSessionID"
+                                                       value="<?php echo $pSessions['id']; ?>">
+                                                <input type="hidden" name="student_names"
+                                                       value="<?php echo $pSessions['student_names']; ?>">
                                             </div>
                                         </form>
                                     </div>

@@ -3,20 +3,7 @@
 
 ?>
 <style>
-    .dropdown {
-        position: relative;
-        display: inline-block;
-    }
 
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 250px;
-        overflow-y: auto;
-        border: 1px solid #ddd;
-        z-index: 1;
-    }
 
     .dropdown-content label {
         display: block;
@@ -30,6 +17,147 @@
     .show {
         display: block;
     }
+
+    /* Multi-step form container */
+    .tab-pane {
+        font-family: 'Cairo', sans-serif;
+    }
+
+    /* Form step container */
+    .tab {
+        display: none;
+    }
+
+    /* Step indicator */
+    .step {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    /* Active step indicator */
+    .step.active {
+        opacity: 1;
+    }
+
+    /* Completed step indicator */
+    .step.finish {
+        background-color: #4CAF50;
+    }
+
+    /* Navigation buttons */
+    .btn-secondary, .btn-primary {
+        margin-top: 20px;
+    }
+
+    /* Make the Previous button appear inline if it's not the first tab */
+    .btn-secondary {
+        display: none;
+    }
+
+
+
+    /* Input fields */
+    .form-control {
+        margin-bottom: 20px;
+    }
+
+    /* Step-specific styling */
+    #studentCheckboxes, #materialsCheckboxes, #teachersCheckboxes {
+        height: 350px;
+        overflow-y: auto;
+    }
+
+    #studentCheckboxes .form-check, #materialsCheckboxes .form-check, #teachersCheckboxes .form-check {
+        margin-bottom: 10px;
+    }
+
+    /* Ensure that the form container takes the full width */
+    form#multiStepForm {
+        width: 100%;
+    }
+
+    /* Style the buttons consistently */
+    button {
+        padding: 10px 20px;
+    }
+
+    /* Highlight the current step */
+    .step.active {
+        background-color: #007bff;
+        color: white;
+    }
+
+    /* Customize the submit button */
+    #studentCheckboxes{
+        background-color: #e9e9ff;
+    }
+
+
+    /* Form step container */
+    .tab1 {
+        display: none;
+    }
+
+    /* Step indicator */
+    .step1 {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    /* Active step indicator */
+    .step1.active {
+        opacity: 1;
+    }
+
+    /* Completed step indicator */
+    .step1.finish {
+        background-color: #4CAF50;
+    }
+
+    /* Navigation buttons */
+    .btn-secondary, .btn-primary {
+        margin-top: 20px;
+    }
+    .invalid{
+        color: red;
+        border: 1px solid;
+    }
+
+
+    /* Step-specific styling */
+    #studentCheckboxes, #materialsCheckboxes, #teachersCheckboxes {
+        height: 350px;
+        overflow-y: auto;
+    }
+
+    #studentCheckboxes .form-check, #materialsCheckboxes .form-check, #teachersCheckboxes .form-check {
+        margin-bottom: 10px;
+    }
+
+    /* Ensure that the form container takes the full width */
+    form#multiStepForm, form#studentToPackageForm {
+        width: 100%;
+    }
+
+
+    /* Highlight the current step */
+    .step1.active {
+        background-color: #007bff;
+        color: white;
+    }
+
 
 </style>
 <?php
@@ -76,28 +204,30 @@ $teachers = $db->getAllTeachers();
     </ul>
 
     <div class="tab-content">
+        <!--    اضافة دورات جديدة    -->
         <div class="tab-pane fade show active" id="new-package" role="tabpanel" aria-labelledby="new-package-tab">
-            <form method="post" enctype="application/x-www-form-urlencoded" action="../assignPackages.php">
+            <form id="multiStepForm" method="post" enctype="application/x-www-form-urlencoded"
+                  action="../assignPackages.php">
                 <input hidden name="pkg" value="package">
 
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="session_name">معرف الدورة</span>
+                <!-- Step 1: Session Name -->
+                <div class="tab">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="session_name">معرف الدورة</span>
+                        </div>
+                        <input required name="session_name" id="session_name" type="text" class="form-control">
                     </div>
-                    <input required name="session_name" id="session_name" type="text" class="form-control">
                 </div>
 
-                <br>
-                <div class="row">
-
-                    <!-- Students list -->
-                    <div class="col-md-6 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                <!-- Step 2: Students list -->
+                <div class="tab">
+                    <div class="col-md-12 font-weight-bold" style="height: 400px; overflow-y: auto;">
                         <h4>الطلاب</h4>
                         <div class="mb-3">
                             <select id="classDropdown" class="form-control mb-2" onchange="filterStudents()">
                                 <option value="">اختر الصف</option>
                                 <?php
-                                // Get unique classes
                                 $classes = array_unique(array_column($students, 'class'));
                                 sort($classes);
                                 foreach ($classes as $class) { ?>
@@ -109,23 +239,24 @@ $teachers = $db->getAllTeachers();
                         </div>
                         <div id="studentCheckboxes">
                             <?php foreach ($students as $student) { ?>
-                                <div class="mr-2 mb-2 form-check row justify-content-center student-row" data-class="<?php echo $student['class']; ?>">
+                                <div class="mr-2 mb-2 form-check row justify-content-center student-row"
+                                     data-class="<?php echo $student['class']; ?>">
                                     <input class="form-check-input" type="checkbox" name="students[]"
                                            id="session_<?php echo $student['id']; ?>"
                                            value="<?php echo $student['id']; ?>"
                                            oninput="getClassValue(<?= $student['class'] ?>, this)">
                                     <label class="mr-2 form-check-label" for="session_<?php echo $student['id']; ?>">
-                                        <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - '
-                                            . $student['class'] ?>
+                                        <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                                     </label>
                                 </div>
                             <?php } ?>
                         </div>
                     </div>
+                </div>
 
-
-                    <!-- Sessions list -->
-                    <div class="col-md-2 font-weight-bold">
+                <!-- Step 3: Sessions list -->
+                <div class="tab">
+                    <div class="col-md-6 font-weight-bold">
                         <h4>الدورات</h4>
                         <div class="m-auto form-check col session_package">
                             <div class="row justify-content-between">
@@ -145,25 +276,19 @@ $teachers = $db->getAllTeachers();
                             </div>
                         </div>
                     </div>
-                    <!-- price and subs -->
-                    <div class="col-md-4 font-weight-bold">
+                </div>
 
+                <!-- Step 4: Price and subscription -->
+                <div class="tab">
+                    <div class="col-md-6 font-weight-bold">
                         <h4>اختر فئة الإشتراك والسعر</h4>
                         <div class="mr-2 form-check row justify-content-center" id="individual-div">
-                            <input class="form-check-input" type="radio" name="is_group"
-                                   id="individual"
-                                   value="0">
-                            <label class="mr-2 form-check-label" for="individual">
-                                فردي
-                            </label>
+                            <input class="form-check-input" type="radio" name="is_group" id="individual" value="0">
+                            <label class="mr-2 form-check-label" for="individual">فردي</label>
                         </div>
                         <div class="mr-2 form-check row justify-content-center" id="group-div">
-                            <input class="form-check-input" type="radio" name="is_group"
-                                   id="group" value="1">
-                            <label class="mr-2 form-check-label"
-                                   for="group">
-                                جماعي
-                            </label>
+                            <input class="form-check-input" type="radio" name="is_group" id="group" value="1">
+                            <label class="mr-2 form-check-label" for="group">جماعي</label>
                         </div>
                         <div class="form-group row justify-content-center mt-3" id="hours-div">
                             <label for="hours" class="col-form-label">عدد الساعات:</label>
@@ -180,62 +305,139 @@ $teachers = $db->getAllTeachers();
                             </div>
                         </div>
                     </div>
-                    <!-- Materials list -->
-                    <div class="col-md-5 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
-                        <h4>قائمة المواد</h4>
-                        <div class="mr-2 form-check row justify-content-center">
-                            <input class="form-check-input" type="checkbox" id="all_materials_2"
-                                   onclick="toggleAllMaterials2()">
-                            <label class="mr-2 form-check-label" for="all_materials_2">كل المواد</label>
-                        </div>
-                        <?php foreach ($materials as $material) { ?>
+                </div>
+
+                <!-- Step 5: Materials list -->
+                <div class="tab">
+                    <div class="row">
+                        <!-- Column for Class Type 1 -->
+                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                            <h4>قائمة المواد الأساسية</h4>
                             <div class="mr-2 form-check row justify-content-center">
-                                <input class="form-check-input" type="checkbox" name="materials2[]"
-                                       id="material2_<?php echo $material['id']; ?>"
-                                       value="<?php echo $material['id']; ?>">
-                                <label class="mr-2 form-check-label" for="material2_<?php echo $material['id']; ?>">
-                                    <?php echo $material['name']; ?>
-                                </label>
+                                <input class="form-check-input" type="checkbox" id="all_class1"
+                                       onclick="toggleAll('class1')">
+                                <label class="mr-2 form-check-label" for="all_class1">كل المواد</label>
                             </div>
-                        <?php } ?>
+                            <?php foreach ($materials as $material) {
+                                if ($material['class_type'] == 1) { ?>
+                                    <div class="mr-2 form-check row justify-content-center">
+                                        <input class="form-check-input class1" type="checkbox" name="materials2[]"
+                                               id="material1_<?php echo $material['id']; ?>"
+                                               value="<?php echo $material['id']; ?>">
+                                        <label class="mr-2 form-check-label"
+                                               for="material1_<?php echo $material['id']; ?>">
+                                            <?php echo $material['name']; ?>
+                                        </label>
+                                    </div>
+                                <?php }
+                            } ?>
+                        </div>
+
+                        <!-- Column for Class Type 2 -->
+                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                            <h4>قائمة المواد الاعدادية</h4>
+                            <div class="mr-2 form-check row justify-content-center">
+                                <input class="form-check-input" type="checkbox" id="all_class2"
+                                       onclick="toggleAll('class2')">
+                                <label class="mr-2 form-check-label" for="all_class2">كل المواد</label>
+                            </div>
+                            <?php foreach ($materials as $material) {
+                                if ($material['class_type'] == 2) { ?>
+                                    <div class="mr-2 form-check row justify-content-center">
+                                        <input class="form-check-input class2" type="checkbox" name="materials2[]"
+                                               id="material2_<?php echo $material['id']; ?>"
+                                               value="<?php echo $material['id']; ?>">
+                                        <label class="mr-2 form-check-label"
+                                               for="material2_<?php echo $material['id']; ?>">
+                                            <?php echo $material['name']; ?>
+                                        </label>
+                                    </div>
+                                <?php }
+                            } ?>
+                        </div>
+
+                        <!-- Column for Class Type 3 -->
+                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                            <h4>قائمة المواد الثانوية</h4>
+                            <div class="mr-2 form-check row justify-content-center">
+                                <input class="form-check-input" type="checkbox" id="all_class3"
+                                       onclick="toggleAll('class3')">
+                                <label class="mr-2 form-check-label" for="all_class3">كل المواد</label>
+                            </div>
+                            <?php foreach ($materials as $material) {
+                                if ($material['class_type'] == 3) { ?>
+                                    <div class="mr-2 form-check row justify-content-center">
+                                        <input class="form-check-input class3" type="checkbox" name="materials2[]"
+                                               id="material3_<?php echo $material['id']; ?>"
+                                               value="<?php echo $material['id']; ?>">
+                                        <label class="mr-2 form-check-label"
+                                               for="material3_<?php echo $material['id']; ?>">
+                                            <?php echo $material['name']; ?>
+                                        </label>
+                                    </div>
+                                <?php }
+                            } ?>
+                        </div>
                     </div>
-                    <!--                    Teachers list-->
-                    <div class="col-md-5 mt-3  font-weight-bold" style="height: 150px; overflow-y: auto;">
+                </div>
+
+                <!-- Step 6: Teachers list -->
+                <div class="tab">
+                    <div class="col-md-5 mt-3 font-weight-bold" style="height: 150px; overflow-y: auto;">
                         <div>
                             <p><strong>المعلمين</strong></p>
-                            <?php
-                            foreach ($teachers as $teacher) { ?>
+                            <?php foreach ($teachers as $teacher) { ?>
                                 <div class="mr-2 form-check row justify-content-center">
                                     <input class="form-check-input" type="checkbox" name="teachers[]"
                                            id="teacher_<?php echo $teacher['id']; ?>"
                                            value="<?php echo $teacher['id']; ?>">
-                                    <label class="form-check-label"
-                                           for="teacher_<?php echo $teacher['id']; ?>">
+                                    <label class="form-check-label" for="teacher_<?php echo $teacher['id']; ?>">
                                         <?php echo $teacher['name']; ?>
                                     </label>
                                 </div>
                             <?php } ?>
                         </div>
                     </div>
-                    <div class="col-md-2 mt-3">
-                        <button type="submit" style="height: 5rem" class="m-3 btn btn-success btn-block">حفظ</button>
+
+                </div>
+                <!-- Navigation Buttons -->
+                <div style="overflow:auto;">
+                    <div style="float:right;">
+                        <button type="button" class="btn btn-secondary" id="prevBtn" onclick="nextPrev(-1)
+">السابق
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextPrev(1)
+">التالي
+                        </button>
                     </div>
+                </div>
+
+                <!-- Step Indicators -->
+                <div style="text-align:center;margin-top:40px;">
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
                 </div>
             </form>
         </div>
 
+
+        <!--    تعيين الى دورات    -->
         <div class="tab-pane fade show" id="student-to-package" role="tabpanel"
              aria-labelledby="student-to-package-tab">
-            <form method="post" enctype="application/x-www-form-urlencoded" action="../assignPackages.php">
-
-                <br>
+            <form id="studentToPackageForm" method="post" enctype="application/x-www-form-urlencoded"
+                  action="../assignPackages.php">
                 <input hidden name="pkg" value="student-to-package">
-                <div class="row">
-                    <!-- Students list -->
-                    <div class="col-md-4 font-weight-bold" style="height: 350px; overflow-y: auto;">
+
+                <!-- Step 1: Select Students -->
+                <div class="tab1">
+                    <div class="col-md-12 font-weight-bold" style="height: 350px; overflow-y: auto;">
                         <h4>الطلاب</h4>
                         <div class="mb-3">
-                            <select id="classDropdown" class="form-control mb-2" onchange="filterStudents()">
+                            <select id="classDropdown2" class="form-control mb-2" onchange="filterStudents2()">
                                 <option value="">اختر الصف</option>
                                 <?php
                                 // Get unique classes
@@ -245,43 +447,45 @@ $teachers = $db->getAllTeachers();
                                     <option value="<?php echo $class; ?>"><?php echo 'الصف: ' . $class; ?></option>
                                 <?php } ?>
                             </select>
-                            <input type="text" id="searchInput" class="form-control" onkeyup="filterStudents()"
+                            <input type="text" id="searchInput2" class="form-control" onkeyup="filterStudents2()"
                                    placeholder="ابحث عن طالب...">
                         </div>
                         <div id="studentCheckboxes">
                             <?php foreach ($students as $student) { ?>
-                                <div class="mr-2 mb-2 form-check row justify-content-center student-row" data-class="<?php echo $student['class']; ?>">
+                                <div class="mr-2 mb-2 form-check row justify-content-center student-row2"
+                                     data-class="<?php echo $student['class']; ?>">
                                     <input class="form-check-input" type="checkbox" name="students[]"
                                            id="session_<?php echo $student['id']; ?>"
-                                           value="<?php echo $student['id']; ?>"
-                                           oninput="getClassValue(<?= $student['class'] ?>, this)">
+                                           value="<?php echo $student['id']; ?>">
                                     <label class="mr-2 form-check-label" for="session_<?php echo $student['id']; ?>">
-                                        <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - '
-                                            . $student['class'] ?>
+                                        <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                                     </label>
                                 </div>
                             <?php } ?>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Sessions list -->
-                    <div class="col-md-4 font-weight-bold" style="height: 350px; overflow-y: auto;">
-                        <p><strong>الدورات</strong></p>
+                <!-- Step 2: Select Sessions -->
+                <div class="tab1">
+                    <div class="col-md-12 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <h4>الدورات</h4>
                         <?php foreach ($sessions as $session) { ?>
-                            <div class="mr-2 form-check row justify-content-center">
-                                <input class="form-check-input" type="checkbox" name="sessions[]"
-                                       id="session_<?php echo $session['id']; ?>"
-                                       value="<?php echo $session['id']; ?>">
+                            <div class="mr-2 mt-2 form-check row justify-content-center">
+                                <input class="form-check-input" type="radio" name="sessions[]"
+                                       id="session_<?php echo $session['id']; ?>" value="<?php echo $session['id']; ?>">
                                 <label class="mr-2 form-check-label" for="session_<?php echo $session['id']; ?>">
                                     <?php echo $session['session_name']; ?>
                                 </label>
                             </div>
                         <?php } ?>
                     </div>
+                </div>
 
-                    <!-- Materials list -->
-                    <div class="col-md-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
-                        <p><strong>قائمة المواد</strong></p>
+                <!-- Step 3: Select Materials -->
+                <div class="tab1">
+                    <div class="col-md-12 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <h4>قائمة المواد</h4>
                         <div class="form-check row justify-content-center">
                             <input class="form-check-input" type="checkbox" id="all_materials"
                                    onclick="toggleAllMaterials()">
@@ -298,10 +502,25 @@ $teachers = $db->getAllTeachers();
                             </div>
                         <?php } ?>
                     </div>
-                    <div class="col-md-1 mt-3">
-                        <button type="submit" style="height: 5rem" class="m-3 btn btn-success btn-block">حفظ</button>
-                    </div>
+                </div>
 
+                <!-- Navigation Buttons -->
+                <div style="overflow:auto;">
+                    <div style="float:right;">
+                        <button type="button" class="btn btn-secondary" id="prevBtn1" onclick="nextPrev1(-1)
+">السابق
+                        </button>
+                        <button type="button" class="btn btn-primary" id="nextBtn1" onclick="nextPrev1(1)
+">التالي
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step Indicators -->
+                <div style="text-align:center;margin-top:40px;">
+                    <span class="step1"></span>
+                    <span class="step1"></span>
+                    <span class="step1"></span>
                 </div>
             </form>
         </div>
@@ -318,6 +537,7 @@ $teachers = $db->getAllTeachers();
         <table class="table table-striped text-right" id="reports">
             <thead>
             <tr>
+                <th>الرقم</th>
                 <th>الاسم</th>
                 <th>النوع</th>
                 <th>المواد</th>
@@ -335,6 +555,7 @@ $teachers = $db->getAllTeachers();
             // Display session details in the table
             foreach ($sessions as $session) {
                 echo "<tr>";
+                echo "<td>{$session['id']}</td>";
                 echo "<td>{$session['session_name']}</td>";
                 echo "<td>{$session['type']}</td>";
                 echo "<td>{$session['materials']}</td>";
@@ -364,6 +585,126 @@ $teachers = $db->getAllTeachers();
 
     </div>
 </div>
+
+<script>
+    var currentTab = 0;
+    showTab(currentTab);
+
+    function showTab(n) {
+        var x = document.getElementsByClassName("tab");
+        x[n].style.display = "block";
+        if (n == 0) {
+            document.getElementsByClassName("btn-secondary")[0].style.display = "none";
+        } else {
+            document.getElementsByClassName("btn-secondary")[0].style.display = "inline";
+        }
+        if (n == (x.length - 1)) {
+            document.getElementById("nextBtn").innerHTML = "حفظ";
+        } else {
+            document.getElementById("nextBtn").innerHTML = "التالي";
+        }
+        fixStepIndicator(n);
+    }
+
+    function nextPrev(n) {
+        var x = document.getElementsByClassName("tab");
+        x[currentTab].style.display = "none";
+        currentTab = currentTab + n;
+        if (currentTab >= x.length) {
+            document.getElementById("multiStepForm").submit();
+            return false;
+        }
+        showTab(currentTab);
+    }
+
+    function fixStepIndicator(n) {
+        let i, x = document.getElementsByClassName("step");
+        console.log(x)
+        for (i = 0; i < x.length; i++) {
+            x[i].className = x[i].className.replace(" active", "");
+        }
+        x[n].className += " active";
+    }
+</script>
+
+<script>
+    let currentTab1 = 0; // Current tab is set to be the first tab (0)
+    showTab1(currentTab1); // Display the current tab
+
+    function showTab1(n) {
+        // This function will display the specified tab of the form
+        let x = document.getElementsByClassName("tab1");
+        x[n].style.display = "block";
+        // Fix the Previous/Next buttons:
+        if (n == 0) {
+            document.getElementById("prevBtn1").style.display = "none";
+        } else {
+            document.getElementById("prevBtn1").style.display = "inline";
+        }
+        if (n == (x.length - 1)) {
+            document.getElementById("nextBtn1").innerHTML = "حفظ";
+        } else {
+            document.getElementById("nextBtn1").innerHTML = "التالي";
+        }
+        // Run a function that displays the correct step indicator:
+        fixStepIndicator1(n)
+    }
+
+    function nextPrev1(n) {
+
+        // This function will figure out which tab to display
+        let x = document.getElementsByClassName("tab1");
+        console.log(x)
+        // Exit the function if any field in the current tab is invalid:
+        if (n == 1 && !validateForm1()) return false;
+        // Hide the current tab:
+        x[currentTab1].style.display = "none";
+        // Increase or decrease the current tab by 1:
+        currentTab1 = currentTab1 + n;
+        // if you have reached the end of the form... :
+        if (currentTab1 >= x.length) {
+            //...the form gets submitted:
+            document.getElementById("studentToPackageForm").submit();
+            return false;
+        }
+        // Otherwise, display the correct tab:
+        showTab1(currentTab1);
+    }
+
+    function validateForm1() {
+        // This function deals with validation of the form fields
+        let x, y, i, valid = true;
+        x = document.getElementsByClassName("tab1");
+        y = x[currentTab1].getElementsByTagName("input");
+        // A loop that checks every input field in the current tab:
+        console.log('validation starts')
+        console.log(y)
+        for (i = 1; i < y.length; i++) {
+            // If a field is empty...
+            if (y[i].value == "") {
+                // add an "invalid" class to the field:
+                y[i].className += " invalid";
+                // and set the current valid status to false
+                valid = false;
+            }
+        }
+        // If the valid status is true, mark the step as finished and valid:
+        if (valid) {
+            document.getElementsByClassName("step")[currentTab1].className += " finish";
+        }
+        return valid; // return the valid status
+    }
+
+    function fixStepIndicator1(n) {
+        // This function removes the "active" class of all steps...
+        let i, x = document.getElementsByClassName("step1");
+        for (i = 0; i < x.length; i++) {
+            x[i].className = x[i].className.replace(" active", "");
+        }
+        //... and adds the "active" class to the current step:
+        x[n].className += " active";
+    }
+</script>
 
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -431,13 +772,14 @@ $teachers = $db->getAllTeachers();
 <script>
 
     let selectedClassValues = [];
-    let selectAllCheckbox = document.getElementById('all_materials_2');
+
+
     function filterStudents() {
         let selectedClass = document.getElementById('classDropdown').value.toUpperCase();
         let searchInput = document.getElementById('searchInput').value.toUpperCase();
         let studentRows = document.querySelectorAll('.student-row');
 
-        studentRows.forEach(function(row) {
+        studentRows.forEach(function (row) {
             let studentName = row.querySelector('.form-check-label').textContent.toUpperCase();
             let studentClass = row.getAttribute('data-class').toUpperCase();
 
@@ -449,6 +791,25 @@ $teachers = $db->getAllTeachers();
             }
         });
     }
+
+    function filterStudents2() {
+        let selectedClass = document.getElementById('classDropdown2').value.toUpperCase();
+        let searchInput = document.getElementById('searchInput2').value.toUpperCase();
+        let studentRows = document.querySelectorAll('.student-row2');
+
+        studentRows.forEach(function (row) {
+            let studentName = row.querySelector('.form-check-label').textContent.toUpperCase();
+            let studentClass = row.getAttribute('data-class').toUpperCase();
+
+            if ((selectedClass === "" || studentClass === selectedClass) &&
+                (searchInput === "" || studentName.includes(searchInput))) {
+                row.style.display = 'flex';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
     function getClassValue(classValue, checkbox) {
         if (checkbox.checked) {
             selectedClassValues.push(classValue);
@@ -460,10 +821,18 @@ $teachers = $db->getAllTeachers();
         }
 
         let schoolBackpackDiv = document.getElementById('school_backpack');
-        console.log(selectedClassValues)
+        let individualDiv = document.getElementById('individual-div');
+        if (selectedClassValues.length >= 2) {
+            individualDiv.style.visibility = 'hidden';
+
+        } else {
+            individualDiv.style.visibility = 'visible';
+
+        }
+
         if (selectedClassValues.some(value => parseInt(value) >= 10)) {
             schoolBackpackDiv.style.visibility = 'hidden';
-            alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
+            // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
         } else {
             schoolBackpackDiv.style.visibility = 'visible';
         }
@@ -480,7 +849,7 @@ $teachers = $db->getAllTeachers();
         } else if (privateValue === 'حقيبة مدرسية') {
             console.log(selectedClassValues)
             if (selectedClassValues.some(value => parseInt(value) >= 10)) {
-                // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
+                alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
                 document.querySelector('input[name="session_package"]:checked').checked = false;
                 return;
             }
@@ -506,18 +875,11 @@ $teachers = $db->getAllTeachers();
         });
     }
 
-    function toggleAllMaterials2(checkAll = false) {
-
-        let checkboxes = document.querySelectorAll('input[name="materials2[]"]');
-        let selectAllCheckbox = document.getElementById('all_materials_2');
-
-        // If the function is called with checkAll as true, set selectAllCheckbox.checked to true
-        if (checkAll) {
-            selectAllCheckbox.checked = true;
-        }
-
+    function toggleAll(classType) {
+        var checkboxes = document.querySelectorAll('.' + classType);
+        var allChecked = document.getElementById('all_' + classType).checked;
         checkboxes.forEach(function (checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
+            checkbox.checked = allChecked;
         });
     }
 

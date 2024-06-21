@@ -6,12 +6,14 @@ $db = new MyDB();
 $sName = '';
 $material = $_POST['material'];
 $teacher_id = $_POST['teacher_id'];
-//echo json_encode($_POST);die();
+
 if(isset($_POST['student_name'])){
     $sName =  $_POST['student_name'];
 }else{
     $sName=$_POST['student_names'];
-    $sName = implode(",",$sName);
+    if(is_array($sName)){
+        $sName = implode(",",$sName);
+    }
 }
 $id = $_POST['pSessionID'];
 $type = $_POST['type'];
