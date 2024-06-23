@@ -8,7 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['student_id'])) {
     // Call the getEnrolledSessionsForStudent function
     $studentId = $_POST['student_id'];
     $sessions = $db->getEnrolledSessionsForStudent($studentId);
-
+    // Return the result as JSON
+    echo json_encode($sessions);
+} else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['teacher_id'])) {
+    // Call the getEnrolledSessionsForStudent function
+    $teacherId = $_POST['teacher_id'];
+    $sessions = $db->getEnrolledSessionsForTeachers($teacherId);
     // Return the result as JSON
     echo json_encode($sessions);
 } else {

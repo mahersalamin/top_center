@@ -74,12 +74,12 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             </select>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="session_cost">سعر الدورة</label>
+                                    <label for="session_cost">المبلغ المطلوب</label>
                                     <input class="form-control" id="session_cost" type="number" readonly>
 
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="total_payments">المدفوع</label>
+                                    <label for="total_payments">المبلغ المدفوع</label>
                                     <input class="form-control" id="total_payments" type="number" readonly>
 
                                 </div>
@@ -159,16 +159,20 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                                 <option value="" selected disabled>اختر المستلم</option>
                                 <option value="0" >مستفيد خارجي</option>
                                 <?php
-                                // Fetch teachers from the database
                                 $teachers = $db->getAllTeachers();
-
-                                // Loop through the teachers and populate the options
                                 foreach ($teachers as $teacher) {
                                     echo "<option value='{$teacher['id']}'>{$teacher['name']}</option>";
                                 }
                                 ?>
                             </select>
                         </div>
+                         <div id="teacher-sessions-div" class="form-group">
+                             <label for="teacher-sessions">الدورة</label>
+                             <select class="form-control" id="teacher-sessions" name="teacher-sessions">
+                                 <!-- Options will be populated dynamically via AJAX -->
+                                 <option disabled selected>اختر معلم لعرض الدورات</option>
+                             </select>
+                         </div>
                         <div class="form-group">
                             <label for="outcome_amount">القيمة</label>
                             <input type="number" min="0" class="form-control" id="outcome_amount" name="outcome_amount" required>
@@ -240,14 +244,14 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                         </div>
                         <div class="card col-md-4 mt-4">
                             <div class="card-body">
-                                <h5 class="card-title">المصاريف</h5>
+                                <h5 class="card-title">مصاريف المعلمين</h5>
                                 <p>عدد الدفعات الصادرة للمعلمين: <?php echo $outcomeStats['count']; ?></p>
                                 <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
                             </div>
                         </div>
                         <div class="card col-md-4 mt-4">
                             <div class="card-body">
-                                <h5 class="card-title">المصاريف</h5>
+                                <h5 class="card-title">مصاريف خارجية</h5>
                                 <p>عدد الدفعات الصادرة الى جهات خارجية: <?php echo $outcomeStats['count']; ?></p>
                                 <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
                             </div>
@@ -267,7 +271,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
 <script>
     $(document).ready(function() {
         var sessionData = {}; // Define sessionData in the outer scope
-
+        $('#teacher-sessions-div').css("visibility", "hidden");
         $('#income_student').change(function() {
             var studentId = $(this).val();
             $.ajax({
@@ -308,6 +312,61 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                 }
             });
         });
+
+        $('#outcome_type').change(function() {
+            let outComeType = $(this).val()
+            if(outComeType !== 'أجور'){
+                $('#teacher-sessions-div').css("visibility", "hidden");
+                $('#teacher-sessions').prop("disabled", true);
+            } else {
+                $('#teacher-sessions-div').css("visibility", "visible");
+                $('#teacher-sessions').prop("disabled", false);
+            }
+
+        });
+
+
+        $('#outcome_receiver').change(function() {
+            var teacherID = $(this).val();
+            $.ajax({
+                url: '../get_enrolled_sessions.php', // Endpoint URL
+                type: 'POST',
+                data: { teacher_id: teacherID },
+                dataType: 'json',
+                success: function(response) {
+                    $('#income_session').empty();
+                    sessionData = {}; // Re-initialize sessionData for the new student
+
+                    $.each(response, function(index, session) {
+                        $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
+                        sessionData[session.id] = {
+                            price: session.price,
+                            total_payments: session.total_payments
+                        };
+                    });
+
+                    // Unbind the previous change event handler to avoid stacking
+                    $('#income_session').off('change').change(function() {
+                        var selectedSessionId = $(this).val();
+                        if (selectedSessionId) {
+                            var selectedSession = sessionData[selectedSessionId];
+                            $('#session_cost').val(selectedSession.price);
+                            $('#total_payments').val(selectedSession.total_payments);
+                        } else {
+                            $('#session_cost').val('');
+                            $('#total_payments').val('');
+                        }
+                    });
+
+                    // Trigger change to update fields for the initially selected option
+                    $('#income_session').trigger('change');
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
     });
 
 </script>

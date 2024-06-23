@@ -188,14 +188,7 @@ class MyDB
         $conn = $this->connect();
         $result = $conn->query($query);
         $rows = array();
-
         while ($row = $result->fetch_assoc()) {
-            $duration = $row['total']; // Assuming there's a column named 'total' in 'att' table
-            $spec_id = $row['spc'];
-            $teacher_id = $row['tec_id'];
-            $price = $this->calculatePrice($duration, $spec_id, $teacher_id); // Use $this-> to refer to the method within the same class
-            $row['price'] = number_format($price, 2); // Add the calculated price to the result set
-
             $rows[] = $row;
         }
 //        $conn->close();
@@ -310,46 +303,42 @@ class MyDB
     }
 
 
-    public function addSession($session_name,
-                               $students,
-                               $sessionPackage,
-                               $materials,
-                               $isGroup,
-                               $price,
-                               $hours,
-                               $teachers)
-    {
-
-
+    public function addSession(
+        $session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers){
         $conn = $this->connect();
         $materials = implode(",", $materials);
 
-
         $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price) 
               VALUES ('$session_name','$sessionPackage', '$materials', $isGroup, $hours, $price)";
-
-
         $conn->query($query);
         $sessionId = $conn->insert_id;
 
-
         foreach ($teachers as $teacher) {
-            $query = "INSERT INTO session_teachers (session_id, teacher_id) 
-                  VALUES ('$sessionId', '$teacher')";
+            $teacherId = $teacher['id'];
+            $percentage = $teacher['percentage'] / 100;
+
+            $sessionAmount = $price * $percentage;
+
+            $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage) 
+                  VALUES ('$sessionId', '$teacherId', '$sessionAmount', '$percentage')";
             $conn->query($query);
         }
 
+        $studentSessionCost = $price / count($students);
         foreach ($students as $student) {
-            $query = "INSERT INTO session_students (session_id, student_id) 
-                  VALUES ('$sessionId', '$student')";
+            $query = "INSERT INTO session_students (session_id, student_id, session_cost) 
+                  VALUES ('$sessionId', '$student', '$studentSessionCost')";
             $conn->query($query);
         }
 
         // Close the connection
-//        $conn->close();
+        $conn->close();
 
         return true;
     }
+
+
+
 
     public function updateSessions($students, $sessions, $materials)
     {
