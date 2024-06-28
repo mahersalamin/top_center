@@ -18,11 +18,12 @@ require '../dbconnection.php';
                             <th>الحالة</th>
                             <th>الطالب</th>
                             <th>المعلم</th>
+                            <th>اسم الدورة</th>
                             <th>التاريخ</th>
                             <th>وقت البدء</th>
                             <th>وقت الإنتهاء</th>
                             <th>مدة الحصة</th>
-                            <th>السعر</th>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -40,7 +41,9 @@ require '../dbconnection.php';
                                         <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
                                         <!-- Display the current approve status -->
                                         <?php $approveStatus = $row['aprove'] == 1 ? 'موافق' : 'غير موافق'; ?>
-                                        <p>الحالة: <?php echo $approveStatus; ?></p>
+                                        <?php $processed = $row['processed'] == 1 ? 'تم التأكيد' : 'غير مؤكدة'; ?>
+                                        <p>الحالة: <?= $approveStatus; ?></p>
+                                        <p>الحالة: <?= $processed; ?></p>
                                         <!-- Display the button to toggle the approve status -->
                                         <button type="submit" value="1" name="status" class="btn btn-outline-success">
                                             موافقة ✓
@@ -52,18 +55,38 @@ require '../dbconnection.php';
                                     </form>
                                 </td>
                                 <td>
+                                    <?php $snames = explode(',',$row['snames']);
+                                            echo '<ul  class="list-group">';
+                                            foreach ($snames as $sname){
+                                                echo '<li>'. $sname.'</li>';
 
-                                    <?php echo "  ", $row['sname']; ?>
+                                            }
+                                            echo '</ul>'
+                                    ?>
+
                                 </td>
                                 <td><?php echo $row['tname']; ?></td>
+                                <td><?php echo $row['session_name']; ?></td>
                                 <td><?php echo $row['date']; ?></td>
                                 <td><?php echo $row['enter']; ?></td>
                                 <td><?php echo $row['exit']; ?></td>
                                 <td><?php echo $row['total']; ?></td>
-                                <td><?php echo $row['price']; ?></td>
+
                             </tr>
                         <?php } ?>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>الحالة</th>
+                            <th>الطالب</th>
+                            <th>المعلم</th>
+                            <th>اسم الدورة</th>
+                            <th>التاريخ</th>
+                            <th>وقت البدء</th>
+                            <th>وقت الإنتهاء</th>
+                            <th>مدة الحصة</th>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -83,14 +106,52 @@ require '../dbconnection.php';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script src="/pdfmake-arabic/pdfmake.js"></script>
+<script src="/pdfmake-arabic/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
 <script>
     $(document).ready(function () {
+        $('#dt-filter-search').dataTable({
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    let column = this;
+                    let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
+                        .appendTo($(column.footer()).empty())
+                        .on('change input', function () {
+                            let val = $(this).val()
+
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    import pdfMake from "pdfmake/build/pdfmake";
+    import pdfFonts from "pdfmake/build/vfs_fonts";
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+    pdfMake.fonts = {
+        Cairo: {
+            normal: '/top/Cairo/static/Cairo-Black.ttf',
+        }
+    };
+    $(document).ready(function () {
         var table = $('#example').DataTable({
+            dom: 'Bfrtip',
+
             lengthChange: false,
             buttons: [
                 'copy', 'excel', 'csv', {
@@ -104,16 +165,16 @@ require '../dbconnection.php';
                     customize: function (doc) {
                         // Specify the font paths for all styles
                         var cairoFonts = {
-                            normal: '../Cairo/static/Cairo-Regular.ttf',
-                            bold: '../Cairo/static/Cairo-Bold.ttf',
-                            italic: '../Cairo/static/Cairo-Regular.ttf', // You can change this if there's a separate italic font file
-                            bolditalic: '../Cairo/static/Cairo-Bold.ttf',
-                            light: '../Cairo/static/Cairo-Light.ttf',
-                            extralight: '../Cairo/static/Cairo-ExtraLight.ttf',
-                            medium: '../Cairo/static/Cairo-Medium.ttf',
-                            semibold: '../Cairo/static/Cairo-SemiBold.ttf',
-                            extrabold: '../Cairo/static/Cairo-ExtraBold.ttf',
-                            black: '../Cairo/static/Cairo-Black.ttf'
+                            normal: '/top/Cairo/static/Cairo-Regular.ttf',
+                            bold: '/top/Cairo/static/Cairo-Bold.ttf',
+                            italic: '/top/Cairo/static/Cairo-Regular.ttf', // You can change this if there's a separate italic font file
+                            bolditalic: '/top/Cairo/static/Cairo-Bold.ttf',
+                            light: '/top/Cairo/static/Cairo-Light.ttf',
+                            extralight: '/top/Cairo/static/Cairo-ExtraLight.ttf',
+                            medium: '/top/Cairo/static/Cairo-Medium.ttf',
+                            semibold: '/top/Cairo/static/Cairo-SemiBold.ttf',
+                            extrabold: '/top/Cairo/static/Cairo-ExtraBold.ttf',
+                            black: '/top/Cairo/static/Cairo-Black.ttf'
                         };
                         doc.defaultStyle.font = 'Cairo';
 

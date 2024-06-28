@@ -80,9 +80,6 @@ $classes = $db->getClasses();
 ?>
 
 
-    <br>
-    <br>
-
 <?php
 if (isset($_GET['message']) && isset($_GET['status'])) {
     // Get the message and status from the query parameters

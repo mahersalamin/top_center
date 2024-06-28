@@ -139,17 +139,49 @@ class MyDB
     }
 
 
+    function dailyReport(){
+        $sql = "
+            SELECT att.*, 
+                   teacher.name AS tname, 
+                   (SELECT GROUP_CONCAT(students.name ORDER BY students.name SEPARATOR ', ') 
+                    FROM students 
+                    WHERE FIND_IN_SET(students.id, att.st_id)) AS snames, 
+                   sessions.session_name,
+                   sessions.hours
+            FROM att
+            INNER JOIN teacher 
+                ON teacher.id = att.tec_id
+            INNER JOIN sessions
+                ON sessions.id = att.session_id
+            ORDER BY att.date DESC;
+        ";
+
+        $result =  $this->connect()->query($sql);
+
+        $attendances = [];
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $attendances[] = $row;
+            }
+            return $attendances;
+        } else {
+            echo "0 results";
+        }
+
+    }
 
 
     public function getApprovedAttendances()
     {
 
-        $query = "SELECT att.* , teacher.name AS tname , students.name as sname 
+        $query = "SELECT att.* , teacher.name AS tname , students.name as sname , sessions.session_name
             FROM att
             INNER JOIN students 
             ON students.id = att.st_id
             INNER JOIN teacher 
             ON teacher.id = att.tec_id
+            INNER JOIN sessions
+            ON sessions.id = att.session_id
             WHERE att.aprove = 1
             ORDER BY date DESC";
 
@@ -159,11 +191,6 @@ class MyDB
         $rows = array();
 
         while ($row = $result->fetch_assoc()) {
-            $duration = $row['total']; // Assuming there's a column named 'total' in 'att' table
-            $spec_id = $row['spc'];
-            $teacher_id = $row['tec_id'];
-            $price = $this->calculatePrice($duration, $spec_id, $teacher_id); // Use $this-> to refer to the method within the same class
-            $row['price'] = number_format($price, 2); // Add the calculated price to the result set
 
             $rows[] = $row;
         }
@@ -175,14 +202,19 @@ class MyDB
     public function getAllSessions()
     {
 
-        $query = "SELECT att.* , teacher.name AS tname , students.name as sname 
+        $query = "
+            SELECT att.*, 
+            teacher.name AS tname, 
+            (SELECT GROUP_CONCAT(students.name ORDER BY students.name SEPARATOR ', ') 
+            FROM students 
+            WHERE FIND_IN_SET(students.id, att.st_id)) AS snames, sessions.session_name
             FROM att
-            INNER JOIN students 
-            ON students.id = att.st_id
             INNER JOIN teacher 
             ON teacher.id = att.tec_id
-        
-            ORDER BY date DESC";
+            INNER JOIN sessions
+            ON sessions.id = att.session_id
+            ORDER BY att.date DESC;
+        ";
 
 
         $conn = $this->connect();
@@ -271,16 +303,7 @@ class MyDB
         return $rows;
     }
 
-    public function getSpecializationPriceForTeacher($tid, $sid)
-    {
-        $query = "SELECT price FROM teacher_specializations where teacher_id = $tid and  spec=$sid";
-        $conn = $this->connect();
-        $result = $conn->query($query);
-        $row = $result->fetch_assoc();
-//        $conn->close();
 
-        return isset($row['price']) ? $row['price'] : '';
-    }
 
 
     public function getAllTeachers()
@@ -1067,13 +1090,6 @@ GROUP BY students.id
         $rows = array();
 
         while ($row = $result->fetch_assoc()) {
-            // Calculate the price for each session based on duration
-            $duration = $row['total']; // Assuming there's a column named 'total' in 'att' table
-            $spec_id = $row['spc'];
-            $teacher_id = $row['tec_id'];
-            $price = $this->calculatePrice($duration, $spec_id, $teacher_id); // Use $this-> to refer to the method within the same class
-            $row['price'] = $price; // Add the calculated price to the result set
-
             $rows[] = $row;
         }
 //        echo json_encode($rows);die();

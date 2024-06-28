@@ -15,6 +15,7 @@ require '../dbconnection.php';
             <tr>
                 <th class="th-sm">اسم الطالب</th>
                 <th class="th-sm">اسم المعلم</th>
+                <th class="th-sm">الدورة</th>
                 <th class="th-sm">التاريخ</th>
                 <th class="th-sm">وقت البدء</th>
                 <th class="th-sm">وقت الإنتهاء</th>
@@ -36,6 +37,9 @@ require '../dbconnection.php';
                 </td>
                 <td>
                     <?php echo $row['tname']; ?>
+                </td>
+                <td>
+                    <?php echo $row['session_name']; ?>
                 </td>
                 <td>
                     <?php echo $row['date']; ?>
@@ -63,6 +67,8 @@ require '../dbconnection.php';
                 </th>
                 <th>اسم المعلم
                 </th>
+                <th>الدورة
+                </th>
                 <th>تاريخ الحصة
                 </th>
                 <th>وقت البدء
@@ -86,11 +92,11 @@ require '../dbconnection.php';
 
                 initComplete: function () {
                     this.api().columns().every(function () {
-                        var column = this;
-                        var search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
+                        let column = this;
+                        let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                             .appendTo($(column.footer()).empty())
                             .on('change input', function () {
-                                var val = $(this).val()
+                                let val = $(this).val()
 
                                 column
                                     .search(val ? val : '', true, false)

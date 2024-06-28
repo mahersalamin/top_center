@@ -61,7 +61,6 @@
     }
 
 
-
     /* Input fields */
     .form-control {
         margin-bottom: 20px;
@@ -94,7 +93,7 @@
     }
 
     /* Customize the submit button */
-    #studentCheckboxes{
+    #studentCheckboxes {
         background-color: #e9e9ff;
     }
 
@@ -130,7 +129,8 @@
     .btn-secondary, .btn-primary {
         margin-top: 20px;
     }
-    .invalid{
+
+    .invalid {
         color: red;
         border: 1px solid;
     }
@@ -383,17 +383,26 @@ $teachers = $db->getAllTeachers();
 
                 <!-- Step 6: Teachers list -->
                 <div class="tab">
-                    <div class="col-md-5 mt-3 font-weight-bold" style="height: 150px; overflow-y: auto;">
+                    <div class="col-md-5 mt-3 font-weight-bold" style="height: 400px; overflow-y: auto;">
                         <div>
                             <p><strong>المعلمين</strong></p>
                             <?php foreach ($teachers as $teacher) { ?>
                                 <div class="mr-2 form-check row justify-content-center">
-                                    <input class="form-check-input" type="checkbox" name="teachers[]"
+                                    <input class="form-check-input" type="checkbox" name="teachers[<?php echo $teacher['id']; ?>][id]"
                                            id="teacher_<?php echo $teacher['id']; ?>"
                                            value="<?php echo $teacher['id']; ?>">
-                                    <label class="form-check-label" for="teacher_<?php echo $teacher['id']; ?>">
+                                    <label class="form-check-label mr-2" for="teacher_<?php echo $teacher['id']; ?>">
                                         <?php echo $teacher['name']; ?>
                                     </label>
+
+                                    <select class="form-control percentage-select ml-2"
+                                            name="teachers[<?php echo $teacher['id']; ?>][percentage]"
+                                            id="percentage_<?php echo $teacher['id']; ?>"
+                                            disabled>
+                                        <option value="" disabled selected>اختر النسب</option>
+                                        <option value="50">50%</option>
+                                        <option value="75">75%</option>
+                                    </select>
                                 </div>
                             <?php } ?>
                         </div>
@@ -586,6 +595,23 @@ $teachers = $db->getAllTeachers();
     </div>
 </div>
 
+
+<script>
+    // Enable or disable percentage select based on checkbox state
+    document.querySelectorAll('.form-check-input').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const teacherId = this.value;
+            const percentageSelect = document.getElementById('percentage_' + teacherId);
+            if (this.checked) {
+                percentageSelect.disabled = false;
+            } else {
+                percentageSelect.disabled = true;
+                percentageSelect.value = ''; // Clear the select if unchecked
+            }
+        });
+    });
+</script>
+
 <script>
     var currentTab = 0;
     showTab(currentTab);
@@ -619,7 +645,7 @@ $teachers = $db->getAllTeachers();
 
     function fixStepIndicator(n) {
         let i, x = document.getElementsByClassName("step");
-        console.log(x)
+
         for (i = 0; i < x.length; i++) {
             x[i].className = x[i].className.replace(" active", "");
         }
@@ -654,7 +680,7 @@ $teachers = $db->getAllTeachers();
 
         // This function will figure out which tab to display
         let x = document.getElementsByClassName("tab1");
-        console.log(x)
+
         // Exit the function if any field in the current tab is invalid:
         if (n == 1 && !validateForm1()) return false;
         // Hide the current tab:
@@ -677,8 +703,7 @@ $teachers = $db->getAllTeachers();
         x = document.getElementsByClassName("tab1");
         y = x[currentTab1].getElementsByTagName("input");
         // A loop that checks every input field in the current tab:
-        console.log('validation starts')
-        console.log(y)
+
         for (i = 1; i < y.length; i++) {
             // If a field is empty...
             if (y[i].value == "") {
@@ -822,12 +847,13 @@ $teachers = $db->getAllTeachers();
 
         let schoolBackpackDiv = document.getElementById('school_backpack');
         let individualDiv = document.getElementById('individual-div');
-        if (selectedClassValues.length >= 2) {
+        let groupInput = document.getElementById('group');
+        if (selectedClassValues.length > 1) {
             individualDiv.style.visibility = 'hidden';
-
+            groupInput.checked = true
         } else {
             individualDiv.style.visibility = 'visible';
-
+            groupInput.checked = false
         }
 
         if (selectedClassValues.some(value => parseInt(value) >= 10)) {
@@ -844,10 +870,14 @@ $teachers = $db->getAllTeachers();
         let individualDiv = document.getElementById('individual-div');
 
         if (privateValue === 'دورة خاصة') {
-            hoursDiv.style.visibility = 'hidden';
-            individualDiv.style.visibility = 'visible';
+            if (selectedClassValues.length < 2) {
+                hoursDiv.style.visibility = 'hidden';
+                individualDiv.style.visibility = 'visible';
+            }
+            hoursDiv.style.visibility = 'visible';
+            individualDiv.style.visibility = 'hidden';
         } else if (privateValue === 'حقيبة مدرسية') {
-            console.log(selectedClassValues)
+
             if (selectedClassValues.some(value => parseInt(value) >= 10)) {
                 alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
                 document.querySelector('input[name="session_package"]:checked').checked = false;
@@ -855,10 +885,13 @@ $teachers = $db->getAllTeachers();
             }
             individualDiv.style.visibility = 'hidden';
             hoursDiv.style.visibility = 'visible';
-            toggleAllMaterials2(true); // Call the function here with true to check all checkboxes
         } else {
+            if (selectedClassValues.length < 2) {
+                hoursDiv.style.visibility = 'hidden';
+                individualDiv.style.visibility = 'visible';
+            }
             hoursDiv.style.visibility = 'visible';
-            individualDiv.style.visibility = 'visible';
+            individualDiv.style.visibility = 'hidden';
         }
     }
 
