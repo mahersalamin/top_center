@@ -7,10 +7,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Retrieve the new specialization name from the form
     $new_spec = $_POST['new_spec'];
+    $class = $_POST['class_type'];
 
     // Add the new specialization to the database
 
-    $result = $db->addSpecialization($new_spec);
+    $result = $db->addSpecialization($new_spec,$class);
 
     // Check if the specialization was successfully added
     if ($result) {

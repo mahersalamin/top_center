@@ -311,7 +311,7 @@ $teachers = $db->getAllTeachers();
                 <div class="tab">
                     <div class="row">
                         <!-- Column for Class Type 1 -->
-                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الأساسية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class1"
@@ -334,7 +334,7 @@ $teachers = $db->getAllTeachers();
                         </div>
 
                         <!-- Column for Class Type 2 -->
-                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الاعدادية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class2"
@@ -357,7 +357,7 @@ $teachers = $db->getAllTeachers();
                         </div>
 
                         <!-- Column for Class Type 3 -->
-                        <div class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الثانوية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class3"
@@ -794,6 +794,8 @@ $teachers = $db->getAllTeachers();
     });
 </script>
 
+
+
 <script>
 
     let selectedClassValues = [];
@@ -861,6 +863,26 @@ $teachers = $db->getAllTeachers();
             // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
         } else {
             schoolBackpackDiv.style.visibility = 'visible';
+        }
+
+        let elementary_div = document.getElementById('elementary_materials');
+        let mid_div = document.getElementById('mid_materials');
+        let secondary_div = document.getElementById('secondary_materials');
+
+        if (selectedClassValues.some(value => parseInt(value) >= 10)) {
+            elementary_div.style.visibility = 'hidden';
+            mid_div.style.visibility = 'hidden';
+            secondary_div.style.visibility = 'visible';
+
+            // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
+        } else if(selectedClassValues.some(value => parseInt(value) <= 6 )){
+            elementary_div.style.visibility = 'visible';
+            mid_div.style.visibility = 'hidden';
+            secondary_div.style.visibility = 'hidden';
+        }else {
+            elementary_div.style.visibility = 'hidden';
+            mid_div.style.visibility = 'visible';
+            secondary_div.style.visibility = 'hidden';
         }
     }
 

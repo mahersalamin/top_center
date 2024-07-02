@@ -42,37 +42,41 @@ if ($teacher) {
                             <label style="color: black; display: inline; font-weight: bold" for="specs">اختر التخصصات:</label><br>
                             <br>
                             <?php
-                            $teacher_specializations = $db->getTeacherSpecializations($teacher['id']); // Assuming you have a method to fetch the teacher's specializations
+                            $teacher_specializations = $db->getTeacherSessions($teacher['id']); // Assuming you have a method to fetch the teacher's specializations
+
                             $specializations = $db->getSpecializations();
                             foreach ($specializations as $spec) {
                                 $checked = false;
                                 foreach ($teacher_specializations as $teacher_spec) {
-                                    if (($teacher_spec['spec'] == $spec['id'])) {
+                                    if (($teacher_spec['spc'] == $spec['id'])) {
                                         $checked = true;
+                                        ?>
+                                        <div class="form-check row ">
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="specs[<?php echo $spec['id']; ?>][id]"
+                                                   value="<?php echo $spec['id']; ?>"
+                                                   id="spec_<?php echo $spec['id']; ?>" <?php echo $checked ? 'checked' : ''; ?>>
+                                            <label class="form-check-label"
+                                                   for="spec_<?php echo $spec['id']; ?>"><?php echo $spec['name']; ?></label>
+                                            <?php
+                                            $price = $db->getSpecializationPriceForTeacher($teacher['id'], $spec['id']);
+                                            ?>
+                                            <label>
+                                                <select name="specs[<?php echo $spec['id']; ?>][price]" class="form-control">
+                                                    <option value="50" <?php $price==50? print "selected":'' ;?> >ثابت</option>
+                                                    <option value="75" <?php $price==75? print "selected":'' ;?> >حسب
+                                                        الطلب</option>
+                                                </select>
+
+                                            </label>
+                                        </div>
+                                        <?php
                                         break;
                                     }
                                 }
-                                ?>
-                                <div class="form-check row ">
-                                    <input class="form-check-input" type="checkbox"
-                                           name="specs[<?php echo $spec['id']; ?>][id]"
-                                           value="<?php echo $spec['id']; ?>"
-                                           id="spec_<?php echo $spec['id']; ?>" <?php echo $checked ? 'checked' : ''; ?>>
-                                    <label class="form-check-label"
-                                           for="spec_<?php echo $spec['id']; ?>"><?php echo $spec['name']; ?></label>
-                                    <?php
-                                    $price = $db->getSpecializationPriceForTeacher($teacher['id'], $spec['id']);
-                                    ?>
-                                    <label>
-                                        <select name="specs[<?php echo $spec['id']; ?>][price]" class="form-control">
-                                            <option value="50" <?php $price==50? print "selected":'' ;?> >ثابت</option>
-                                            <option value="75" <?php $price==75? print "selected":'' ;?> >حسب
-                                                الطلب</option>
-                                        </select>
 
-                                    </label>
-                                </div>
-                                <?php
+
+
                             }
                             ?>
                         </li>
