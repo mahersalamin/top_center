@@ -4,20 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix edit student and teacher">
-      <change afterPath="$PROJECT_DIR$/accept_attendance.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/page/daily_report.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/top.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/top.iml" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="&#10;big updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/AddSPC.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/MissionsReports.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/MissionsReports.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/MyRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/MyRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addSpecialization.php" beforeDir="false" afterPath="$PROJECT_DIR$/addSpecialization.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/newMission.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMission.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/editTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/editTeacher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/teacherBackPack.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherBackPack.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +40,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "D:/PhpstormProjects/practice_app",
     "node.js.detected.package.eslint": "true",
@@ -97,7 +91,9 @@
       <workItem from="1717090602869" duration="17534000" />
       <workItem from="1718866829700" duration="44000" />
       <workItem from="1719203912312" duration="9109000" />
-      <workItem from="1719556850833" duration="1418000" />
+      <workItem from="1719556850833" duration="1782000" />
+      <workItem from="1719913766356" duration="26000" />
+      <workItem from="1719913813752" duration="4241000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -127,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="&#10;big updates">
+      <option name="closed" value="true" />
+      <created>1719572713941</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1719572713941</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,7 +153,8 @@
     <MESSAGE value="add finance" />
     <MESSAGE value="commit unversioned files" />
     <MESSAGE value="fix edit student and teacher" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix edit student and teacher" />
+    <MESSAGE value="&#10;big updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="&#10;big updates" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

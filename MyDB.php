@@ -303,7 +303,17 @@ class MyDB
         return $rows;
     }
 
+    public function getSpecializationPriceForTeacher($tid, $sid)
+    {
+        $query = "SELECT percentage FROM session_teachers where teacher_id = $tid and  session_id=$sid";
 
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        $row = $result->fetch_assoc();
+//        $conn->close();
+
+        return isset($row['price']) ? $row['price'] : '';
+    }
 
 
     public function getAllTeachers()
@@ -556,7 +566,7 @@ class MyDB
         return $result;
     }
     // duplicated
-    public function addSpecialization($new_spec)
+    public function addSpecialization($new_spec,$class)
     {
         $conn = $this->connect();
 
@@ -564,7 +574,7 @@ class MyDB
         $new_spec = $conn->real_escape_string($new_spec);
 
         // Insert the new specialization into the database
-        $insertQuery = "INSERT INTO spc (name) VALUES ('$new_spec')";
+        $insertQuery = "INSERT INTO spc (name, class_type) VALUES ('$new_spec',$class)";
         $result = $conn->query($insertQuery);
 
         return $result;
@@ -866,22 +876,25 @@ GROUP BY students.id
         $conn = $this->connect(); // Assuming you have a method to establish a database connection
 
         // Fetch all sessions with their related session_teachers, session_students, and materials
-        $query = "SELECT s.*, st.*, ss.*, GROUP_CONCAT(DISTINCT stu.name) AS student_names, GROUP_CONCAT(DISTINCT t.name) AS teacher_names,
+        $query = "SELECT s.*, st.*, ss.*,s.hours AS session_hours,
+                   ss.hours AS student_hours,  GROUP_CONCAT(DISTINCT stu.name) AS student_names, GROUP_CONCAT(DISTINCT t.name) AS teacher_names,
                    GROUP_CONCAT(DISTINCT spc.name) AS materials
                     FROM sessions s
-                    LEFT JOIN session_teachers st ON s.id = st.session_id
-                    LEFT JOIN session_students ss ON s.id = ss.session_id
-                    LEFT JOIN students stu ON ss.student_id = stu.id
-                    LEFT JOIN teacher t ON st.teacher_id = t.id
-                    LEFT JOIN spc ON FIND_IN_SET(spc.id, s.material) > 0
-                    GROUP BY s.id
-                    ORDER BY s.id DESC;
+                     LEFT JOIN session_teachers st ON s.id = st.session_id
+                     LEFT JOIN session_students ss ON s.id = ss.session_id
+                     LEFT JOIN students stu ON ss.student_id = stu.id
+                     LEFT JOIN teacher t ON st.teacher_id = t.id
+                     LEFT JOIN spc ON FIND_IN_SET(spc.id, s.material) > 0
+            GROUP BY s.id
+            ORDER BY s.id DESC
         ";
         $result = $conn->query($query);
 
         // Store the fetched data in an associative array
         $sessions = [];
+
         while ($row = $result->fetch_assoc()) {
+//            var_dump($row['session_hours']);die();
             $sessionID = $row['id'];
             if (!isset($sessions[$sessionID])) {
                 // Initialize session details if not already set
@@ -890,7 +903,7 @@ GROUP BY students.id
                     'session_name' => $row['session_name'],
                     'type' => $row['type'],
                     'materials' => $row['materials'],
-                    'hours' => $row['hours'],
+                    'hours' => $row['session_hours'],
                     'price' => $row['price'],
                     'teachers' => [],
                     'students' => []
