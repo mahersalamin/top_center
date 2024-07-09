@@ -140,7 +140,6 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                 <div class="col-md-4">
                     <h3>مصاريف جديدة</h3>
                     <form method="POST" action="../finance_endpoint.php">
-
                         <div class="form-group">
                             <label for="outcome_date">التاريخ</label>
                             <input type="date" class="form-control" id="outcome_date" name="outcome_date" required>
@@ -157,7 +156,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             <label for="outcome_receiver">المستلم</label>
                             <select class="form-control" id="outcome_receiver" name="outcome_receiver" required>
                                 <option value="" selected disabled>اختر المستلم</option>
-                                <option value="0" >مستفيد خارجي</option>
+                                <option value="0">مستفيد خارجي</option>
                                 <?php
                                 $teachers = $db->getAllTeachers();
                                 foreach ($teachers as $teacher) {
@@ -166,13 +165,23 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                                 ?>
                             </select>
                         </div>
-                         <div id="teacher-sessions-div" class="form-group">
-                             <label for="teacher-sessions">الدورة</label>
-                             <select class="form-control" id="teacher-sessions" name="teacher-sessions">
-                                 <!-- Options will be populated dynamically via AJAX -->
-                                 <option disabled selected>اختر معلم لعرض الدورات</option>
-                             </select>
-                         </div>
+                        <div id="teacher-sessions-div" class="form-group">
+                            <label for="teacher-sessions">الدورة</label>
+                            <select class="form-control" id="teacher-sessions" name="teacher_sessions" required>
+                                <!-- Options will be populated dynamically via AJAX -->
+                                <option disabled selected>اختر معلم لعرض الدورات</option>
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="teacher_session_cost">المبلغ المطلوب</label>
+                                <input class="form-control" id="teacher_session_cost" type="number" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="teacher_total_payments">المبلغ المدفوع</label>
+                                <input class="form-control" id="teacher_total_payments" type="number" readonly>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="outcome_amount">القيمة</label>
                             <input type="number" min="0" class="form-control" id="outcome_amount" name="outcome_amount" required>
@@ -181,8 +190,14 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             <label for="outcome_notes">ملاحظات</label>
                             <textarea class="form-control" id="outcome_notes" name="outcome_notes"></textarea>
                         </div>
+
+                        <!-- Hidden inputs for teacher_id and session_id -->
+                        <input type="hidden" id="teacher_id" name="teacher_id">
+                        <input type="hidden" id="session_id" name="session_id">
+
                         <button type="submit" name="outcome_submit" class="btn btn-success mt-3">حفظ</button>
                     </form>
+
                 </div>
                 <div class="col-md-8">
                     <h3>تقرير المصاريف</h3>
@@ -205,7 +220,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                             echo "<td>{$outcome['id']}</td>";
                             echo "<td>{$outcome['date']}</td>";
                             echo "<td>{$outcome['type']}</td>";
-                            if($outcome['receiver'] == 0){
+                            if ($outcome['receiver'] == 0) {
                                 echo "<td>مستفيد خارجي</td>";
                             } else {
                                 echo "<td>{$outcome['receiver']}</td>";
@@ -269,21 +284,21 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
     </div>
 </div>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         var sessionData = {}; // Define sessionData in the outer scope
         $('#teacher-sessions-div').css("visibility", "hidden");
-        $('#income_student').change(function() {
+        $('#income_student').change(function () {
             var studentId = $(this).val();
             $.ajax({
                 url: '../get_enrolled_sessions.php', // Endpoint URL
                 type: 'POST',
-                data: { student_id: studentId },
+                data: {student_id: studentId},
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     $('#income_session').empty();
                     sessionData = {}; // Re-initialize sessionData for the new student
 
-                    $.each(response, function(index, session) {
+                    $.each(response, function (index, session) {
                         $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
                         sessionData[session.id] = {
                             price: session.price,
@@ -292,7 +307,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                     });
 
                     // Unbind the previous change event handler to avoid stacking
-                    $('#income_session').off('change').change(function() {
+                    $('#income_session').off('change').change(function () {
                         var selectedSessionId = $(this).val();
                         if (selectedSessionId) {
                             var selectedSession = sessionData[selectedSessionId];
@@ -307,15 +322,15 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                     // Trigger change to update fields for the initially selected option
                     $('#income_session').trigger('change');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
         });
 
-        $('#outcome_type').change(function() {
+        $('#outcome_type').change(function () {
             let outComeType = $(this).val()
-            if(outComeType !== 'أجور'){
+            if (outComeType !== 'أجور') {
                 $('#teacher-sessions-div').css("visibility", "hidden");
                 $('#teacher-sessions').prop("disabled", true);
             } else {
@@ -326,45 +341,67 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
         });
 
 
-        $('#outcome_receiver').change(function() {
-            var teacherID = $(this).val();
+        $('#outcome_receiver').change(function () {
+            let teacherID = $(this).val();
+
             $.ajax({
                 url: '../get_enrolled_sessions.php', // Endpoint URL
                 type: 'POST',
-                data: { teacher_id: teacherID },
+                data: {teacher_id: teacherID},
                 dataType: 'json',
-                success: function(response) {
-                    $('#income_session').empty();
+                success: function (response) {
+                    $('#teacher-sessions').empty();
                     sessionData = {}; // Re-initialize sessionData for the new student
 
-                    $.each(response, function(index, session) {
-                        $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
+                    $.each(response, function (index, session) {
+
+                        $('#teacher-sessions').append('<option value="' + session.id + '">' + session.session_name + '</option>');
                         sessionData[session.id] = {
-                            price: session.price,
-                            total_payments: session.total_payments
+                            price: session.session_amount,
+                            total_payments: session.paid_amount,
+                            teacher_id: session.teacher_id,
+                            session_id: session.id
                         };
                     });
 
                     // Unbind the previous change event handler to avoid stacking
-                    $('#income_session').off('change').change(function() {
-                        var selectedSessionId = $(this).val();
+                    $('#teacher-sessions').off('change').change(function () {
+                        let selectedSessionId = $(this).val();
+                        console.log(sessionData)
                         if (selectedSessionId) {
-                            var selectedSession = sessionData[selectedSessionId];
-                            $('#session_cost').val(selectedSession.price);
-                            $('#total_payments').val(selectedSession.total_payments);
+                            let selectedSession = sessionData[selectedSessionId];
+                            $('#teacher_session_cost').val(selectedSession.price);
+                            $('#teacher_total_payments').val(selectedSession.total_payments);
+                            $('#teacher_id').val(selectedSession.teacher_id);
+                            $('#session_id').val(selectedSession.session_id);
                         } else {
-                            $('#session_cost').val('');
-                            $('#total_payments').val('');
+                            $('#teacher_session_cost').val('');
+                            $('#teacher_total_payments').val('');
                         }
                     });
 
                     // Trigger change to update fields for the initially selected option
-                    $('#income_session').trigger('change');
+                    $('#teacher-sessions').trigger('change');
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
+        });
+
+        // Handle change event for teacher-sessions to update cost and paid amounts
+        $('#teacher-sessions').change(function() {
+            var selectedOption = $(this).find('option:selected');
+            var sessionId = selectedOption.val();
+            var sessionCost = selectedOption.data('cost');
+            var paidAmount = selectedOption.data('paid');
+
+            // Set the session_id hidden input
+            $('#session_id').val(sessionId);
+
+            // Update the cost and paid amounts
+            $('#teacher_session_cost').val(sessionCost);
+            $('#teacher_total_payments').val(paidAmount);
         });
 
     });

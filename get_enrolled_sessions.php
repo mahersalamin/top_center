@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['student_id'])) {
 } else if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['teacher_id'])) {
     // Call the getEnrolledSessionsForStudent function
     $teacherId = $_POST['teacher_id'];
+
     $sessions = $db->getEnrolledSessionsForTeachers($teacherId);
     // Return the result as JSON
     echo json_encode($sessions);

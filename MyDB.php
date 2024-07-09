@@ -144,11 +144,10 @@ class MyDB
     {
         $conn = $this->connect();
         $sql = "
-            SELECT DISTINCT s.*, ss.total_payments
+            SELECT DISTINCT s.*, st.session_amount, st.paid_amount, st.teacher_id
             FROM sessions s
-            JOIN session_students ss ON s.id = ss.session_id
-            WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
-            AND ss.payment_status != 'paid';
+            JOIN session_teachers st ON s.id = st.session_id
+            WHERE st.teacher_id = '4' AND st.payment_status != 'paid';
         ";
 
         $result = $conn->query($sql);
