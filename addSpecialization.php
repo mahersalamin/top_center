@@ -27,4 +27,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ./page/newMissionSpecialization.php?status=$status&message=لم تتم الاضافة");
     }
 }
-?>

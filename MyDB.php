@@ -97,7 +97,8 @@ class MyDB
         return $rows;
     }
 
-    function getStudentSessions($studentId){
+    function getStudentSessions($studentId)
+    {
         $conn = $this->connect();
         $sql = "
             SELECT  s.*
@@ -117,7 +118,30 @@ class MyDB
         return $sessions;
     }
 
-    function getEnrolledSessionsForStudent($studentIds) {
+    function getEnrolledSessionsForStudent($studentIds)
+    {
+        $conn = $this->connect();
+        $sql = "
+            SELECT DISTINCT s.*, ss.total_payments
+            FROM sessions s
+            JOIN session_students ss ON s.id = ss.session_id
+            WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
+            AND ss.payment_status != 'paid';
+        ";
+
+        $result = $conn->query($sql);
+        $sessions = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $sessions[] = $row;
+            }
+            $result->free();
+        }
+        return $sessions;
+    }
+
+    function getEnrolledSessionsForTeachers($studentIds)
+    {
         $conn = $this->connect();
         $sql = "
             SELECT DISTINCT s.*, ss.total_payments
@@ -139,7 +163,8 @@ class MyDB
     }
 
 
-    function dailyReport(){
+    function dailyReport()
+    {
         $sql = "
             SELECT att.*, 
                    teacher.name AS tname, 
@@ -156,7 +181,7 @@ class MyDB
             ORDER BY att.date DESC;
         ";
 
-        $result =  $this->connect()->query($sql);
+        $result = $this->connect()->query($sql);
 
         $attendances = [];
         if ($result->num_rows > 0) {
@@ -227,17 +252,6 @@ class MyDB
 
         return $rows;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
     public function getSpecializations()
@@ -319,8 +333,7 @@ class MyDB
     public function getAllTeachers()
     {
         $query = "SELECT t.id, t.`user`, t.name, t.img, t.att_id FROM teacher t
-                    WHERE ROLE != 1  ORDER BY t.id ASC"
-        ;
+                    WHERE ROLE != 1  ORDER BY t.id ASC";
 
 
         $conn = $this->connect();
@@ -337,8 +350,10 @@ class MyDB
 
 
     public function addSession(
-        $session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers){
+        $session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers)
+    {
         $conn = $this->connect();
+        $materialsArray = $materials;
         $materials = implode(",", $materials);
 
         $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price) 
@@ -349,11 +364,30 @@ class MyDB
         foreach ($teachers as $teacher) {
             $teacherId = $teacher['id'];
             $percentage = $teacher['percentage'] / 100;
+            $sessionAmount = ($price / count($students) / 2);
+            $sessionAmountPerMaterial = $sessionAmount / count($materialsArray);
+            $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
+            $result = $conn->query($query);
+            $teacherMaterials = [];
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $teacherMaterials[] = $row['spec'];
+                }
+            }
 
-            $sessionAmount = $price * $percentage;
+            $teacherSessionAmountPerTheirMaterials = 0;
+
+
+            foreach ($materialsArray as $value) {
+                if (in_array($value, $teacherMaterials)) {
+                    $teacherSessionAmountPerTheirMaterials += $sessionAmountPerMaterial;
+                }
+
+            }
+            $teacherAllSessionAmount = $teacherSessionAmountPerTheirMaterials * count($students);
 
             $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage) 
-                  VALUES ('$sessionId', '$teacherId', '$sessionAmount', '$percentage')";
+                  VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage')";
             $conn->query($query);
         }
 
@@ -369,8 +403,6 @@ class MyDB
 
         return true;
     }
-
-
 
 
     public function updateSessions($students, $sessions, $materials)
@@ -565,8 +597,9 @@ class MyDB
         // Return true if deletion was successful, false otherwise
         return $result;
     }
+
     // duplicated
-    public function addSpecialization($new_spec,$class)
+    public function addSpecialization($new_spec, $class)
     {
         $conn = $this->connect();
 
@@ -947,7 +980,6 @@ GROUP BY students.id
     }
 
 
-
     public function getTeacherOpenSessions($id)
     {
 
@@ -1285,13 +1317,13 @@ GROUP BY students.id
     }
 
     // Method to get all incomes
-    public function getAllIncomes() {
+    public function getAllIncomes()
+    {
         $conn = $this->connect();
         $query = "SELECT i.*, s.name AS student
                     FROM students s
                     JOIN income i ON i.student_id = s.id
-                    ORDER BY date DESC"
-        ;
+                    ORDER BY date DESC";
         $result = $conn->query($query);
 
         $incomes = [];
@@ -1302,7 +1334,8 @@ GROUP BY students.id
         return $incomes;
     }
 
-    public function getAllOutcomes() {
+    public function getAllOutcomes()
+    {
         $conn = $this->connect();
         $query = "SELECT * FROM outcome ORDER BY date DESC";
         $result = $conn->query($query);
@@ -1315,7 +1348,8 @@ GROUP BY students.id
         return $outcomes;
     }
 
-    public function getIncomeStatistics() {
+    public function getIncomeStatistics()
+    {
         $conn = $this->connect();
         $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM income";
         $result = $conn->query($query);
@@ -1323,7 +1357,8 @@ GROUP BY students.id
         return $result->fetch_assoc();
     }
 
-    public function getOutcomeStatistics() {
+    public function getOutcomeStatistics()
+    {
         $conn = $this->connect();
         $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM outcome";
         $result = $conn->query($query);
