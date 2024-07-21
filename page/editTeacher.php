@@ -42,7 +42,7 @@ if ($teacher) {
                             <label style="color: black; display: inline; font-weight: bold" for="specs">اختر التخصصات:</label><br>
                             <br>
                             <?php
-                            $teacher_specializations = $db->getTeacherSessions($teacher['id']); // Assuming you have a method to fetch the teacher's specializations
+                            $teacher_specializations = $db->getTeacherSessionsAttendances($teacher['id']); // Assuming you have a method to fetch the teacher's specializations
 
                             $specializations = $db->getSpecializations();
                             foreach ($specializations as $spec) {

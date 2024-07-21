@@ -20,12 +20,20 @@ $db = new MyDB();
     <link rel="icon" href="../sysdata/logo.jpg">
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 
     <!-- CSS only -->
@@ -66,8 +74,8 @@ $db = new MyDB();
             rel="stylesheet">
 
 
-    <link rel="stylesheet" type="text/css" href="../../ViewerJS/dist/viewer.css">
-    <script src="../../ViewerJS/dist/viewer.js"></script>
+<!--    <link rel="stylesheet" type="text/css" href="../../ViewerJS/dist/viewer.css">-->
+<!--    <script src="../../ViewerJS/dist/viewer.js"></script>-->
 
 
 </head>
@@ -143,11 +151,14 @@ foreach ($user
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             التقارير
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="acceptedMission.php">حصصي</a>
+                        <div class="dropdown-menu text-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="mySessions.php">كل الدورات</a>
+                            <div class="dropdown-divider"></div>
 
+                            <a class="dropdown-item" href="acceptedMission.php">حصص أُعطيت</a>
                         </div>
                     </li>
+
 
                 <?php } ?>
 

@@ -541,8 +541,9 @@ $teachers = $db->getAllTeachers();
 <div class="container text-center">
     <div class="col-md-12 mb-2 font-weight-bold">
 
-        <body>
+
         <h1>تقرير الدورات</h1>
+
         <table class="table table-striped text-right" id="reports">
             <thead>
             <tr>
@@ -557,40 +558,37 @@ $teachers = $db->getAllTeachers();
             </tr>
             </thead>
             <tbody>
-            <?php
-            // Fetch all sessions with details
+                <?php
 
+                    foreach ($sessions as $session) {
+                    echo "<tr>";
+                    echo "<td>{$session['id']}</td>";
+                    echo "<td>{$session['session_name']}</td>";
+                    echo "<td>{$session['type']}</td>";
+                    echo "<td>{$session['materials']}</td>";
+                    echo "<td>{$session['hours']}</td>";
+                    echo "<td>{$session['price']}</td>";
 
-            // Display session details in the table
-            foreach ($sessions as $session) {
-                echo "<tr>";
-                echo "<td>{$session['id']}</td>";
-                echo "<td>{$session['session_name']}</td>";
-                echo "<td>{$session['type']}</td>";
-                echo "<td>{$session['materials']}</td>";
-                echo "<td>{$session['hours']}</td>";
-                echo "<td>{$session['price']}</td>";
+                    // Display teacher details
+                    echo "<td>";
+                    foreach ($session['teachers'] as $teacher) {
+                        echo "{$teacher['teacher_names']}"; // Add more teacher details here if needed
+                    }
+                    echo "</td>";
 
-                // Display teacher details
-                echo "<td>";
-                foreach ($session['teachers'] as $teacher) {
-                    echo "{$teacher['teacher_names']}"; // Add more teacher details here if needed
+                    // Display student details
+                    echo "<td>";
+                    foreach ($session['students'] as $student) {
+                        echo "{$student['student_names']}<br>"; // Add more student details here if needed
+                    }
+                    echo "</td>";
+
+                    echo "</tr>";
                 }
-                echo "</td>";
-
-                // Display student details
-                echo "<td>";
-                foreach ($session['students'] as $student) {
-                    echo "{$student['student_names']}<br>"; // Add more student details here if needed
-                }
-                echo "</td>";
-
-                echo "</tr>";
-            }
-            ?>
+                ?>
             </tbody>
         </table>
-        </body>
+
 
     </div>
 </div>
@@ -613,11 +611,11 @@ $teachers = $db->getAllTeachers();
 </script>
 
 <script>
-    var currentTab = 0;
+    let currentTab = 0;
     showTab(currentTab);
 
     function showTab(n) {
-        var x = document.getElementsByClassName("tab");
+        let x = document.getElementsByClassName("tab");
         x[n].style.display = "block";
         if (n == 0) {
             document.getElementsByClassName("btn-secondary")[0].style.display = "none";
@@ -633,7 +631,7 @@ $teachers = $db->getAllTeachers();
     }
 
     function nextPrev(n) {
-        var x = document.getElementsByClassName("tab");
+        let x = document.getElementsByClassName("tab");
         x[currentTab].style.display = "none";
         currentTab = currentTab + n;
         if (currentTab >= x.length) {
@@ -731,66 +729,102 @@ $teachers = $db->getAllTeachers();
     }
 </script>
 
-<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
+
+
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+<!-- JSZip for Excel export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
 <script>
     $(document).ready(function () {
-        var table = $('#reports').DataTable({
-            lengthChange: false,
-            buttons: [
-                'copy', 'excel', 'csv', {
-                    extend: 'pdfHtml5',
-                    text: 'PDF',
-                    filename: 'Sessions_Report',
-                    title: 'Sessions Report',
-                    exportOptions: {
-                        columns: ':visible'
-                    },
-                    customize: function (doc) {
-                        // Specify the font paths for all styles
-                        var cairoFonts = {
-                            normal: '../Cairo/static/Cairo-Regular.ttf',
-                            bold: '../Cairo/static/Cairo-Bold.ttf',
-                            italic: '../Cairo/static/Cairo-Regular.ttf', // You can change this if there's a separate italic font file
-                            bolditalic: '../Cairo/static/Cairo-Bold.ttf',
-                            light: '../Cairo/static/Cairo-Light.ttf',
-                            extralight: '../Cairo/static/Cairo-ExtraLight.ttf',
-                            medium: '../Cairo/static/Cairo-Medium.ttf',
-                            semibold: '../Cairo/static/Cairo-SemiBold.ttf',
-                            extrabold: '../Cairo/static/Cairo-ExtraBold.ttf',
-                            black: '../Cairo/static/Cairo-Black.ttf'
-                        };
-                        doc.defaultStyle.font = 'Cairo';
-
-                        // Add Cairo font to the font dictionary
-                        doc.fonts = {
-                            Cairo: cairoFonts
-                        };
-                        // Update font in styles
-                        doc.content[1].table.body.forEach(function (row) {
-                            row.forEach(function (cell) {
-                                cell.font = 'Cairo';
-                            });
-                        });
-                    }
+        $('#reports').DataTable({
+            "paging": true,          // Enable pagination
+            "lengthChange": true,    // Show length change options
+            "searching": true,       // Enable search functionality
+            "ordering": true,        // Enable column sorting
+            "info": true,            // Show table information
+            "autoWidth": false,      // Disable automatic column width adjustment
+            "language": {
+                "paginate": {
+                    "previous": "السابق",
+                    "next": "التالي",
+                    "first": "الأول",
+                    "last": "الأخير"
                 },
-                'colvis'
-            ]
+                "lengthMenu": "عرض _MENU_ سجلات",
+                "info": "عرض _START_ إلى _END_ من _TOTAL_ سجلات",
+                "infoEmpty": "لا توجد سجلات متاحة",
+                "infoFiltered": "(تمت تصفيته من _MAX_ إجمالي السجلات)",
+                "search": "بحث:",
+                "zeroRecords": "لم يتم العثور على تطابقات"
+            },
+            "order": [[0, 'desc']],
+            buttons: [
+                'excel', 'print', {
+                    text: 'PDF',
+                    action: function (e, dt, button, config) {
+                        // Get the table headers
+                        var headers = [];
+                        $('#dt-filter-search-income thead th').each(function() {
+                            headers.push($(this).text());
+                        });
+
+                        // Get the table data
+                        var data = [];
+                        dt.rows({ search: 'applied' }).every(function() {
+                            let row = [];
+                            $(this.node()).find('td').each(function() {
+                                row.push($(this).text());
+                            });
+                            data.push(row);
+                        });
+
+                        // Create a form and submit it
+                        let form = $('<form>', {
+                            action: '../mpdf-generator.php',
+                            method: 'POST'
+                        }).append($('<input>', {
+                            type: 'hidden',
+                            name: 'headers',
+                            value: JSON.stringify(headers)
+                        })).append($('<input>', {
+                            type: 'hidden',
+                            name: 'tableData',
+                            value: JSON.stringify(data)
+                        })).append($('<input>', {
+                            type: 'hidden',
+                            name: 'reportType',
+                            value: 'income_report'
+                        }));
+
+                        form.appendTo('body').submit();
+                    }
+                }
+            ],
+
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    let column = this;
+                    let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
+                        .appendTo($(column.footer()).empty())
+                        .on('change input', function () {
+                            let val = $(this).val()
+
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+
+                });
+            }
         });
 
-        table.buttons().container()
-            .appendTo('#example_wrapper .col-md-6:eq(0)');
     });
 </script>
 
@@ -922,8 +956,8 @@ $teachers = $db->getAllTeachers();
     }
 
     function toggleAllMaterials() {
-        var checkboxes = document.querySelectorAll('input[name="materials[]"]');
-        var selectAllCheckbox = document.getElementById('all_materials');
+        let checkboxes = document.querySelectorAll('input[name="materials[]"]');
+        let selectAllCheckbox = document.getElementById('all_materials');
 
         checkboxes.forEach(function (checkbox) {
             checkbox.checked = selectAllCheckbox.checked;
@@ -931,15 +965,15 @@ $teachers = $db->getAllTeachers();
     }
 
     function toggleAll(classType) {
-        var checkboxes = document.querySelectorAll('.' + classType);
-        var allChecked = document.getElementById('all_' + classType).checked;
+        let checkboxes = document.querySelectorAll('.' + classType);
+        let allChecked = document.getElementById('all_' + classType).checked;
         checkboxes.forEach(function (checkbox) {
             checkbox.checked = allChecked;
         });
     }
 
     function filterFunction() {
-        var input, filter, div, label, i, txtValue;
+        let input, filter, div, label, i, txtValue;
         input = document.getElementById("searchInput");
         filter = input.value.toUpperCase();
         div = document.getElementById("myDropdown");

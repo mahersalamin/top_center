@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix equation of teacher session amount">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix outcomes">
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/top.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/top.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/finance_endpoint.php" beforeDir="false" afterPath="$PROJECT_DIR$/finance_endpoint.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/get_enrolled_sessions.php" beforeDir="false" afterPath="$PROJECT_DIR$/get_enrolled_sessions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/accept_attendance.php" beforeDir="false" afterPath="$PROJECT_DIR$/accept_attendance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/MyRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/MyRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/daily_report.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/daily_report.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/header.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,28 +39,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/PhpstormProjects/practice_app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Laravel.SettingsForm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
+    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
+    "WebServerToolWindowPanel.toolwindow.show.date": "false",
+    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
+    "WebServerToolWindowPanel.toolwindow.show.size": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/PhpstormProjects/practice_app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Laravel.SettingsForm",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\top" />
@@ -93,7 +103,11 @@
       <workItem from="1719556850833" duration="1782000" />
       <workItem from="1719913766356" duration="26000" />
       <workItem from="1719913813752" duration="4607000" />
-      <workItem from="1720159459350" duration="12171000" />
+      <workItem from="1720159459350" duration="17244000" />
+      <workItem from="1720931858996" duration="3000" />
+      <workItem from="1721103718269" duration="55000" />
+      <workItem from="1721280771080" duration="13158000" />
+      <workItem from="1721359387071" duration="52602000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -155,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720504671352</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="fix outcomes">
+      <option name="closed" value="true" />
+      <created>1720512694162</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1720512694162</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,7 +203,8 @@
     <MESSAGE value="التاكد من المادة للبدأ بالحصة" />
     <MESSAGE value="تعديل عدد الساعات في التقرير تعديل على اضافة دورة ظهور جميع الموا]" />
     <MESSAGE value="fix equation of teacher session amount" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix equation of teacher session amount" />
+    <MESSAGE value="fix outcomes" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix outcomes" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -18,7 +18,7 @@ class MyDB
     }
 
 
-    public function getAllStudents($id)
+    public function getAllStudents($id) // for admin
     {
         $conn = $this->connect();
 
@@ -122,7 +122,7 @@ class MyDB
     {
         $conn = $this->connect();
         $sql = "
-            SELECT DISTINCT s.*, ss.total_payments
+            SELECT DISTINCT s.*, ss.total_payments, ss.session_cost
             FROM sessions s
             JOIN session_students ss ON s.id = ss.session_id
             WHERE FIND_IN_SET(ss.student_id, '$studentIds') > 0
@@ -140,14 +140,14 @@ class MyDB
         return $sessions;
     }
 
-    function getEnrolledSessionsForTeachers($studentIds)
+    function getEnrolledSessionsForTeachers($teacherId)
     {
         $conn = $this->connect();
         $sql = "
             SELECT DISTINCT s.*, st.session_amount, st.paid_amount, st.teacher_id
             FROM sessions s
             JOIN session_teachers st ON s.id = st.session_id
-            WHERE st.teacher_id = '4' AND st.payment_status != 'paid';
+            WHERE st.teacher_id = '$teacherId' AND st.payment_status != 'paid';
         ";
 
         $result = $conn->query($sql);
@@ -364,7 +364,9 @@ class MyDB
             $teacherId = $teacher['id'];
             $percentage = $teacher['percentage'] / 100;
             $sessionAmount = ($price / count($students) / 2);
+
             $sessionAmountPerMaterial = $sessionAmount / count($materialsArray);
+//            var_dump($sessionAmountPerMaterial);die();
             $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
             $result = $conn->query($query);
             $teacherMaterials = [];
@@ -376,17 +378,20 @@ class MyDB
 
             $teacherSessionAmountPerTheirMaterials = 0;
 
-
             foreach ($materialsArray as $value) {
                 if (in_array($value, $teacherMaterials)) {
+
                     $teacherSessionAmountPerTheirMaterials += $sessionAmountPerMaterial;
+
                 }
 
             }
+
             $teacherAllSessionAmount = $teacherSessionAmountPerTheirMaterials * count($students);
 
             $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage) 
                   VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage')";
+
             $conn->query($query);
         }
 
@@ -978,6 +983,25 @@ GROUP BY students.id
         return $rows;
     }
 
+ public function allStudentsDailyReport($session_id)
+    {
+        $query = " SELECT DISTINCT s.*, sc.name AS school_name, sessions.session_name, ss.session_id 
+        FROM students s
+        JOIN schools sc ON s.school = sc.id
+        JOIN session_students ss ON s.id = ss.student_id
+        JOIN sessions ON sessions.id = ss.session_id
+        WHERE ss.session_id = $session_id"
+        ;
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
 
     public function getTeacherOpenSessions($id)
     {
@@ -1120,6 +1144,27 @@ GROUP BY students.id
     }
 
     public function getTeacherSessions($id)
+    {
+        $conn = $this->connect();
+
+        $query = "SELECT st.*, t.name, s.session_name, s.type
+                  FROM session_teachers st
+                  JOIN sessions s ON st.session_id = s.id
+                  JOIN teacher t ON st.teacher_id = t.id
+                  WHERE t.id =$id "
+        ;
+
+        $result = $conn->query($query);
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+//        echo json_encode($rows);die();
+        return $rows;
+    }
+
+    public function getTeacherSessionsAttendances($id)
     {
         $conn = $this->connect();
 
@@ -1336,11 +1381,18 @@ GROUP BY students.id
     public function getAllOutcomes()
     {
         $conn = $this->connect();
-        $query = "SELECT * FROM outcome ORDER BY date DESC";
+        $query = "SELECT o.*, t.name
+                  FROM outcome o
+                  JOIN teacher t ON o.receiver = t.id
+                  ORDER BY id DESC"
+        ;
         $result = $conn->query($query);
 
         $outcomes = [];
         while ($row = $result->fetch_assoc()) {
+            $dateTime = new DateTime($row['date']);
+            $row['date'] = $dateTime->format('Y-m-d'); // Format as YYYY-MM-DD
+
             $outcomes[] = $row;
         }
 
@@ -1360,6 +1412,24 @@ GROUP BY students.id
     {
         $conn = $this->connect();
         $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM outcome";
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc();
+    }
+
+    public function getTeachersOutcomeStatistics()
+    {
+        $conn = $this->connect();
+        $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM outcome WHERE receiver <> 0";
+        $result = $conn->query($query);
+
+        return $result->fetch_assoc();
+    }
+
+    public function getOthersOutcomeStatistics()
+    {
+        $conn = $this->connect();
+        $query = "SELECT COUNT(*) AS count, SUM(amount) AS total_amount FROM outcome WHERE receiver = 0";
         $result = $conn->query($query);
 
         return $result->fetch_assoc();

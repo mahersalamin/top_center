@@ -59,7 +59,7 @@ if (isset($_POST['income_submit'])) {
     $sessionCost = $row['session_cost'];
 
     $newTotalPayments = $currentTotalPayments + $amount;
-    $newPaymentStatus = ($newTotalPayments >= $sessionCost) ? 'paid' : 'partially paid';
+    $newPaymentStatus = ($newTotalPayments >= $sessionCost) ? 'مدفوع بالكامل' : 'مدفوع جزئياً';
 
     $stmt->close();
 
@@ -80,12 +80,70 @@ if (isset($_POST['income_submit'])) {
     if (!$executeResult) {
         die('Error in executing SQL query: ' . $stmt->error);
     }
+    $query = "SELECT s.name AS student_name, ss.session_name FROM students s
+          JOIN session_students sst ON sst.student_id = s.id
+          JOIN sessions ss ON ss.id = sst.session_id
+          WHERE ss.id = ? AND s.id = ?";
+    $stmt = $conn->prepare($query);
 
-//    $stmt->close();
-//    $db->close();
+    if (!$stmt) {
+        die('Error in preparing SQL statement: ' . $db->error);
+    }
 
-// Redirect back to page/finance.php after successful submission
-    header('Location: page/finance.php');
+    $bindResult = $stmt->bind_param('ii', $sessionId, $studentId);
+    if (!$bindResult) {
+        die('Error in binding parameters: ' . $stmt->error);
+    }
+
+    $executeResult = $stmt->execute();
+    if (!$executeResult) {
+        die('Error in executing SQL query: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    $studentName = $row['student_name'];
+    $sessionName = $row['session_name'];
+    $receiptData = [
+        'date' => $date,
+        'cashier' => $cashier,
+        'amount' => $amount,
+        'payer' => $payer,
+        'student_name' => $studentName,
+        'session_name' => $sessionName,
+        'notes' => $notes,
+        'total_payments' => $newTotalPayments,
+        'session_cost' => $sessionCost,
+        'payment_status' => $newPaymentStatus,
+    ];
+//    var_dump(95);die();
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'http://localhost/top/mpdf-generator.php');
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'reportType' => 'receipt_report',
+        'tableData' => json_encode($receiptData)
+    ]));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if ($response === false) {
+        die('Curl error: ' . curl_error($ch));
+    }
+
+    curl_close($ch);
+    $fileName = "{$studentName}_receipt_{$date}.pdf";
+    if ($httpCode == 200 && !empty($response)) {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $fileName . '"');
+        header('Content-Length: ' . strlen($response)); // Set the correct content length
+        echo $response;
+    } else {
+        echo "Failed to generate PDF.";
+    }
     exit();
 }
 

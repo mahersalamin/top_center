@@ -1,0 +1,19 @@
+{
+    "name": "hp2/top",
+    "autoload": {
+        "psr-4": {
+            "Hp2\\Top\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "maher",
+            "email": "salaminmaher@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.3.0",
+        "mpdf/mpdf": "^8.0"
+    }
+
+}
