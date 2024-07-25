@@ -295,9 +295,9 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
         </div>
 
         <!-- Summary Tab -->
-        <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
         <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
+            <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
             <div class="row">
                 <div class="col-md-12" style="direction: rtl; text-align: right;">
@@ -608,7 +608,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                     action: function (e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
-                        $('#dt-filter-search-income thead th').each(function() {
+                        $('#dt-filter-search-outcome thead th').each(function() {
                             headers.push($(this).text());
                         });
 

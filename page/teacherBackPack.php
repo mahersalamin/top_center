@@ -93,7 +93,7 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
 
         <?php foreach ($backpacks
 
-                       as $monthlySession) {
+                       as $backpack) {
             ?>
 
             <div class="col-md-3">
@@ -101,17 +101,18 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                     <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
 
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $monthlySession['session_name']; ?></h5>
+                            <h5 class="card-title"><?php echo $backpack['session_name']; ?></h5>
                         </div>
 
                         <!--                            material-->
                         <div class="card-body">
+
                             <ul class="list-group list-group-flush">
                                 المادة:
                                 <select class="mb-3 form-select" name="material">
                                     <?php
 
-                                    $materials = explode(',', $monthlySession['materials']);
+                                    $materials = explode(',', $backpack['materials']);
 
                                     foreach ($materials as $material) {
                                         echo '<option value="' . $material . '">' . $material . '</option>';
@@ -121,6 +122,16 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                                 </select>
 
                             </ul>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="teacher_meetings">عدد اللقاءات الكلي</label>
+                                    <input class="form-control" value="<?=$backpack['meetings'] ?>" id="teacher_meetings" type="number" readonly>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="teacher_finished_meetings">عدد اللقاءات</label>
+                                    <input class="form-control" value="<?=$backpack['meetings_count'] ?>" id="teacher_finished_meetings" type="number" readonly>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
                             <button <?php $activeAtt ? print "disabled" : ""; ?> type="submit" class="btn btn-outline-info
@@ -131,8 +142,8 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
 
                             <input type="hidden"
                                    name="student_name"
-                                   value="<?php echo $monthlySession['student_names']; ?>">
-                            <input type="hidden" name="pSessionID" value="<?php echo $monthlySession['id']; ?>">
+                                   value="<?php echo $backpack['student_names']; ?>">
+                            <input type="hidden" name="pSessionID" value="<?php echo $backpack['id']; ?>">
 
 
                         </div>

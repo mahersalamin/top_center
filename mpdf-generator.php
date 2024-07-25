@@ -260,6 +260,68 @@ function generate_public_report($headers, $tableData): string {
 
     return $html;
 }
+function generate_sessions_report($headers, $tableData): string {
+    $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
+    $htmlTable .= '<thead><tr>';
+    foreach ($headers as $header) {
+        $htmlTable .= '<th>' . htmlspecialchars($header, ENT_QUOTES, 'UTF-8') . '</th>';
+    }
+    $htmlTable .= '</tr></thead><tbody>';
+    foreach ($tableData as $row) {
+        $htmlTable .= '<tr>';
+        foreach ($row as $cell) {
+            $htmlTable .= '<td>' . htmlspecialchars($cell, ENT_QUOTES, 'UTF-8') . '</td>';
+        }
+        $htmlTable .= '</tr>';
+    }
+    $htmlTable .= '</tbody></table>';
+
+    // Define the header HTML
+    $date = date('Y-m-d');
+
+    $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
+    $companyName = 'توب سنتر التعليمي';
+    $customerName = 'تقرير الدورات'; // Example customer name, you can dynamically set this
+    $companyPhone = "+970599123456";
+    $companyAddress = 'بيت لحم';
+
+    $html = '
+        <div style="direction: rtl; text-align: center; padding: 20px;">
+            <div class="receipt-header">
+                <div style="float: left; width: 50%;">
+                    <h5>' . $customerName . '</h5>
+                  
+                </div>
+                <div style="float: right; width: 50%; text-align: right;">
+                    <h5>' . $companyName . '</h5>
+                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
+                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+
+            
+
+            ' . $htmlTable . '
+
+            <div class="receipt-footer" style="padding: 20px 0;">
+                <div style="float: right; width: 20%;">
+                    <p><b>التاريخ: </b> ' . $date . '</p>
+                   
+                </div>
+                <div style="float: left; width: 20%;">
+                    <p><b>' . $issuer . '</b> </p>
+                   
+                </div>
+                
+                
+            </div>
+        </div>
+    ';
+
+    return $html;
+}
 
 function generate_receipt($tableData): string {
     $companyPhone = "+970599123456";
@@ -395,6 +457,7 @@ try {
             if (empty($headers) || empty($tableData)) {
                 throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
             }
+
             $outcome_report = generate_outcome_report($headers, $tableData);
             // Initialize mPDF and set the HTML content
 
@@ -441,13 +504,16 @@ try {
                                
                             </div>
                             <div style="float: left; width: 20%;">
-                                <p><b>' . الإدارة . '</b> </p>
+                                <p><b> الإدارة </b> </p>
                                
                             </div>
                             
                             
                         </div>
-                 </div>';
+                 </div>'
+            ;
+
+
             $mpdf->WriteHTML($htmlContent);
             // Output PDF directly to browser for download
             $mpdf->Output('all_stat_report_' . $date . '_.pdf', 'D');
@@ -470,13 +536,22 @@ try {
             $mpdf->WriteHTML($public_report);
             $mpdf->Output('public_report_' . $date . '_.pdf', 'D');
             break;
+        case 'sessions_report':
+            if (empty($headers) || empty($tableData)) {
+                throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
+            }
+            $sessions_report = generate_sessions_report($headers, $tableData);
+            $mpdf = new Mpdf(['default_font' => 'Cairo']);
+            $mpdf->WriteHTML($sessions_report);
+            $mpdf->Output('sessions_report_' . $date . '_.pdf', 'D');
+            break;
         case 'receipt_report':
             if (empty($tableData)) {
                 throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
             }
 
             $receipt_report = generate_receipt($tableData);
-//            var_dump($receipt_report);die();
+
             $mpdf = new Mpdf(['default_font' => 'Cairo']);
             $mpdf->WriteHTML($receipt_report);
             // Output PDF directly to the browser

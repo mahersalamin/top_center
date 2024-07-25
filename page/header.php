@@ -74,8 +74,8 @@ $db = new MyDB();
             rel="stylesheet">
 
 
-<!--    <link rel="stylesheet" type="text/css" href="../../ViewerJS/dist/viewer.css">-->
-<!--    <script src="../../ViewerJS/dist/viewer.js"></script>-->
+    <!--    <link rel="stylesheet" type="text/css" href="../../ViewerJS/dist/viewer.css">-->
+    <!--    <script src="../../ViewerJS/dist/viewer.js"></script>-->
 
 
 </head>
@@ -172,6 +172,8 @@ foreach ($user
                             التقارير
                         </a>
                         <div class="dropdown-menu text-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="SessionsReport.php">تقرير الدورات</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="MissionsReports.php">التقرير الشامل</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="MyRequest.php">تقرير الحصص الموافق عليها</a>

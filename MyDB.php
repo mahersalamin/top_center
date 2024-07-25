@@ -41,7 +41,46 @@ class MyDB
 
     public function getTeacherPrivateSessions($id, $type)
     {
-        $query = "SELECT 
+        if($type == "حقيبة مدرسية"){
+            $query = "SELECT 
+    s.*, 
+    st.teacher_id, 
+    ss.*, 
+    GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
+    t.name AS teacher_name,
+    GROUP_CONCAT(DISTINCT spc.name) AS materials,
+    COALESCE(attendance_counts.attendance_count, 0) AS meetings_count  -- Add accurate count here
+FROM 
+    sessions s
+LEFT JOIN 
+    session_teachers st ON s.id = st.session_id
+LEFT JOIN 
+    session_students ss ON s.id = ss.session_id
+LEFT JOIN 
+    students stu ON ss.student_id = stu.id
+LEFT JOIN 
+    teacher t ON st.teacher_id = t.id
+LEFT JOIN 
+    spc ON FIND_IN_SET(spc.id, s.material) > 0
+LEFT JOIN (
+    SELECT 
+        session_id, 
+        COUNT(session_id) AS attendance_count
+    FROM 
+        att
+    GROUP BY 
+        session_id
+) attendance_counts ON s.id = attendance_counts.session_id  -- Join with attendance count subquery
+WHERE 
+    st.teacher_id = $id -- Filter by teacher_id
+    AND s.type = 'حقيبة مدرسية' -- Filter by session type
+GROUP BY 
+    s.id, st.teacher_id, ss.session_id, t.name;
+
+        ";
+        }
+        else {
+            $query = "SELECT 
                         s.*, 
                         st.teacher_id, 
                         ss.*, 
@@ -66,6 +105,7 @@ class MyDB
                     GROUP BY 
                         s.id
         ";
+        }
 //        var_dump($query);die();
         $conn = $this->connect();
         $result = $conn->query($query);
@@ -1402,7 +1442,7 @@ GROUP BY students.id
         $conn = $this->connect();
         $query = "SELECT o.*, t.name
                   FROM outcome o
-                  JOIN teacher t ON o.receiver = t.id
+                  LEFT JOIN teacher t ON o.receiver = t.id
                   ORDER BY id DESC"
         ;
         $result = $conn->query($query);

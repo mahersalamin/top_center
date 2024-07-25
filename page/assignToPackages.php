@@ -537,61 +537,6 @@ $teachers = $db->getAllTeachers();
     </div>
 </div>
 
-<!-- For sessions report-->
-<div class="container text-center">
-    <div class="col-md-12 mb-2 font-weight-bold">
-
-
-        <h1>تقرير الدورات</h1>
-
-        <table class="table table-striped text-right" id="reports">
-            <thead>
-            <tr>
-                <th>الرقم</th>
-                <th>الاسم</th>
-                <th>النوع</th>
-                <th>المواد</th>
-                <th>عدد الساعات</th>
-                <th>السعر</th>
-                <th>المعلمون</th>
-                <th>الطلاب</th>
-            </tr>
-            </thead>
-            <tbody>
-                <?php
-
-                    foreach ($sessions as $session) {
-                    echo "<tr>";
-                    echo "<td>{$session['id']}</td>";
-                    echo "<td>{$session['session_name']}</td>";
-                    echo "<td>{$session['type']}</td>";
-                    echo "<td>{$session['materials']}</td>";
-                    echo "<td>{$session['hours']}</td>";
-                    echo "<td>{$session['price']}</td>";
-
-                    // Display teacher details
-                    echo "<td>";
-                    foreach ($session['teachers'] as $teacher) {
-                        echo "{$teacher['teacher_names']}"; // Add more teacher details here if needed
-                    }
-                    echo "</td>";
-
-                    // Display student details
-                    echo "<td>";
-                    foreach ($session['students'] as $student) {
-                        echo "{$student['student_names']}<br>"; // Add more student details here if needed
-                    }
-                    echo "</td>";
-
-                    echo "</tr>";
-                }
-                ?>
-            </tbody>
-        </table>
-
-
-    </div>
-</div>
 
 
 <script>
