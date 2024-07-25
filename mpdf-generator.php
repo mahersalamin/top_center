@@ -423,7 +423,7 @@ function generate_receipt($tableData): string {
 }
 
 try {
-    // Retrieve the headers and table data from the POST request
+
 
     $type = $_POST['reportType'];
     $htmlContent = $_POST['htmlContent'] ?? '';
