@@ -424,7 +424,6 @@ function generate_receipt($tableData): string {
 
 try {
 
-
     $type = $_POST['reportType'];
     $htmlContent = $_POST['htmlContent'] ?? '';
     $headers = '';
