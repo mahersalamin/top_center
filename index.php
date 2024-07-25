@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 require 'dbconnection.php';
 
 
 
-$query = "select * from teacher"; 
-$result = mysqli_query($conn , $query); 
+$query = "select * from teacher";
+$result = mysqli_query($conn , $query);
 
 if (mysqli_error($conn)){
 

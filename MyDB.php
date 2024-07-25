@@ -144,10 +144,12 @@ class MyDB
     {
         $conn = $this->connect();
         $sql = "
-            SELECT DISTINCT s.*, st.session_amount, st.paid_amount, st.teacher_id
+            SELECT s.*, st.session_amount, st.paid_amount, st.teacher_id, COUNT(a.session_id) AS meetings_count
             FROM sessions s
             JOIN session_teachers st ON s.id = st.session_id
-            WHERE st.teacher_id = '$teacherId' AND st.payment_status != 'paid';
+            LEFT JOIN att a ON s.id = a.session_id  -- Use LEFT JOIN to include sessions without attendance
+            WHERE st.teacher_id = '$teacherId' AND st.payment_status != 'paid'
+            GROUP BY s.id, st.session_amount, st.paid_amount, st.teacher_id;
         ";
 
         $result = $conn->query($sql);
@@ -347,16 +349,33 @@ class MyDB
         return $rows;
     }
 
+    public function getSessionsCount($id){
+        $conn = $this->connect();
+        $query = "SELECT COUNT(session_id) FROM att WHERE session_id = $id";
+        $conn->query($query);
+        $result = $conn->query($query);
+        $rows = array();
 
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+
+    }
     public function addSession(
         $session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers)
     {
         $conn = $this->connect();
         $materialsArray = $materials;
         $materials = implode(",", $materials);
-
-        $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price) 
+        if($sessionPackage== "حقيبة مدرسية"){
+            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, meetings, price) 
+              VALUES ('$session_name','$sessionPackage', '$materials', $isGroup, '0', $hours, $price)";
+        } else {
+            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price) 
               VALUES ('$session_name','$sessionPackage', '$materials', $isGroup, $hours, $price)";
+        }
+//        var_dump($query);die();
         $conn->query($query);
         $sessionId = $conn->insert_id;
 

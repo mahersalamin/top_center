@@ -291,7 +291,7 @@ $teachers = $db->getAllTeachers();
                             <label class="mr-2 form-check-label" for="group">جماعي</label>
                         </div>
                         <div class="form-group row justify-content-center mt-3" id="hours-div">
-                            <label for="hours" class="col-form-label">عدد الساعات:</label>
+                            <label for="hours" class="col-form-label">عدد الساعات (اللقاءات في حال اختيار حقيبة مدرسية):</label>
                             <div class="col-md-12">
                                 <input type="number" min="0" value="0" class="form-control" id="hours" name="hours"
                                        placeholder="عدد الساعات">

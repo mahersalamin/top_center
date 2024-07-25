@@ -207,6 +207,16 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                                 <input class="form-control" id="teacher_total_payments" type="number" readonly>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="teacher_meetings">عدد اللقاءات الكلي</label>
+                                <input class="form-control" id="teacher_meetings" type="number" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="teacher_finished_meetings">عدد اللقاءات</label>
+                                <input class="form-control" id="teacher_finished_meetings" type="number" readonly>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="outcome_amount">القيمة</label>
                             <input type="number" min="0" class="form-control" id="outcome_amount" name="outcome_amount" required>
@@ -423,6 +433,8 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                         teacherSessionData[session.id] = {
                             price: session.session_amount,
                             total_payments: session.paid_amount,
+                            meetings: session.meetings,
+                            meetings_count: session.meetings_count,
                             teacher_id: session.teacher_id,
                             session_id: session.id
                         };
@@ -435,12 +447,16 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                         if (selectedSessionId) {
                             let selectedSession = teacherSessionData[selectedSessionId];
                             $('#teacher_session_cost').val(selectedSession.price);
+                            $('#teacher_meetings').val(selectedSession.meetings);
+                            $('#teacher_finished_meetings').val(selectedSession.meetings_count);
                             $('#teacher_total_payments').val(selectedSession.total_payments);
                             $('#teacher_id').val(selectedSession.teacher_id);
                             $('#session_id').val(selectedSession.session_id);
                         } else {
                             $('#teacher_session_cost').val('');
                             $('#teacher_total_payments').val('');
+                            $('#teacher_meetings').val('');
+                            $('#teacher_finished_meetings').val('');
                         }
                     });
 
