@@ -831,9 +831,11 @@ $teachers = $db->getAllTeachers();
         let groupInput = document.getElementById('group');
         if (selectedClassValues.length > 1) {
             individualDiv.style.visibility = 'hidden';
+            console.log("more than 1")
             groupInput.checked = true
         } else {
             individualDiv.style.visibility = 'visible';
+            console.log("only 1")
             groupInput.checked = false
         }
 
@@ -874,25 +876,35 @@ $teachers = $db->getAllTeachers();
             if (selectedClassValues.length < 2) {
                 hoursDiv.style.visibility = 'hidden';
                 individualDiv.style.visibility = 'visible';
+                console.log("دورة 879")
+            } else {
+                hoursDiv.style.visibility = 'visible';
+                individualDiv.style.visibility = 'hidden';
+                console.log("دورة 883")
             }
-            hoursDiv.style.visibility = 'visible';
-            individualDiv.style.visibility = 'hidden';
         } else if (privateValue === 'حقيبة مدرسية') {
 
             if (selectedClassValues.some(value => parseInt(value) >= 10)) {
                 alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
                 document.querySelector('input[name="session_package"]:checked').checked = false;
-                return;
+                console.log("حقيبة 890")
+
             }
-            individualDiv.style.visibility = 'hidden';
-            hoursDiv.style.visibility = 'visible';
+            else {
+                individualDiv.style.visibility = 'hidden';
+                console.log("حقيبة 894")
+                hoursDiv.style.visibility = 'visible';
+            }
         } else {
             if (selectedClassValues.length < 2) {
                 hoursDiv.style.visibility = 'hidden';
                 individualDiv.style.visibility = 'visible';
+                console.log("اشتراك 900")
+            } else {
+                hoursDiv.style.visibility = 'visible';
+                console.log("اشتراك 903")
+                individualDiv.style.visibility = 'hidden';
             }
-            hoursDiv.style.visibility = 'visible';
-            individualDiv.style.visibility = 'hidden';
         }
     }
 

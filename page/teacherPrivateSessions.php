@@ -109,8 +109,9 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                 foreach ($privateSessions as $pSessions) {
                     $studentNames = explode(',', $pSessions['student_names']);
 
-                    if ($pSessions['is_group'] == 0) {
+                    if ($pSessions['is_group'] == "0") {
                         // Flag to track if current session matches the material
+
                         $matchesMaterial = false;
 
                         // If $pSessions['materials'] is a string, explode it into an array
@@ -118,7 +119,8 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
 
                         foreach ($materials as $material) {
                             foreach ($teacherMaterialsNames as $teacherMaterialsName) {
-                                if ($teacherMaterialsName === $material) {
+
+                                if ($teacherMaterialsName['spec_name'] === $material) {
                                     $matchesMaterial = true;
                                     $hasPrivateSessions = true;
                                     break 2; // Exit both loops once match is found
@@ -163,8 +165,9 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                             </div>
                         <?php } // End if $matchesMaterial
                     } // End if count($studentNames) == 1
-                } // End foreach $privateSessions
 
+                } // End foreach $privateSessions
+//var_dump($hasPrivateSessions);die();
                 // Show alert if no private sessions match the material
                 if (!$hasPrivateSessions) {
                     ?>
