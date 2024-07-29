@@ -14,11 +14,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Dumping database structure for top_data
-CREATE DATABASE IF NOT EXISTS `top_data` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
-USE `top_data`;
-
 -- Dumping structure for table top_data.att
 CREATE TABLE IF NOT EXISTS `att` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -37,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `att` (
   CONSTRAINT `att_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.att: ~38 rows (approximately)
+-- Dumping data for table top_data.att: ~37 rows (approximately)
 DELETE FROM `att`;
 INSERT INTO `att` (`id`, `st_id`, `tec_id`, `date`, `enter`, `exit`, `total`, `spc`, `aprove`, `processed`, `session_id`) VALUES
 	(109, '53', '4', '2024-05-11', '20:35:56', '20:46:54', '00:10:58', '3', 0, 0, 6),
@@ -120,9 +115,9 @@ CREATE TABLE IF NOT EXISTS `income` (
   KEY `FK_income_students` (`student_id`),
   KEY `FK_income_sessions` (`session_id`),
   CONSTRAINT `FK_income_students` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.income: ~26 rows (approximately)
+-- Dumping data for table top_data.income: ~27 rows (approximately)
 DELETE FROM `income`;
 INSERT INTO `income` (`id`, `date`, `cashier`, `payer`, `amount`, `student_id`, `session_id`, `material`, `notes`) VALUES
 	(14, '2024-06-20 00:00:00', 'السكرتيرة', 'ماهر', 500, 4, 15, '0', 'دفعة اولى'),
@@ -152,7 +147,8 @@ INSERT INTO `income` (`id`, `date`, `cashier`, `payer`, `amount`, `student_id`, 
 	(38, '2024-07-20 00:00:00', 'السكرتيرة', 'ابو علي', 200, 2, 7, '0', 'الدفعة الأخيرة'),
 	(39, '2024-07-19 00:00:00', 'السكرتيرة', 'ابو أحمد', 600, 1, 7, '0', 'الدفعة الأولى'),
 	(40, '2024-07-19 00:00:00', 'السكرتيرة', 'ابو أحمد', 600, 1, 7, '0', 'الدفعة الثانية'),
-	(41, '2024-07-24 00:00:00', 'الإدارة', 'احمد سالم', 400, 2, 13, '0', 'دفعة كاملة');
+	(41, '2024-07-24 00:00:00', 'الإدارة', 'احمد سالم', 400, 2, 13, '0', 'دفعة كاملة'),
+	(42, '2024-07-26 00:00:00', 'السكرتيرة', 'محمود', 600, 3, 7, '0', 'ؤكرمنكمؤنرنمئءؤترخ');
 
 -- Dumping structure for table top_data.outcome
 CREATE TABLE IF NOT EXISTS `outcome` (
@@ -163,9 +159,9 @@ CREATE TABLE IF NOT EXISTS `outcome` (
   `amount` float NOT NULL DEFAULT 0,
   `notes` varchar(255) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.outcome: ~3 rows (approximately)
+-- Dumping data for table top_data.outcome: ~8 rows (approximately)
 DELETE FROM `outcome`;
 INSERT INTO `outcome` (`id`, `date`, `receiver`, `type`, `amount`, `notes`) VALUES
 	(1, '2024-05-22 00:00:00', '0', 'مستلزمات مكتب', 100, 'شحن كرت'),
@@ -174,7 +170,8 @@ INSERT INTO `outcome` (`id`, `date`, `receiver`, `type`, `amount`, `notes`) VALU
 	(4, '2024-07-09 00:00:00', '11', 'أجور', 100, 'دفعة'),
 	(5, '2024-07-15 00:00:00', '0', 'مستلزمات مكتب', 500, 'كهرباء'),
 	(6, '2024-07-24 00:00:00', '0', 'مستلزمات مكتب', 100, 'كهربا'),
-	(7, '2024-07-24 00:00:00', '0', 'مستلزمات مكتب', 250, 'شحن كرت الكهربا');
+	(7, '2024-07-24 00:00:00', '0', 'مستلزمات مكتب', 250, 'شحن كرت الكهربا'),
+	(8, '2024-07-29 00:00:00', '11', 'أجور', 25, 'تن تن');
 
 -- Dumping structure for table top_data.schools
 CREATE TABLE IF NOT EXISTS `schools` (
@@ -222,9 +219,9 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   PRIMARY KEY (`id`),
   KEY `FK_sessions_sessions_status` (`status`),
   CONSTRAINT `FK_sessions_sessions_status` FOREIGN KEY (`status`) REFERENCES `sessions_status` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.sessions: ~28 rows (approximately)
+-- Dumping data for table top_data.sessions: ~29 rows (approximately)
 DELETE FROM `sessions`;
 INSERT INTO `sessions` (`id`, `session_name`, `type`, `material`, `hours`, `meetings`, `price`, `is_group`, `status`) VALUES
 	(4, 'testing web - حقيبة مدرسية', 'حقيبة مدرسية', '1,2,5', '5', '0', 600.00, 0, 1),
@@ -255,7 +252,8 @@ INSERT INTO `sessions` (`id`, `session_name`, `type`, `material`, `hours`, `meet
 	(34, 'فحوصات', 'اشتراك شهري', '9,10,11', '20', '0', 1800.00, 1, 1),
 	(35, 'دورة توب', 'اشتراك شهري', '10,11,19', '12', '0', 1000.00, 1, 1),
 	(60, 'ك1', 'اشتراك شهري', '1,2,3', '12', '0', 1200.00, 1, 1),
-	(61, 'تست اللقاءات', 'حقيبة مدرسية', '2', '0', '20', 900.00, 1, 1);
+	(61, 'تست اللقاءات', 'حقيبة مدرسية', '2', '0', '20', 900.00, 1, 1),
+	(62, 'فحص دورة', 'حقيبة مدرسية', '1,2,3,4', '0', '20', 5000.00, 1, 1);
 
 -- Dumping structure for table top_data.sessions_status
 CREATE TABLE IF NOT EXISTS `sessions_status` (
@@ -285,7 +283,7 @@ CREATE TABLE IF NOT EXISTS `session_students` (
   CONSTRAINT `session_students_ibfk_2` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.session_students: ~66 rows (approximately)
+-- Dumping data for table top_data.session_students: ~68 rows (approximately)
 DELETE FROM `session_students`;
 INSERT INTO `session_students` (`session_id`, `student_id`, `session_cost`, `total_payments`, `payment_status`, `hours`) VALUES
 	(4, 48, 600.00, 0.00, 'not paid', 2.00),
@@ -293,7 +291,7 @@ INSERT INTO `session_students` (`session_id`, `student_id`, `session_cost`, `tot
 	(6, 53, 400.00, 0.00, 'not paid', 0.00),
 	(7, 1, 1200.00, 1200.00, 'مدفوع بالكامل', -0.01),
 	(7, 2, 1200.00, 1200.00, 'paid', 0.00),
-	(7, 3, 1200.00, 0.00, 'not paid', 0.00),
+	(7, 3, 1200.00, 600.00, 'مدفوع جزئياً', 0.00),
 	(7, 54, 1200.00, 0.00, 'not paid', 0.00),
 	(8, 12, 600.00, 600.00, 'paid', 0.00),
 	(8, 13, 600.00, 0.00, 'not paid', 0.00),
@@ -357,7 +355,12 @@ INSERT INTO `session_students` (`session_id`, `student_id`, `session_cost`, `tot
 	(60, 48, 240.00, 0.00, 'not paid', 0.00),
 	(61, 3, 300.00, 0.00, 'not paid', 0.00),
 	(61, 53, 300.00, 0.00, 'not paid', 0.00),
-	(61, 54, 300.00, 0.00, 'not paid', 0.00);
+	(61, 54, 300.00, 0.00, 'not paid', 0.00),
+	(62, 12, 1000.00, 0.00, 'not paid', 0.00),
+	(62, 13, 1000.00, 0.00, 'not paid', 0.00),
+	(62, 15, 1000.00, 0.00, 'not paid', 0.00),
+	(62, 22, 1000.00, 0.00, 'not paid', 0.00),
+	(62, 48, 1000.00, 0.00, 'not paid', 0.00);
 
 -- Dumping structure for table top_data.session_teachers
 CREATE TABLE IF NOT EXISTS `session_teachers` (
@@ -373,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `session_teachers` (
   CONSTRAINT `session_teachers_ibfk_2` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.session_teachers: ~36 rows (approximately)
+-- Dumping data for table top_data.session_teachers: ~39 rows (approximately)
 DELETE FROM `session_teachers`;
 INSERT INTO `session_teachers` (`session_id`, `teacher_id`, `session_amount`, `paid_amount`, `payment_status`, `percentage`) VALUES
 	(4, 3, 0, 0, 'not paid', 0.50),
@@ -412,7 +415,11 @@ INSERT INTO `session_teachers` (`session_id`, `teacher_id`, `session_amount`, `p
 	(35, 11, 0, 0, 'not paid', 0.50),
 	(60, 3, 400, 0, 'not paid', 0.50),
 	(60, 11, 200, 100, 'partially paid', 0.50),
-	(61, 3, 450, 0, 'not paid', 0.50);
+	(61, 3, 450, 0, 'not paid', 0.50),
+	(62, 2, 0, 0, 'not paid', 0.50),
+	(62, 3, 1875, 0, 'not paid', 0.50),
+	(62, 4, 0, 0, 'not paid', 0.50),
+	(62, 11, 625, 25, 'partially paid', 0.50);
 
 -- Dumping structure for table top_data.spc
 CREATE TABLE IF NOT EXISTS `spc` (
@@ -459,9 +466,9 @@ CREATE TABLE IF NOT EXISTS `students` (
   KEY `FK_students_schools` (`school`),
   CONSTRAINT `FK_students_classes` FOREIGN KEY (`class`) REFERENCES `classes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `FK_students_schools` FOREIGN KEY (`school`) REFERENCES `schools` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.students: ~15 rows (approximately)
+-- Dumping data for table top_data.students: ~16 rows (approximately)
 DELETE FROM `students`;
 INSERT INTO `students` (`id`, `name`, `tec_id`, `phone`, `class`, `InSess`, `att_id`, `img`, `school`) VALUES
 	(1, 'محمد احمد', '4', '0565435869', 11, 0, 0, 'student.jpg', 1),
@@ -478,7 +485,8 @@ INSERT INTO `students` (`id`, `name`, `tec_id`, `phone`, `class`, `InSess`, `att
 	(53, 'سالم', '4', '123456120', 4, 0, 0, 'student.jpg', 1),
 	(54, 'ماهر', '4', '0595534652', 4, 0, 0, 'student.jpg', 1),
 	(55, 'نادر اسماعيل', '0', '0535534652', 7, 0, 0, 'student.jpg', 1),
-	(56, 'طالب توب', '0', '9876543210', 12, 0, 0, 'student.jpg', 4);
+	(56, 'طالب توب', '0', '9876543210', 12, 0, 0, 'student.jpg', 4),
+	(57, 'امين محمود الشوامرة', '0', '0599123123', 7, 0, 0, 'student.jpg', 4);
 
 -- Dumping structure for table top_data.teacher
 CREATE TABLE IF NOT EXISTS `teacher` (
@@ -490,16 +498,18 @@ CREATE TABLE IF NOT EXISTS `teacher` (
   `role` int(3) NOT NULL,
   `att_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table top_data.teacher: ~5 rows (approximately)
+-- Dumping data for table top_data.teacher: ~7 rows (approximately)
 DELETE FROM `teacher`;
 INSERT INTO `teacher` (`id`, `user`, `password`, `name`, `img`, `role`, `att_id`) VALUES
 	(1, 'admin@top.com', '123', 'محمد الدبس', 'super.jpg', 1, 0),
 	(2, 'mohmad@top.com', '8520', 'محمد سالم', 'super.jpg', 2, 0),
 	(3, 'fatima.top@top.com', '123', 'فاطمة ابو مرخية', 'super.jpg', 2, 0),
 	(4, 'maher@test.com', '123123', 'ماهر سلامين', 'super.jpg', 2, 0),
-	(11, 'teacher@top.ps', '123', 'معلمك توب', 'file-668cf7ce663aa0.99604417toppng', 2, 0);
+	(11, 'teacher@top.ps', '123', 'معلمك توب', 'file-668cf7ce663aa0.99604417toppng', 2, 0),
+	(12, '', '', 'مدرسة خلة العقد', 'super.jpg', 2, 0),
+	(13, '', '', 'مدرسة خلة العقد', 'super.jpg', 2, 0);
 
 -- Dumping structure for table top_data.teacher_specializations
 CREATE TABLE IF NOT EXISTS `teacher_specializations` (

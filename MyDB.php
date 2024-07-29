@@ -1356,7 +1356,7 @@ GROUP BY students.id
     public function addTeacher($user, $password, $name, $specs, $img, $role)
     {
         $conn = $this->connect();
-
+        echo json_encode($specs);die();
         // Insert teacher basic information
         if ($img == "") {
             $query = "INSERT INTO teacher (user, password, name, role)
@@ -1405,13 +1405,23 @@ GROUP BY students.id
     {
         try {
             $conn = $this->connect();
-            // Step 1: Insert student data into students table
             $query = "INSERT INTO students (name, phone, tec_id, school, class) VALUES ('$name', '$phone', '0',$school_name, '$class')";
-//            var_dump($query);die();
             $conn->query($query);
+            return true;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
 
-            // Close the connection
-//            $conn->close();
+    }
+
+    public function addSchool(
+        $name,
+        $type)
+    {
+        try {
+            $conn = $this->connect();
+            $query = "INSERT INTO schools (name, type) VALUES ('$name', $type)";
+            $conn->query($query);
             return true;
         } catch (Exception $e) {
             return $e->getMessage();

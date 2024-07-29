@@ -1,11 +1,17 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-
+$companyName = 'مركز القمة التعليمي';
+$customerName = 'تقرير الدورات'; // Example customer name, you can dynamically set this
+$companyPhone1 = "0569204082";
+$companyPhone2 = "02-2750628";
+$logoPath = './upload/top_logo.jpg';
+$companyAddress = 'بيت لحم/شارع القدس الخليل/ سوبر ماركت الراضي/ مجمع ابو سرور/مبنى الارتباط المدني/ الطابق الثاني';
 use Mpdf\Mpdf;
 
 function generate_income_report($headers, $tableData): string
 {
+    global $companyName, $companyAddress, $companyPhone1, $companyPhone2, $logoPath;
     $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
     $htmlTable .= '<thead><tr>';
     foreach ($headers as $header) {
@@ -25,43 +31,44 @@ function generate_income_report($headers, $tableData): string
     $date = date('Y-m-d');
 
     $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
-    $companyName = 'توب سنتر التعليمي';
+
     $customerName = 'اسم الطالب'; // Example customer name, you can dynamically set this
 
 
-    $companyAddress = 'بيت لحم';
+
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
-                  
+
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
-                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
-                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">' . $companyPhone2 . '<i class="fa fa-phone"></i></p>
                     <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                 </div>
                 <div style="clear: both;"></div>
             </div>
 
-            
+
 
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
                 <div style="float: right; width: 20%;">
                     <p><b>التاريخ: </b> ' . $date . '</p>
-                   
+
                 </div>
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
-                   
+
                 </div>
-                
-                
+
+
             </div>
         </div>
     ';
@@ -71,6 +78,7 @@ function generate_income_report($headers, $tableData): string
 
 function generate_outcome_report($headers, $tableData): string
 {
+    global $companyName, $companyAddress, $companyPhone1, $companyPhone2, $logoPath;
     $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
     $htmlTable .= '<thead><tr>';
     foreach ($headers as $header) {
@@ -90,43 +98,45 @@ function generate_outcome_report($headers, $tableData): string
     $date = date('Y-m-d');
 
     $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
-    $companyName = 'توب سنتر التعليمي';
+
     $customerName = 'اسم المستلم'; // Example customer name, you can dynamically set this
 
 
-    $companyAddress = 'بيت لحم';
+
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
+            
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
-                  
+
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
-                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
-                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">' . $companyPhone2 . '<i class="fa fa-phone"></i></p>
                     <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                 </div>
                 <div style="clear: both;"></div>
             </div>
 
-            
+
 
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
                 <div style="float: right; width: 20%;">
                     <p><b>التاريخ: </b> ' . $date . '</p>
-                   
+
                 </div>
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
-                   
+
                 </div>
-                
-                
+
+
             </div>
         </div>
     ';
@@ -135,6 +145,7 @@ function generate_outcome_report($headers, $tableData): string
 }
 
 function generate_daily_report($headers, $tableData): string{
+    global $companyName, $companyPhone1, $companyPhone2, $companyAddress, $logoPath;
     $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
     $htmlTable .= '<thead><tr>';
     foreach ($headers as $header) {
@@ -154,43 +165,42 @@ function generate_daily_report($headers, $tableData): string{
     $date = date('Y-m-d');
 
     $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
-    $companyName = 'توب سنتر التعليمي';
     $customerName = 'اسم الطالب'; // Example customer name, you can dynamically set this
 
 
-    $companyAddress = 'بيت لحم';
-
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
+
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
-                  
+
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
-                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
-                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">' . $companyPhone2 . '<i class="fa fa-phone"></i></p>
                     <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                 </div>
                 <div style="clear: both;"></div>
             </div>
 
-            
+
 
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
                 <div style="float: right; width: 20%;">
                     <p><b>التاريخ: </b> ' . $date . '</p>
-                   
+
                 </div>
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
-                   
+
                 </div>
-                
-                
+
+
             </div>
         </div>
     ';
@@ -199,6 +209,7 @@ function generate_daily_report($headers, $tableData): string{
 }
 
 function generate_public_report($headers, $tableData): string {
+    global $companyName, $companyAddress, $logoPath, $companyPhone1, $companyPhone2;
     $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
     $htmlTable .= '<thead><tr>';
     foreach ($headers as $header) {
@@ -218,42 +229,41 @@ function generate_public_report($headers, $tableData): string {
     $date = date('Y-m-d');
 
     $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
-    $companyName = 'توب سنتر التعليمي';
     $customerName = 'التقرير الشامل'; // Example customer name, you can dynamically set this
-    $companyPhone = "+970599123456";
-    $companyAddress = 'بيت لحم';
+
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
-                  
+
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
-                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
-                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p style="direction: ltr">'.$companyPhone1.'<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">'.$companyPhone2.'<i class="fa fa-phone"></i></p>
                     <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                 </div>
                 <div style="clear: both;"></div>
             </div>
 
-            
+
 
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
                 <div style="float: right; width: 20%;">
                     <p><b>التاريخ: </b> ' . $date . '</p>
-                   
+
                 </div>
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
-                   
+
                 </div>
-                
-                
+
+
             </div>
         </div>
     ';
@@ -261,6 +271,7 @@ function generate_public_report($headers, $tableData): string {
     return $html;
 }
 function generate_sessions_report($headers, $tableData): string {
+    global $customerName, $companyName, $companyPhone1, $companyPhone2, $companyAddress, $companyAddress, $logoPath;
     $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
     $htmlTable .= '<thead><tr>';
     foreach ($headers as $header) {
@@ -280,42 +291,40 @@ function generate_sessions_report($headers, $tableData): string {
     $date = date('Y-m-d');
 
     $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
-    $companyName = 'توب سنتر التعليمي';
-    $customerName = 'تقرير الدورات'; // Example customer name, you can dynamically set this
-    $companyPhone = "+970599123456";
-    $companyAddress = 'بيت لحم';
+
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
-                  
+
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
-                    <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>
-                    <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
+                    <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">' . $companyPhone2 . '<i class="fa fa-phone"></i></p>
                     <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                 </div>
                 <div style="clear: both;"></div>
             </div>
 
-            
+
 
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
                 <div style="float: right; width: 20%;">
                     <p><b>التاريخ: </b> ' . $date . '</p>
-                   
+
                 </div>
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
-                   
+
                 </div>
-                
-                
+
+
             </div>
         </div>
     ';
@@ -324,10 +333,8 @@ function generate_sessions_report($headers, $tableData): string {
 }
 
 function generate_receipt($tableData): string {
-    $companyPhone = "+970599123456";
-    $companyAddress = 'بيت لحم';
-    $companyName = "مركز توب التعليمي";
-    $companyEmail = "top.center@gmail.com";
+
+    global $companyName, $companyAddress, $companyPhone1, $companyPhone2, $logoPath;
     return "
     <html>
         <head>
@@ -365,11 +372,110 @@ function generate_receipt($tableData): string {
         </head>
         <body>
             <div class='header'>
+            <img src='{$logoPath}' style='width: 100px; height: auto; display: block; margin: 0 auto;'>
                 <h1>وصل دفع</h1>
                 <p><strong>اسم الشركة:</strong> {$companyName}</p>
                 <p><strong>عنوان الشركة:</strong> {$companyAddress}</p>
-                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone}</p>
-                <p><strong>بريد الشركة:</strong> {$companyEmail}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone1}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone2}</p>
+
+            </div>
+            <table>
+                <tr>
+                    <td>التاريخ</td>
+                    <td>{$tableData['date']}</td>
+                </tr>
+                <tr>
+                    <td>المستلم</td>
+                    <td>{$tableData['cashier']}</td>
+                </tr>
+                <tr>
+                    <td>الدافع</td>
+                    <td>{$tableData['payer']}</td>
+                </tr>
+                <tr>
+                    <td>الطالب</td>
+                    <td>{$tableData['student_name']}</td>
+                </tr>
+                <tr>
+                    <td>الدورة</td>
+                    <td>{$tableData['session_name']}</td>
+                </tr>
+                <tr>
+                    <td>المبلغ المدفوع</td>
+                    <td>{$tableData['amount']}</td>
+                </tr>
+                <tr>
+                    <td>مجموع الدفعات</td>
+                    <td>{$tableData['total_payments']}</td>
+                </tr>
+                <tr>
+                    <td>المبلغ المطلوب</td>
+                    <td>{$tableData['session_cost']}</td>
+                </tr>
+                <tr>
+                    <td>حالة الدفع</td>
+                    <td>{$tableData['payment_status']}</td>
+                </tr>
+                <tr>
+                    <td>ملاحظات</td>
+                    <td>{$tableData['notes']}</td>
+                </tr>
+            </table>
+            <div class='signature'>
+                <p>التوقيع: ...........................................</p>
+                <p>السكرتيرة: ...........................................</p>
+            </div>
+        </body>
+    </html>
+    ";
+}
+function generate_outcome_receipt($tableData): string {
+
+    global $companyPhone1, $companyAddress, $companyPhone2, $companyName, $logoPath;
+    return "
+    <html>
+        <head>
+            <style>
+                body {
+                    direction: rtl;
+                    text-align: right;
+                    font-family: 'Cairo', sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                h1 {
+                    text-align: center;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .signature {
+                    margin-top: 30px;
+                    border-top: 1px solid #000;
+                    text-align: right;
+                    padding-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='header'>
+            <img src='  $logoPath  ' style='width: 100px; height: auto; display: block; margin: 0 auto;'>
+                <h1>وصل دفع</h1>
+                <p><strong>اسم الشركة:</strong> {$companyName}</p>
+                <p><strong>عنوان الشركة:</strong> {$companyAddress}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone1}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone2}</p>
             </div>
             <table>
                 <tr>
@@ -436,8 +542,7 @@ try {
     }
 
     $date = date('d-m-Y');
-    $companyAddress = 'بيت لحم';
-    $companyName = 'توب سنتر التعليمي';
+
     switch ($type) {
         case 'income_report':
             if (empty($headers) || empty($tableData)) {
@@ -486,28 +591,28 @@ try {
             $htmlContent = '
                 <div style="direction: rtl; text-align: center; padding: 20px;">
                         <div class="receipt-header">
-                          
+
                             <div style="float: right; width: 50%; text-align: right;">
                                 <h5>' . $companyName . '</h5>
-                                
+
                            <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
                             </div>
                             <div style="float: left; width: 50%; text-align: right;">
-                                     <p>company@gmail.com <i class="fa fa-envelope-o"></i></p>
-                               <p style="direction: ltr">+1 3649-6589 <i class="fa fa-phone"></i></p>              
+                                                         <p style="direction: ltr">'.$companyPhone1.'<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">'.$companyPhone2.'<i class="fa fa-phone"></i></p>
                             </div>
                             <div style="clear: both;"></div>
                         </div>' . $htmlContent . '<div class="receipt-footer" style="padding: 20px 0;">
                             <div style="float: right; width: 20%;">
                                 <p><b>التاريخ: </b> ' . $date . '</p>
-                               
+
                             </div>
                             <div style="float: left; width: 20%;">
                                 <p><b> الإدارة </b> </p>
-                               
+
                             </div>
-                            
-                            
+
+
                         </div>
                  </div>'
             ;
@@ -567,6 +672,29 @@ try {
             echo $pdfContent;
             exit();
             break;
+        case 'outcome_receipt_report':
+            if (empty($tableData)) {
+                throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
+            }
+
+            $receipt_report = generate_outcome_receipt($tableData);
+
+            $mpdf = new Mpdf(['default_font' => 'Cairo']);
+            $mpdf->WriteHTML($receipt_report);
+            // Output PDF directly to the browser
+            $pdfContent = $mpdf->Output('', 'S');
+            if ($pdfContent === false) {
+                http_response_code(500);
+                echo 'فشل في إنشاء PDF';
+                exit();
+            }
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="outcome_receipt.pdf"');
+            header('Content-Length: ' . strlen($pdfContent)); // Set the correct content length
+            echo $pdfContent;
+            exit();
+            break;
         default:
             throw new Exception('No data received or data is invalid.');
 
@@ -576,4 +704,228 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
+
+
+
+
+
+//require_once __DIR__ . '/vendor/autoload.php';
+//
+//use Mpdf\Mpdf;
+//
+//$companyName = 'مركز القمة التعليمي';
+//$companyPhone1 = "0569204082";
+//$companyPhone2 = "02-2750628";
+//$companyAddress = 'بيت لحم/شارع القدس الخليل/ سوبر ماركت الراضي/ مجمع ابو سرور/مبنى الارتباط المدني/ الطابق الثاني';
+//$logoPath = './upload/logo.jpg';
+//
+//function generateReportHeader(): string
+//{
+//    global $companyName, $companyAddress, $companyPhone1, $companyPhone2, $logoPath;
+//
+//    return '
+//    <div style="direction: rtl; text-align: center; padding: 20px;">
+//        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+//        <div class="receipt-header">
+//            <div style="float: left; width: 50%;">
+//                <h5>' . $companyName . '</h5>
+//            </div>
+//            <div style="float: right; width: 50%; text-align: right;">
+//                <p style="direction: ltr">' . $companyPhone1 . ' <i class="fa fa-phone"></i></p>
+//                <p style="direction: ltr">' . $companyPhone2 . ' <i class="fa fa-phone"></i></p>
+//                <p>' . $companyAddress . ' <i class="fa fa-location-arrow"></i></p>
+//            </div>
+//            <div style="clear: both;"></div>
+//        </div>
+//    </div>';
+//}
+//
+//function generateTable($headers, $tableData): string
+//{
+//    $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
+//    $htmlTable .= '<thead><tr>';
+//    foreach ($headers as $header) {
+//        $htmlTable .= '<th>' . htmlspecialchars($header, ENT_QUOTES, 'UTF-8') . '</th>';
+//    }
+//    $htmlTable .= '</tr></thead><tbody>';
+//    foreach ($tableData as $row) {
+//        $htmlTable .= '<tr>';
+//        foreach ($row as $cell) {
+//            $htmlTable .= '<td>' . htmlspecialchars($cell, ENT_QUOTES, 'UTF-8') . '</td>';
+//        }
+//        $htmlTable .= '</tr>';
+//    }
+//    $htmlTable .= '</tbody></table>';
+//
+//    return $htmlTable;
+//}
+//
+//function generateReport($type, $headers, $tableData): string
+//{
+//    $headerHtml = generateReportHeader();
+//
+//    $htmlContent = $headerHtml . '<div>' . generateTable($headers, $tableData) . '</div>';
+//
+//    $date = date('Y-m-d');
+//    $issuer = 'السكرتيرة';
+//
+//    $htmlContent .= '
+//    <div class="receipt-footer" style="padding: 20px 0;">
+//        <div style="float: right; width: 20%;">
+//            <p><b>التاريخ: </b>' . $date . '</p>
+//        </div>
+//        <div style="float: left; width: 20%;">
+//            <p><b>' . $issuer . '</b></p>
+//        </div>
+//        <div style="clear: both;"></div>
+//    </div>';
+//
+//    return $htmlContent;
+//}
+//
+//function generateReceipt($tableData): string
+//{
+//    global $companyName, $logoPath, $companyAddress;
+//
+//    return "
+//    <html>
+//        <head>
+//            <style>
+//                body {
+//                    direction: rtl;
+//                    text-align: right;
+//                    font-family: 'Cairo', sans-serif;
+//                }
+//                table {
+//                    width: 100%;
+//                    border-collapse: collapse;
+//                }
+//                th, td {
+//                    border: 1px solid #ddd;
+//                    padding: 8px;
+//                }
+//                th {
+//                    background-color: #f2f2f2;
+//                }
+//                .header {
+//                    text-align: center;
+//                    margin-bottom: 20px;
+//                }
+//                .signature {
+//                    margin-top: 30px;
+//                    border-top: 1px solid #000;
+//                    text-align: right;
+//                    padding-top: 10px;
+//                }
+//            </style>
+//        </head>
+//        <body>
+//            <div class='header'>
+//                <img src='" . $logoPath . "' style='width: 100px; height: auto; display: block; margin: 0 auto;'>
+//                <h1>وصل دفع</h1>
+//                <p><strong>اسم الشركة:</strong> {$companyName}</p>
+//                <p><strong>عنوان الشركة:</strong> {$companyAddress}</p>
+//            </div>
+//            <table>
+//                <tr><td>التاريخ</td><td>{$tableData['date']}</td></tr>
+//                <tr><td>المستلم</td><td>{$tableData['cashier']}</td></tr>
+//                <tr><td>الدافع</td><td>{$tableData['payer']}</td></tr>
+//                <tr><td>الطالب</td><td>{$tableData['student_name']}</td></tr>
+//                <tr><td>الدورة</td><td>{$tableData['session_name']}</td></tr>
+//                <tr><td>المبلغ المدفوع</td><td>{$tableData['amount']}</td></tr>
+//                <tr><td>مجموع الدفعات</td><td>{$tableData['total_payments']}</td></tr>
+//                <tr><td>المبلغ المطلوب</td><td>{$tableData['session_cost']}</td></tr>
+//                <tr><td>حالة الدفع</td><td>{$tableData['payment_status']}</td></tr>
+//                <tr><td>ملاحظات</td><td>{$tableData['notes']}</td></tr>
+//            </table>
+//            <div class='signature'>
+//                <p>التوقيع: ...........................................</p>
+//                <p>السكرتيرة: ...........................................</p>
+//            </div>
+//        </body>
+//    </html>
+//    ";
+//}
+//
+//try {
+//    $type = $_POST['reportType'] ?? '';
+//    $headers = isset($_POST['headers']) ? json_decode($_POST['headers'], true) : [];
+//    $tableData = isset($_POST['tableData']) ? json_decode($_POST['tableData'], true) : [];
+//    $htmlContent = $_POST['htmlContent'] ?? '';
+//
+//    $mpdf = new Mpdf(['default_font' => 'Cairo']);
+//
+//    switch ($type) {
+//        case 'income_report':
+//            if (empty($headers) || empty($tableData)) {
+//                throw new Exception('No data received for income report.');
+//            }
+//            $reportHtml = generateReport($type, $headers, $tableData);
+//            $mpdf->WriteHTML($reportHtml);
+//            $mpdf->Output('income_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'outcome_report':
+//            if (empty($headers) || empty($tableData)) {
+//                throw new Exception('No data received for outcome report.');
+//            }
+//            $reportHtml = generateReport($type, $headers, $tableData);
+//            $mpdf->WriteHTML($reportHtml);
+//            $mpdf->Output('outcome_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'sessions_report':
+//            if (empty($headers) || empty($tableData)) {
+//                throw new Exception('No data received for sessions report.');
+//            }
+//            $reportHtml = generateReport($type, $headers, $tableData);
+//            $mpdf->WriteHTML($reportHtml);
+//            $mpdf->Output('sessions_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'all_stats_report':
+//            if (empty($htmlContent)) {
+//                throw new Exception("No HTML content provided for all stats report.");
+//            }
+//            $htmlContent = generateReportHeader() . '<div>' . $htmlContent . '</div>';
+//            $mpdf->WriteHTML($htmlContent);
+//            $mpdf->Output('all_stats_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'daily_report':
+//            if (empty($htmlContent)) {
+//                throw new Exception("No HTML content provided for all stats report.");
+//            }
+//            $htmlContent = generateReportHeader() . '<div>' . $htmlContent . '</div>';
+//            $mpdf->WriteHTML($htmlContent);
+//            $mpdf->Output('daily_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'public_report':
+//            if (empty($htmlContent)) {
+//                throw new Exception("No HTML content provided for all stats report.");
+//            }
+//            $htmlContent = generateReportHeader() . '<div>' . $htmlContent . '</div>';
+//            $mpdf->WriteHTML($htmlContent);
+//            $mpdf->Output('public_report_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        case 'receipt':
+//            if (empty($tableData)) {
+//                throw new Exception("No table data provided for receipt.");
+//            }
+//            $receiptHtml = generateReceipt($tableData);
+//            $mpdf->WriteHTML($receiptHtml);
+//            $mpdf->Output('receipt_' . date('d-m-Y') . '.pdf', 'D');
+//            break;
+//
+//        default:
+//            throw new Exception('Invalid report type.');
+//    }
+//
+//} catch (Exception $e) {
+//    echo 'Error: ' . $e->getMessage();
+//}
+//?>
+
 

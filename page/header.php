@@ -137,6 +137,8 @@ foreach ($user
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="newMissionSpecialization.php">إضافة تخصص جديد</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="newSchool.php">إضافة مدرسة جديدة</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="assignToPackages.php">الدورات</a>
                         </div>
                     </li>
