@@ -3,23 +3,31 @@
 require "MyDB.php";
 require 'dbconnection.php';
 $db = new MyDB();
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
-    $spec = $_POST['specs'];
+    $specs = $_POST['specs'];
 
+    // Prepare the specs array to only include checked items
+    $filteredSpecs = [];
+    foreach ($specs as $specId => $specData) {
+        if (isset($specData['price'])) {
+            $filteredSpecs[$specId] = ['price' => $specData['price']];
+        }
+    }
 
-    // Update student data in the database
-    $success = $db->updateTeacher($id, $name, $email, $spec);
+    // Update teacher data in the database
+    $success = $db->updateTeacher($id, $name, $email, $filteredSpecs);
+
     // Check if the update was successful
     if ($success) {
         // Redirect to appropriate page based on user role
-
         header("Location: " .
-            ($_COOKIE['role'] == 2 ? "page/bodyHomeUser.php" : ($_COOKIE['role'] == 1 ? "page/homeAdmin.php" : "page/editStudent.php"))
+            ($_COOKIE['role'] == 2 ? "page/bodyHomeUser.php" : ($_COOKIE['role'] == 1 ? "page/homeAdmin.php" : "page/editTeacher.php"))
         );
         exit;
     } else {
