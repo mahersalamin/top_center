@@ -12,18 +12,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['teacher_id'])) {
         // Redirect to a success page or display a success message
         $status = "success";
 
-        header("Location: ./page/homeAdmin.php?status=$status&message=تم حذف المعلم بنجاح");
+        header("Location: ./page/homeAdmin.php?status=$status&message=تم أرشفة المعلم بنجاح");
         exit();
     } else {
         // Redirect to an error page or display an error message
         $status = "error";
 
-        header("Location: ./page/homeAdmin.php?status=$status&message=حدث خطأ أثناء حذف المعلم");
+        header("Location: ./page/homeAdmin.php?status=$status&message=حدث خطأ أثناء أرشفة المعلم");
         exit();
     }
 } else {
     // Redirect to an error page or display an error message for invalid request
-    $status = "success";
+    $status = "error";
 
     header("Location: ./page/homeAdmin.php?status=$status&message=طلب غير صالح");
     exit();
