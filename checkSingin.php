@@ -17,17 +17,18 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     $query = "SELECT * FROM teacher WHERE user='$Semail' AND password='$Spassword'";
     $result = mysqli_query($conn, $query);
 
-    if($result['is_archived']==1){
-        header("location:page/signin.php?error=2");
-    }
+
 
     foreach ($result as $row) {
 
         $Uid = $row['id'];
         $name = $row['name'];
         $role = $row['role'];
+        $is_archived = $row['is_archived'];
     }
-
+    if($is_archived==1){
+        header("location:page/signin.php?error=2");
+    }
     if (mysqli_num_rows($result) > 0) {
 
         setcookie("id", $Uid, time() + 2000);
