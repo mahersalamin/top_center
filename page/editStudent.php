@@ -80,10 +80,10 @@ if ($student) {
                                     <label class="form-check-label">حالة الدورة:
                                         <?php $session['status']==1?print "جارية":print "منتهية"; ?>
                                     </label>
-                                    <input readonly class="form-control" type="text" name="session_<?php echo $session['session_name'];
+                                    <label for="session_<?php echo $session['id']; ?>"></label><input readonly class="form-control" type="text" name="session_<?php echo $session['session_name'];
                                     ?>"
-                                           id="session_<?php echo $session['id']; ?>"
-                                           value="<?php echo $session['session_name']; ?>"
+                                                                                                      id="session_<?php echo $session['id']; ?>"
+                                                                                                      value="<?php echo $session['session_name']; ?>"
                                     >
                                 </div>
                                 <hr>
@@ -102,7 +102,7 @@ if ($student) {
                     </a>
                 </div>
             </div>
-        </form>
+        </form> 
         <br>
         <br>
         <form id="deleteForm" action="../deleteStudent.php" method="post">

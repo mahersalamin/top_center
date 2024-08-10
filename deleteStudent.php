@@ -1,7 +1,8 @@
 <?php
 // Include the database class
 require_once 'dbconnection.php';
-require('MyDB.php');
+require_once 'MyDB.php';
+
 // Check if student id is provided
 if (isset($_POST['student_id'])) {
     // Get student id from POST data
@@ -10,14 +11,13 @@ if (isset($_POST['student_id'])) {
     // Create a new instance of the database class
     $db = new MyDB();
 
-    // Call the deleteStudent method to delete the student
-    $result = $db->deleteStudent($student_id);
+    // Call the archiveStudent method to archive the student
+    $result = $db->archiveStudent($student_id);
 
-
-    // Check if deletion was successful
+    // Check if archiving was successful
     if ($result) {
         // Set the message and status
-        $message = "تم حذف الطالب بنجاح";
+        $message = "تم أرشفة الطالب بنجاح";
         $status = "success";
 
         // Redirect to the homeAdmin.php page with message and status as query parameters
@@ -30,10 +30,9 @@ if (isset($_POST['student_id'])) {
     }
 } else {
     // If student id is not provided, redirect to an error page
-    $message = "لم يتم حذف الطالب";
+    $message = "لم يتم أرشفة الطالب";
     $status = "error";
 
     header("Location: ./page/homeAdmin.php?message=" . urlencode($message) . "&status=" . urlencode($status));
     exit();
 }
-?>
