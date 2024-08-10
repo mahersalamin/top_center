@@ -31,6 +31,10 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
             <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary"
                aria-selected="false">الملخص</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="remains-summary" data-toggle="tab" href="#remains" role="tab" aria-controls="remains-summary"
+               aria-selected="false">المتبقي</a>
+        </li>
     </ul>
 
     <!-- Tab panes -->
@@ -340,6 +344,15 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                     </div>
                     <!-- Button to generate PDF -->
                 </div>
+            </div>
+        </div>
+        <!-- Remains Tab -->
+
+        <div class="tab-pane fade" id="remains" role="tabpanel" aria-labelledby="remains-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
+
+            <div class="row mt-5 mb-5">
+                <button id="generateRemainsPdf" class="btn btn-primary mtb-4">اصدار تقرير الذمم المستحقة على الطلاب</button>
+
             </div>
         </div>
     </div>
@@ -685,6 +698,23 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
             type: 'hidden',
             name: 'htmlContent',
             value: htmlContent
+        }));
+
+        form.appendTo('body').submit();
+    });
+    $('#generateRemainsPdf').on('click', function() {
+
+        let form = $('<form>', {
+            action: '../mpdf-generator.php',
+            method: 'POST'
+        }).append($('<input>', {
+            type: 'hidden',
+            name: 'reportType',
+            value: 'remains_report'
+        })).append($('<input>', {
+            type: 'hidden',
+            name: 'htmlContent',
+            value: 'remains_report'
         }));
 
         form.appendTo('body').submit();

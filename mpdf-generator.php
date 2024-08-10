@@ -1,5 +1,5 @@
 <?php
-
+require_once "MyDB.php";
 require_once __DIR__ . '/vendor/autoload.php';
 $companyName = 'مركز القمة التعليمي';
 $customerName = 'تقرير الدورات'; // Example customer name, you can dynamically set this
@@ -527,6 +527,88 @@ function generate_outcome_receipt($tableData): string {
     </html>
     ";
 }
+function generate_remains_report(): string {
+    global $companyPhone1, $companyAddress, $companyPhone2, $companyName, $logoPath;
+
+    $db = new MyDB();
+    $data= $db->getRemainsData();
+    $tableRows = "";
+    foreach ($data as $row) {
+        $tableRows .= "
+            <tr>
+                <td>" . htmlspecialchars($row['student_id']) . "</td>
+                <td>" . htmlspecialchars($row['student_name']) . "</td>
+                <td>" . htmlspecialchars($row['session_name']) . "</td>
+                <td>" . htmlspecialchars($row['session_cost']) . "</td>
+                <td>" . htmlspecialchars($row['total_payments']) . "</td>
+                <td>" . htmlspecialchars($row['amount_due']) . "</td>
+            </tr>
+        ";
+    }
+
+    return "
+    <html lang='ar'>
+        <head>
+            <style>
+                body {
+                    direction: rtl;
+                    text-align: right;
+                    font-family: 'Cairo', sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                h1 {
+                    text-align: center;
+                }
+                .header {
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+                .signature {
+                    margin-top: 30px;
+                    border-top: 1px solid #000;
+                    text-align: right;
+                    padding-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='header'>
+                <img src='$logoPath' style='width: 100px; height: auto; display: block; margin: 0 auto;' alt='company_logo'>
+                <h1>تقرير الذمم المستحقة على الطلاب</h1>
+                <p><strong>اسم الشركة:</strong> {$companyName}</p>
+                <p><strong>عنوان الشركة:</strong> {$companyAddress}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone1}</p>
+                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone2}</p>
+            </div>
+            <table>
+                <tr>
+                    <th>رقم الطالب</th>
+                    <th>اسم الطالب</th>
+                    <th>اسم الدورة</th>
+                    <th>السعر الأصلي</th>
+                    <th>مجموع الدفعات</th>
+                    <th>المبلغ المتبقي</th>
+                </tr>
+                $tableRows
+            </table>
+            <div class='signature'>
+                <p>التوقيع: ...........................................</p>
+                <p>السكرتيرة: ...........................................</p>
+            </div>
+        </body>
+    </html>
+    ";
+}
 
 try {
 
@@ -691,6 +773,29 @@ try {
 
             header('Content-Type: application/pdf');
             header('Content-Disposition: attachment; filename="outcome_receipt.pdf"');
+            header('Content-Length: ' . strlen($pdfContent)); // Set the correct content length
+            echo $pdfContent;
+            exit();
+            break;
+        case 'remains_report':
+            if (empty($htmlContent)) {
+                throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
+            }
+
+            $remains_report = generate_remains_report();
+
+            $mpdf = new Mpdf(['default_font' => 'Cairo']);
+            $mpdf->WriteHTML($remains_report);
+            // Output PDF directly to the browser
+            $pdfContent = $mpdf->Output('', 'S');
+            if ($pdfContent === false) {
+                http_response_code(500);
+                echo 'فشل في إنشاء PDF';
+                exit();
+            }
+
+            header('Content-Type: application/pdf');
+            header('Content-Disposition: attachment; filename="remains_report.pdf"');
             header('Content-Length: ' . strlen($pdfContent)); // Set the correct content length
             echo $pdfContent;
             exit();

@@ -43,82 +43,93 @@ class MyDB
 
     public function getTeacherPrivateSessions($id, $type)
     {
+        // Determine the base query based on the session type
         if ($type == "حقيبة مدرسية") {
             $query = "SELECT 
-    s.*, 
-    st.teacher_id, 
-    ss.*, 
-    GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
-    t.name AS teacher_name,
-    GROUP_CONCAT(DISTINCT spc.name) AS materials,
-    COALESCE(attendance_counts.attendance_count, 0) AS meetings_count  -- Add accurate count here
-FROM 
-    sessions s
-LEFT JOIN 
-    session_teachers st ON s.id = st.session_id
-LEFT JOIN 
-    session_students ss ON s.id = ss.session_id
-LEFT JOIN 
-    students stu ON ss.student_id = stu.id
-LEFT JOIN 
-    teacher t ON st.teacher_id = t.id
-LEFT JOIN 
-    spc ON FIND_IN_SET(spc.id, s.material) > 0
-LEFT JOIN (
-    SELECT 
-        session_id, 
-        COUNT(session_id) AS attendance_count
-    FROM 
-        att
-    GROUP BY 
-        session_id
-) attendance_counts ON s.id = attendance_counts.session_id  -- Join with attendance count subquery
-WHERE 
-    st.teacher_id = $id -- Filter by teacher_id
-    AND s.type = 'حقيبة مدرسية' -- Filter by session type
-GROUP BY 
-    s.id, st.teacher_id, ss.session_id, t.name;
-
+            s.*, 
+            st.teacher_id, 
+            ss.*, 
+            GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
+            t.name AS teacher_name,
+            GROUP_CONCAT(DISTINCT spc.name) AS materials,
+            COALESCE(attendance_counts.attendance_count, 0) AS meetings_count
+        FROM 
+            sessions s
+        LEFT JOIN 
+            session_teachers st ON s.id = st.session_id
+        LEFT JOIN 
+            session_students ss ON s.id = ss.session_id
+        LEFT JOIN 
+            students stu ON ss.student_id = stu.id AND stu.archived = 0
+        LEFT JOIN 
+            teacher t ON st.teacher_id = t.id
+        LEFT JOIN 
+            spc ON FIND_IN_SET(spc.id, s.material) > 0
+        LEFT JOIN (
+            SELECT 
+                session_id, 
+                COUNT(session_id) AS attendance_count
+            FROM 
+                att
+            GROUP BY 
+                session_id
+        ) attendance_counts ON s.id = attendance_counts.session_id
+        WHERE 
+            st.teacher_id = ? -- Filter by teacher_id
+            AND s.type = 'حقيبة مدرسية' -- Filter by session type
+        GROUP BY 
+            s.id, st.teacher_id, ss.session_id, t.name;
         ";
         } else {
             $query = "SELECT 
-                        s.*, 
-                        st.teacher_id, 
-                        ss.*, 
-                        GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
-                        t.name AS teacher_name,
-                        GROUP_CONCAT(DISTINCT spc.name) AS materials
-                    FROM 
-                        sessions s
-                    LEFT JOIN 
-                        session_teachers st ON s.id = st.session_id
-                    LEFT JOIN 
-                        session_students ss ON s.id = ss.session_id
-                    LEFT JOIN 
-                        students stu ON ss.student_id = stu.id
-                    LEFT JOIN 
-                        teacher t ON st.teacher_id = t.id
-                    LEFT JOIN 
-                        spc ON FIND_IN_SET(spc.id, s.material) > 0
-                    WHERE 
-                        st.teacher_id = $id -- Filter by teacher_id
-                        AND s.type = '$type' -- Filter by session type
-                    GROUP BY 
-                        s.id
+            s.*, 
+            st.teacher_id, 
+            ss.*, 
+            GROUP_CONCAT(DISTINCT stu.name) AS student_names, 
+            t.name AS teacher_name,
+            GROUP_CONCAT(DISTINCT spc.name) AS materials
+        FROM 
+            sessions s
+        LEFT JOIN 
+            session_teachers st ON s.id = st.session_id
+        LEFT JOIN 
+            session_students ss ON s.id = ss.session_id
+        LEFT JOIN 
+            students stu ON ss.student_id = stu.id AND stu.archived = 0
+        LEFT JOIN 
+            teacher t ON st.teacher_id = t.id
+        LEFT JOIN 
+            spc ON FIND_IN_SET(spc.id, s.material) > 0
+        WHERE 
+            st.teacher_id = ? -- Filter by teacher_id
+            AND s.type = ? -- Filter by session type
+        GROUP BY 
+            s.id;
         ";
         }
-        //        var_dump($query);die();
-        $conn = $this->connect();
-        $result = $conn->query($query);
-        $rows = array();
 
+        // Prepare and execute the query
+        $conn = $this->connect();
+        $stmt = $conn->prepare($query);
+
+        if ($type == "حقيبة مدرسية") {
+            $stmt->bind_param("i", $id);
+        } else {
+            $stmt->bind_param("is", $id, $type);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = array();
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
-        //        $conn->close();
+
 
         return $rows;
     }
+
 
     public function getTeacherAllStudents($id)
     {
@@ -495,7 +506,6 @@ GROUP BY
         }
 
         // Close the connection
-        $conn->close();
 
         return true;
     }
@@ -558,6 +568,36 @@ GROUP BY
         }
         //        $conn->close();
 
+        return $rows;
+    }
+    public function getRemainsData()
+    {
+        $conn = $this->connect();
+        $query = "SELECT
+                        ss.student_id,
+                        s.name AS student_name,
+                        ss.session_id,
+                        se.session_name,
+                        ss.session_cost,
+                        ss.total_payments,
+                        ss.session_cost - ss.total_payments AS amount_due
+                    FROM
+                        session_students ss
+                    JOIN
+                        students s ON ss.student_id = s.id
+                    JOIN
+                         sessions se ON ss.session_id = se.id
+                    WHERE
+                        ss.total_payments < ss.session_cost
+                        AND ss.payment_status != 'paid'; 
+                    "
+        ;
+        $result = $conn->query($query);
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
         return $rows;
     }
 
@@ -940,7 +980,6 @@ GROUP BY students.id
     {
         $conn = $this->connect();
         $teacherId = $t_id;
-        // Fetch the user with InSess = 1 and att_id != 0 and att_id associated with teacher's tec_id
         $query = "
         SELECT DISTINCT 
             students.*, 
@@ -963,8 +1002,11 @@ GROUP BY students.id
             AND students.att_id != 0
             AND t.id = ?;
     ";
-
+//        echo($query);die();
         $stmt = $conn->prepare($query);
+        if ($stmt === false) {
+            die("Prepare failed: " . $conn->error);
+        }
         $stmt->bind_param("i", $teacherId);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -1368,60 +1410,57 @@ GROUP BY students.id
         $materialResult = $materialStmt->get_result();
         $materialRow = $materialResult->fetch_assoc();
         $materialId = $materialRow['id'];
-        //        $materialStmt->close();
 
-        // Split the student names and get their IDs
+        // Get student IDs and filter out archived students
         $studentIds = [];
         $sNames = explode(",", $sNames);
 
         foreach ($sNames as $sName) {
-            $nameToIdQuery = "SELECT id FROM students WHERE name = ?";
+            $nameToIdQuery = "SELECT id, archived FROM students WHERE name = ?";
             $nameStmt = $conn->prepare($nameToIdQuery);
             $nameStmt->bind_param("s", $sName);
             $nameStmt->execute();
             $nameResult = $nameStmt->get_result();
             $nameRow = $nameResult->fetch_assoc();
-            if ($nameRow) {
+
+            if ($nameRow && !$nameRow['archived']) {
                 $studentIds[] = $nameRow['id'];
             }
-            //            $nameStmt->close();
         }
 
-        // Convert student IDs to a comma-separated string
+        if (empty($studentIds)) {
+            return false; // No valid students to add
+        }
+
         $studentIdsStr = implode(",", $studentIds);
 
-        // Insert a single attendance record with all student IDs
+        // Insert attendance record
         $query = "INSERT INTO att (st_id, tec_id, spc, session_id) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("siii", $studentIdsStr, $teacherId, $materialId, $sessionId);
         $result = $stmt->execute();
         $attId = $conn->insert_id;
-        //        $stmt->close();
 
-        // Check if the insertion was successful
         if ($result) {
-            // Update student records with the new attendance ID and set 'InSess' to 1
             $success = true;
+
+            // Update students' attendance status
             foreach ($studentIds as $studentId) {
                 $updateQuery = "UPDATE students SET att_id = ?, InSess = 1 WHERE id = ?";
                 $updateStmt = $conn->prepare($updateQuery);
                 $updateStmt->bind_param("ii", $attId, $studentId);
                 $result2 = $updateStmt->execute();
-                //                $updateStmt->close();
                 if (!$result2) {
                     $success = false;
                     break;
                 }
             }
 
-            // Update teacher record with the new attendance ID
+            // Update teacher's attendance ID
             $updateTeacherQuery = "UPDATE teacher SET att_id = ? WHERE id = ?";
             $updateTeacherStmt = $conn->prepare($updateTeacherQuery);
             $updateTeacherStmt->bind_param("ii", $attId, $teacherId);
             $result3 = $updateTeacherStmt->execute();
-            //            $updateTeacherStmt->close();
-
-            // Check if updating the teacher record was successful
             if (!$result3) {
                 $success = false;
             }
@@ -1429,14 +1468,24 @@ GROUP BY students.id
             $success = false;
         }
 
-        // Close the database connection
-        //        $conn->close();
-
-        // Return true if all queries were successful, otherwise false
         return $success;
     }
 
+    public function getUnArchivedAttendanceStudents($teacherId)
+    {
+        $conn = $this->connect();
+        $query = "SELECT * FROM students WHERE teacher_id = ? AND archived = 0"; // Exclude archived students
+        $stmt = $conn->prepare($query);
 
+        if ($stmt === false) {
+            die('Prepare failed: ' . $conn->error);
+        }
+
+        $stmt->bind_param("i", $teacherId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
     public function addTeacher($user, $password, $name, $specs, $img, $role)
     {
         $conn = $this->connect();
