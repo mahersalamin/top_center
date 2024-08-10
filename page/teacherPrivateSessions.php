@@ -163,12 +163,11 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
                                     </form>
                                 </div>
                             </div>
-                        <?php } // End if $matchesMaterial
-                    } // End if count($studentNames) == 1
+                        <?php }
+                    }
 
-                } // End foreach $privateSessions
-//var_dump($hasPrivateSessions);die();
-                // Show alert if no private sessions match the material
+                }
+
                 if (!$hasPrivateSessions) {
                     ?>
                     <div class="col-md-12">
