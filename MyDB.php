@@ -1642,12 +1642,20 @@ GROUP BY students.id
         }
         return $rows;
     }
-    public function getOutcomeGraph()
+    public function getOutcomeGraph($year, $month = null)
     {
         $conn = $this->connect();
-        $query = "SELECT date, amount FROM outcome ORDER BY date ASC";
-        $result = $conn->query($query);
-
+        if ($month) {
+            $query = "SELECT date, amount FROM outcome WHERE YEAR(date) = ? AND MONTH(date) = ? ORDER BY date ASC";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $year, $month);
+        } else {
+            $query = "SELECT date, amount FROM outcome WHERE YEAR(date) = ? ORDER BY date ASC";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $year);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
         $rows = array();
 
         while ($row = $result->fetch_assoc()) {
@@ -1655,6 +1663,7 @@ GROUP BY students.id
         }
         return $rows;
     }
+
     public function getIncomeStatistics()
     {
         $conn = $this->connect();
