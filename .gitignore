@@ -1,1 +1,3 @@
 /vendor/
+*.xml
+workspace.xml

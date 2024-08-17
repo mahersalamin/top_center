@@ -344,7 +344,68 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                     </div>
                     <!-- Button to generate PDF -->
                 </div>
+<!--                <h5>Graph Summary</h5>-->
+<!--                <div class="card">-->
+<!--                    <div class="card-body">-->
+<!--                        <img src="../generated_graphs/income_outcome_spline_graph.php" alt="Spline Graph" class="img-fluid" />-->
+<!--                        <img src="../generated_graphs/yearly.php" alt="Spline Graph" class="img-fluid" />-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
+            <form method="GET" target="_blank" action="../generated_graphs/monthly.php">
+                <div class="row col-md-12 align-items-end">
+                    <div class="col-md-8">
+                        <label class="form-label" for="month">الشهر:</label>
+                        <select class="form-control form-control-sm" id="month" name="month">
+                            <?php
+                            $months = [
+                                '01' => 'January',
+                                '02' => 'February',
+                                '03' => 'March',
+                                '04' => 'April',
+                                '05' => 'May',
+                                '06' => 'June',
+                                '07' => 'July',
+                                '08' => 'August',
+                                '09' => 'September',
+                                '10' => 'October',
+                                '11' => 'November',
+                                '12' => 'December'
+                            ];
+                            foreach ($months as $key => $value) {
+                                echo "<option value=\"$key\">$value</option>";
+                            }
+                            ?>
+                        </select>
+
+                        <label class="form-label" for="year">السنة:</label>
+                        <input type="number" class="form-control mb-4" id="year" name="year" value="<?php echo date('Y'); ?>" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary" value="إنشاء رسم بياني شهري" />
+
+                    </div>
+
+                </div>
+
+
+            </form>
+            <hr class="mt-5 mb-5"/>
+
+            <form method="GET" target="_blank" action="../generated_graphs/yearly.php">
+
+                <div class="row col-md-12">
+                    <div class="col-md-8">
+                        <input type="number" class="form-control mb-4" id="year" name="year" value="<?php echo date('Y'); ?>" />
+
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-primary " value="إنشاء رسم بياني سنوي" />
+
+                    </div>
+
+                </div>
+            </form>
         </div>
         <!-- Remains Tab -->
 

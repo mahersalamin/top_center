@@ -1598,6 +1598,63 @@ GROUP BY students.id
         return $outcomes;
     }
 
+    public function getIncomeGraph($year = null, $month = null)
+    {
+        $conn = $this->connect();
+
+        // Base query
+        $query = "SELECT date, amount FROM income";
+
+        // Add filtering if year and month are provided
+        if ($year && $month) {
+            $query .= " WHERE YEAR(date) = ? AND MONTH(date) = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('ii', $year, $month);
+        } else {
+            $query .= " ORDER BY date ASC";
+            $stmt = $conn->prepare($query);
+        }
+
+        // Execute the query and fetch results
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $rows = array();
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    public function getYearlyIncomeGraph($year)
+    {
+        $conn = $this->connect();
+        $query = "SELECT date, amount FROM income WHERE YEAR(date) = ? ORDER BY date ASC";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $year);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+    public function getOutcomeGraph()
+    {
+        $conn = $this->connect();
+        $query = "SELECT date, amount FROM outcome ORDER BY date ASC";
+        $result = $conn->query($query);
+
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
     public function getIncomeStatistics()
     {
         $conn = $this->connect();
