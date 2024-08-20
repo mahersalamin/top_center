@@ -527,87 +527,70 @@ function generate_outcome_receipt($tableData): string {
     </html>
     ";
 }
-function generate_remains_report(): string {
+function generate_remains_report($headers, $tableData): string {
     global $companyPhone1, $companyAddress, $companyPhone2, $companyName, $logoPath;
 
-    $db = new MyDB();
-    $data= $db->getRemainsData();
-    $tableRows = "";
-    foreach ($data as $row) {
-        $tableRows .= "
-            <tr>
-                <td>" . htmlspecialchars($row['student_id']) . "</td>
-                <td>" . htmlspecialchars($row['student_name']) . "</td>
-                <td>" . htmlspecialchars($row['session_name']) . "</td>
-                <td>" . htmlspecialchars($row['session_cost']) . "</td>
-                <td>" . htmlspecialchars($row['total_payments']) . "</td>
-                <td>" . htmlspecialchars($row['amount_due']) . "</td>
-            </tr>
-        ";
-    }
 
-    return "
-    <html lang='ar'>
-        <head>
-            <style>
-                body {
-                    direction: rtl;
-                    text-align: right;
-                    font-family: 'Cairo', sans-serif;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #ddd;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-                h1 {
-                    text-align: center;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 20px;
-                }
-                .signature {
-                    margin-top: 30px;
-                    border-top: 1px solid #000;
-                    text-align: right;
-                    padding-top: 10px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class='header'>
-                <img src='$logoPath' style='width: 100px; height: auto; display: block; margin: 0 auto;' alt='company_logo'>
-                <h1>تقرير الذمم المستحقة على الطلاب</h1>
-                <p><strong>اسم الشركة:</strong> {$companyName}</p>
-                <p><strong>عنوان الشركة:</strong> {$companyAddress}</p>
-                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone1}</p>
-                <p><strong>رقم هاتف الشركة:</strong> {$companyPhone2}</p>
+
+    $htmlTable = '<table border="1" style="width: 100%; border-collapse: collapse;">';
+    $htmlTable .= '<thead><tr>';
+    foreach ($headers as $header) {
+        $htmlTable .= '<th>' . htmlspecialchars($header, ENT_QUOTES, 'UTF-8') . '</th>';
+    }
+    $htmlTable .= '</tr></thead><tbody>';
+    foreach ($tableData as $row) {
+        $htmlTable .= '<tr>';
+        foreach ($row as $cell) {
+            $htmlTable .= '<td>' . htmlspecialchars($cell, ENT_QUOTES, 'UTF-8') . '</td>';
+        }
+        $htmlTable .= '</tr>';
+    }
+    $htmlTable .= '</tbody></table>';
+
+    // Define the header HTML
+    $date = date('Y-m-d');
+
+    $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
+
+
+
+
+
+    $html = '
+        <div style="direction: rtl; text-align: center; padding: 20px;">
+        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+            <div class="receipt-header">
+            
+                
+                <div style="float: right; width: 50%; text-align: right;">
+                    <h5>' . $companyName . '</h5>
+                    <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
+                    <p style="direction: ltr">' . $companyPhone2 . '<i class="fa fa-phone"></i></p>
+                    <p> ' . $companyAddress . '<i class="fa fa-location-arrow"></i></p>
+                </div>
+                <div style="clear: both;"></div>
             </div>
-            <table>
-                <tr>
-                    <th>رقم الطالب</th>
-                    <th>اسم الطالب</th>
-                    <th>اسم الدورة</th>
-                    <th>السعر الأصلي</th>
-                    <th>مجموع الدفعات</th>
-                    <th>المبلغ المتبقي</th>
-                </tr>
-                $tableRows
-            </table>
-            <div class='signature'>
-                <p>التوقيع: ...........................................</p>
-                <p>السكرتيرة: ...........................................</p>
+
+
+
+            ' . $htmlTable . '
+
+            <div class="receipt-footer" style="padding: 20px 0;">
+                <div style="float: right; width: 20%;">
+                    <p><b>التاريخ: </b> ' . $date . '</p>
+
+                </div>
+                <div style="float: left; width: 20%;">
+                    <p><b>' . $issuer . '</b> </p>
+
+                </div>
+
+
             </div>
-        </body>
-    </html>
-    ";
+        </div>
+    ';
+
+    return $html;
 }
 
 try {
@@ -778,27 +761,18 @@ try {
             exit();
             break;
         case 'remains_report':
-            if (empty($htmlContent)) {
+            if (empty($headers) || empty($tableData)) {
                 throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
             }
-
-            $remains_report = generate_remains_report();
+//            var_dump($headers);die();
+            $remains_report = generate_remains_report($headers, $tableData);
+            // Initialize mPDF and set the HTML content
 
             $mpdf = new Mpdf(['default_font' => 'Cairo']);
             $mpdf->WriteHTML($remains_report);
-            // Output PDF directly to the browser
-            $pdfContent = $mpdf->Output('', 'S');
-            if ($pdfContent === false) {
-                http_response_code(500);
-                echo 'فشل في إنشاء PDF';
-                exit();
-            }
 
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="remains_report.pdf"');
-            header('Content-Length: ' . strlen($pdfContent)); // Set the correct content length
-            echo $pdfContent;
-            exit();
+            // Output PDF directly to browser for download
+            $mpdf->Output('remains_report_' . $date . '_.pdf', 'D');
             break;
         default:
             throw new Exception('No data received or data is invalid.');

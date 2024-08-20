@@ -11,7 +11,7 @@ $outcomeStats = $db->getOutcomeStatistics();
 $teachersStats = $db->getTeachersOutcomeStatistics();
 $othersStats = $db->getOthersOutcomeStatistics();
 $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
-
+$remainsData= $db->getRemainsData();
 
 ?>
 
@@ -464,10 +464,47 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
 
         <div class="tab-pane fade" id="remains" role="tabpanel" aria-labelledby="remains-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
 
-            <div class="row mt-5 mb-5">
-                <button id="generateRemainsPdf" class="btn btn-primary mtb-4">اصدار تقرير الذمم المستحقة على الطلاب</button>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="lengthMenuRemains">عرض</label>
+                    <select id="lengthMenuRemains" class="form-control form-control-sm" style="width: auto; display: inline-block;">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="-1">الكل</option>
+                    </select>
+                    <label>سجلات</label>
+                </div>
             </div>
+            <table class="table table-bordered" id="dt-filter-search-remains" >
+                <thead>
+                <tr>
+                    <th>رقم الطالب</th>
+                    <th>اسم الطالب</th>
+                    <th>اسم الدورة</th>
+                    <th>السعر الأصلي</th>
+                    <th>مجموع الدفعات</th>
+                    <th>المبلغ المتبقي</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($remainsData as $remains) {
+                    echo
+                    "<tr>";
+                    echo "<td>{$remains['student_id']}</td>";
+                    echo "<td>{$remains['student_name']}</td>";
+                    echo "<td>{$remains['session_name']}</td>";
+                    echo "<td>{$remains['session_cost']}</td>";
+                    echo "<td>{$remains['total_payments']}</td>";
+                    echo "<td>{$remains['amount_due']}</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -481,8 +518,6 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
 <!-- JSZip for Excel export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <!-- pdfmake for PDF export -->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/pdfmake.min.js"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.6/vfs_fonts.js"></script>-->
 
 <script>
     $(document).ready(function () {
@@ -735,6 +770,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
             var length = $(this).val();
             income_table.page.len(length).draw();
         });
+
         let outcome_table = $('#dt-filter-search-outcome').DataTable({
             "paging": true,          // Enable pagination
             "lengthChange": true,    // Show length change options
@@ -818,9 +854,99 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
                 });
             }
         });
+
         $('#lengthMenuOutcome').on('change', function() {
             var length = $(this).val();
             outcome_table.page.len(length).draw();
+        });
+
+        let remains_table = $('#dt-filter-search-remains').DataTable({
+            "paging": true,          // Enable pagination
+            "lengthChange": true,    // Show length change options
+            "searching": true,       // Enable search functionality
+            "ordering": true,        // Enable column sorting
+            "info": true,            // Show table information
+            "autoWidth": false,      // Disable automatic column width adjustment
+            "language": {
+                "paginate": {
+                    "previous": "السابق",
+                    "next": "التالي",
+                    "first": "الأول",
+                    "last": "الأخير"
+                },
+                "lengthMenu": "عرض _MENU_ سجلات",
+                "info": "عرض _START_ إلى _END_ من _TOTAL_ سجلات",
+                "infoEmpty": "لا توجد سجلات متاحة",
+                "infoFiltered": "(تمت تصفيته من _MAX_ إجمالي السجلات)",
+                "search": "بحث:",
+                "zeroRecords": "لم يتم العثور على تطابقات"
+            },
+            dom: 'Bfrtip',
+            "order": [[0, 'desc']],
+            buttons: [
+                'excel', 'print', {
+                    text: 'PDF',
+                    action: function (e, dt, button, config) {
+                        // Get the table headers
+                        var headers = [];
+                        $('#dt-filter-search-remains thead th').each(function() {
+                            headers.push($(this).text());
+                        });
+
+                        // Get the table data
+                        var data = [];
+                        dt.rows({ search: 'applied' }).every(function() {
+                            let row = [];
+                            $(this.node()).find('td').each(function() {
+                                row.push($(this).text());
+                            });
+                            data.push(row);
+                        });
+
+                        // Create a form and submit it
+                        let form = $('<form>', {
+                            action: '../mpdf-generator.php',
+                            method: 'POST'
+                        }).append($('<input>', {
+                            type: 'hidden',
+                            name: 'headers',
+                            value: JSON.stringify(headers)
+                        })).append($('<input>', {
+                            type: 'hidden',
+                            name: 'tableData',
+                            value: JSON.stringify(data)
+                        })).append($('<input>', {
+                            type: 'hidden',
+                            name: 'reportType',
+                            value: 'remains_report'
+                        }));
+
+                        form.appendTo('body').submit();
+                    }
+                }
+            ],
+
+
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    let column = this;
+                    let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
+                        .appendTo($(column.footer()).empty())
+                        .on('change input', function () {
+                            let val = $(this).val()
+
+                            column
+                                .search(val ? val : '', true, false)
+                                .draw();
+                        });
+
+                });
+            }
+        });
+
+        $('#lengthMenuRemains').on('change', function() {
+            var length = $(this).val();
+            remains_table.page.len(length).draw();
         });
     });
 </script>
@@ -845,23 +971,7 @@ $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
 
         form.appendTo('body').submit();
     });
-    $('#generateRemainsPdf').on('click', function() {
 
-        let form = $('<form>', {
-            action: '../mpdf-generator.php',
-            method: 'POST'
-        }).append($('<input>', {
-            type: 'hidden',
-            name: 'reportType',
-            value: 'remains_report'
-        })).append($('<input>', {
-            type: 'hidden',
-            name: 'htmlContent',
-            value: 'remains_report'
-        }));
-
-        form.appendTo('body').submit();
-    });
 
 </script>
 <?php require 'footer.php'; // Include the footer ?>
