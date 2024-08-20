@@ -7,10 +7,8 @@ require '../dbconnection.php';
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <!-- DataTables Buttons JS -->
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
 <!-- JSZip for Excel export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <style>
     table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
@@ -18,132 +16,122 @@ require '../dbconnection.php';
     }
 </style>
 
-    <div class="container-fluid" style="font-family: 'Cairo' ">
-        <div class="card shadow mb-4 mt-3 rounded">
-            <div class="card-header">
-                <h6 class="text-primary">Report All Attendance</h6>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="lengthMenu">عرض</label>
-                            <select id="lengthMenu" class="form-control form-control-sm" style="width: auto; display: inline-block;">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="-1">الكل</option>
-                            </select>
-                            <label>سجلات</label>
-                        </div>
-                    </div>
-                    <table id="report_table" style="text-align: right" class="table table-bordered text-right" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                            <th>الحالة</th>
-                            <th>بحاجة للتأكيد</th>
-                            <th>الطالب</th>
-                            <th>المعلم</th>
-                            <th>اسم الدورة</th>
-                            <th>التاريخ</th>
-                            <th>وقت البدء</th>
-                            <th>وقت الإنتهاء</th>
-                            <th>مدة الحصة</th>
-                            <th></th>
-                            <th></th>
+<div class="container-fluid" style="font-family: 'Cairo' ">
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        $d = date('d/m/Y');
-                        $db = new MyDB();
-                        $Students = $db->getAllSessions();
-
-                        foreach ($Students as $row) {
-                            ?>
-                            <tr>
-                                <td>
-                                    <?php $approveStatus = $row['aprove'] == 1 ? 'موافق' : 'غير موافق'; ?>
-
-                                    <p>الحالة: <?= $approveStatus; ?></p>
-                                    <!-- Display the button to toggle the approve status -->
-
-                                </td>
-                                <td>
-                                    <?php
-                                    $processed = $row['processed'] == 1
-                                        ? 'لا'
-                                        : 'نعم';
-
-                                    ?>
-                                    <p>الحالة: <?= $processed; ?></p>
-
-                                </td>
-                                <td>
-                                    <?php $snames = explode(',',$row['snames']);
-                                            echo '<ul  class="list-group">';
-                                            foreach ($snames as $sname){
-                                                echo '<li>'. $sname.'</li>';
-
-                                            }
-                                            echo '</ul>'
-                                    ?>
-
-                                </td>
-                                <td><?php echo $row['tname']; ?></td>
-                                <td><?php echo $row['session_name']; ?></td>
-                                <td><?php echo $row['date']; ?></td>
-                                <td><?php echo $row['enter']; ?></td>
-                                <td><?php echo $row['exit']; ?></td>
-                                <td><?php echo $row['total']; ?></td>
-                                <td>
-
-                                    <form action="../changStatus.php" method="post">
-                                        <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" value="1" name="status" class="btn btn-sm btn-outline-success">
-                                            موافقة ✓
-                                        </button>
-
-                                    </form>
-
-                                </td>
-                                <td>
-
-                                    <form action="../changStatus.php" method="post">
-                                        <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
-
-                                        <button type="submit" value="0" name="status" class="btn btn-sm btn-outline-danger"> ✕
-                                            عدم الموافقة
-                                        </button>
-                                    </form>
-
-                                </td>
-                            </tr>
-                        <?php } ?>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th>الحالة</th>
-                            <th>بحاجة للتأكيد</th>
-                            <th>الطالب</th>
-                            <th>المعلم</th>
-                            <th>اسم الدورة</th>
-                            <th>التاريخ</th>
-                            <th>وقت البدء</th>
-                            <th>وقت الإنتهاء</th>
-                            <th>مدة الحصة</th>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
+    <div class="row">
+        <div class="col-md-1">
+            <label for="lengthMenu">عرض</label>
+            <select id="lengthMenu" class="form-control form-control-sm" style="width: auto; display: inline-block;">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="-1">الكل</option>
+            </select>
+            <label>سجلات</label>
         </div>
     </div>
+    <table id="report_table" style="text-align: right" class="table table-bordered text-right" width="100%"
+           cellspacing="0">
+        <thead>
+        <tr>
+            <th>الحالة</th>
+            <th>بحاجة للتأكيد</th>
+            <th>الطالب</th>
+            <th>المعلم</th>
+            <th>اسم الدورة</th>
+            <th>التاريخ</th>
+            <th>وقت البدء</th>
+            <th>وقت الإنتهاء</th>
+            <th>مدة الحصة</th>
+            <th></th>
+            <th></th>
 
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        $d = date('d/m/Y');
+        $db = new MyDB();
+        $Students = $db->getAllSessions();
 
+        foreach ($Students as $row) {
+            ?>
+            <tr>
+                <td>
+                    <?php $approveStatus = $row['aprove'] == 1 ? 'موافق' : 'غير موافق'; ?>
 
+                    <p>الحالة: <?= $approveStatus; ?></p>
+                    <!-- Display the button to toggle the approve status -->
 
+                </td>
+                <td>
+                    <?php
+                    $processed = $row['processed'] == 1
+                        ? 'لا'
+                        : 'نعم';
+
+                    ?>
+                    <p>الحالة: <?= $processed; ?></p>
+
+                </td>
+                <td>
+                    <?php $snames = explode(',', $row['snames']);
+                    echo '<ul  class="list-group">';
+                    foreach ($snames as $sname) {
+                        echo '<li>' . $sname . '</li>';
+
+                    }
+                    echo '</ul>'
+                    ?>
+
+                </td>
+                <td><?php echo $row['tname']; ?></td>
+                <td><?php echo $row['session_name']; ?></td>
+                <td><?php echo $row['date']; ?></td>
+                <td><?php echo $row['enter']; ?></td>
+                <td><?php echo $row['exit']; ?></td>
+                <td><?php echo $row['total']; ?></td>
+                <td>
+
+                    <form action="../changStatus.php" method="post">
+                        <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
+                        <button type="submit" value="1" name="status" class="btn btn-sm btn-outline-success">
+                            موافقة ✓
+                        </button>
+
+                    </form>
+
+                </td>
+                <td>
+
+                    <form action="../changStatus.php" method="post">
+                        <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
+
+                        <button type="submit" value="0" name="status" class="btn btn-sm btn-outline-danger"> ✕
+                            عدم الموافقة
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>الحالة</th>
+            <th>بحاجة للتأكيد</th>
+            <th>الطالب</th>
+            <th>المعلم</th>
+            <th>اسم الدورة</th>
+            <th>التاريخ</th>
+            <th>وقت البدء</th>
+            <th>وقت الإنتهاء</th>
+            <th>مدة الحصة</th>
+        </tr>
+        </tfoot>
+    </table>
+
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -156,8 +144,6 @@ require '../dbconnection.php';
 <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
-
-
 
 
 <script>
@@ -185,7 +171,7 @@ require '../dbconnection.php';
                 "search": "بحث:",
                 "zeroRecords": "لم يتم العثور على تطابقات"
             },
-            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "الكل"] ],
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "الكل"]],
             "order": [[0, 'desc']],
             serverSide: false,
             dom: 'Bfrtip',
@@ -195,7 +181,7 @@ require '../dbconnection.php';
                     action: function (e, dt, button, config) {
                         // Get the table headers, skipping the last two
                         let headers = [];
-                        $('#report_table thead th').each(function(index) {
+                        $('#report_table thead th').each(function (index) {
                             if (index < 9) { // Assuming there are 7 columns, change this if different
                                 headers.push($(this).text());
                             }
@@ -203,9 +189,9 @@ require '../dbconnection.php';
 
                         // Get the table data, skipping the last two columns
                         let data = [];
-                        dt.rows({ search: 'applied' }).every(function() {
+                        dt.rows({search: 'applied'}).every(function () {
                             let row = [];
-                            $(this.node()).find('td').each(function(index) {
+                            $(this.node()).find('td').each(function (index) {
                                 if (index < 9) { // Assuming there are 7 columns, change this if different
                                     row.push($(this).text());
                                 }
@@ -253,7 +239,7 @@ require '../dbconnection.php';
             }
         });
 
-        $('#lengthMenu').on('change', function() {
+        $('#lengthMenu').on('change', function () {
             let length = $(this).val();
             table.page.len(length).draw();
         });
