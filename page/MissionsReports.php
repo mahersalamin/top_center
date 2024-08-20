@@ -17,9 +17,7 @@ require '../dbconnection.php';
         text-align: center;
     }
 </style>
-<div class="b-example-divider">
-    <br>
-    <br>
+
     <div class="container-fluid" style="font-family: 'Cairo' ">
         <div class="card shadow mb-4 mt-3 rounded">
             <div class="card-header">
@@ -142,7 +140,7 @@ require '../dbconnection.php';
             </div>
         </div>
     </div>
-</div>
+
 
 
 
