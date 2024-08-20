@@ -9,11 +9,7 @@ if (!isset($_COOKIE['id'])) {
 }
 ?>
 <style>
-    .archived-teacher {
-        opacity: 0.6; /* Makes the card look faded */
-        background-color: #f8f9fa; /* Light grey background for archived teachers */
-        border: 1px solid #e0e0e0; /* Light border to separate from active teachers */
-    }
+
 
     /* Optional: Add a badge or indicator for archived status */
     .archived-badge {
@@ -92,7 +88,7 @@ if (!isset($_COOKIE['id'])) {
                             <form action="singleRequest.php" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="id" value="<?php echo $row['tec_id']; ?>">
                                 <button type="submit" value="3" name="status" class="btn btn-outline-info text-center">
-                                    تفاصيل→
+                                    تفاصيل ←
                                 </button>
                             </form>
 
@@ -220,7 +216,6 @@ if (!isset($_COOKIE['id'])) {
                                                 <li><?php echo $teacher_name; ?></li>
                                             <?php } ?>
                                         </ol>
-                                        </p>
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-auto">
@@ -229,7 +224,7 @@ if (!isset($_COOKIE['id'])) {
                                                     <input type="hidden" name="id"
                                                            value="<?php echo $student['id']; ?>">
                                                     <button type="submit" value="3" name="status"
-                                                            class="btn btn-outline-info text-center">تفاصيل→
+                                                            class="btn btn-outline-info text-center">تفاصيل ←
                                                     </button>
                                                 </form>
                                             </div>
@@ -300,7 +295,7 @@ if (!isset($_COOKIE['id'])) {
                                                     <input type="hidden" name="id"
                                                            value="<?php echo $student['id']; ?>">
                                                     <button type="submit" value="3" name="status"
-                                                            class="btn btn-outline-info text-center">تفاصيل→
+                                                            class="btn btn-outline-info text-center">تفاصيل ←
                                                     </button>
                                                 </form>
                                             </div>
@@ -317,8 +312,8 @@ if (!isset($_COOKIE['id'])) {
                 <div class="row justify-content-center">
                     <div class="container text-center">
                         <!-- Search bar for teachers -->
-                        <input type="text" class="form-control" id="teacherSearchInput" placeholder="بحث عن معلم..."
-                               onkeyup="filterTeachers()">
+                        <label for="teacherSearchInput"></label><input type="text" class="form-control" id="teacherSearchInput" placeholder="بحث عن معلم..."
+                                                                       onkeyup="filterTeachers()">
                     </div>
                     <div class="row justify-content-center" id="teacherContainer">
                         <!-- Example card for adding new teacher -->
@@ -382,7 +377,7 @@ if (!isset($_COOKIE['id'])) {
                                                         <input type="hidden" name="id"
                                                                value="<?php echo htmlspecialchars($teacher['id']); ?>">
                                                         <button type="submit" value="3" name="status"
-                                                                class="btn btn-outline-info text-center">تفاصيل→
+                                                                class="btn btn-outline-info text-center">تفاصيل ←
                                                         </button>
                                                     </form>
                                                 </div>
@@ -443,9 +438,21 @@ if (!isset($_COOKIE['id'])) {
                                                         <input type="hidden" name="id"
                                                                value="<?php echo htmlspecialchars($teacher['id']); ?>">
                                                         <button type="submit" value="3" name="status"
-                                                                class="btn btn-outline-info text-center">تفاصيل→
+                                                                class="btn btn-outline-info text-center">تفاصيل ←
                                                         </button>
                                                     </form>
+
+                                                </div>
+                                                <div class="col-md-auto">
+                                                    <form action="unarchiveTeacher.php" method="POST"
+                                                          enctype="multipart/form-data">
+                                                        <input type="hidden" name="id"
+                                                               value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                                                        <button type="submit" name="status"
+                                                                class="btn btn-danger text-center">استعادة
+                                                        </button>
+                                                    </form>
+
                                                 </div>
                                             </div>
                                         </div>

@@ -389,7 +389,7 @@ class MyDB
         $conn->begin_transaction();
 
         try {
-            // Update the is_archived field to false (0) for the given teacher_id
+
             $unarchiveQuery = "UPDATE teacher SET is_archived = 0 WHERE id = ?";
             $stmt = $conn->prepare($unarchiveQuery);
             $stmt->bind_param("i", $teacher_id);

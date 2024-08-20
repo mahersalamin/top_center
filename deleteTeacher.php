@@ -2,12 +2,12 @@
 require('dbconnection.php');
 require('MyDB.php');
 $db = new MyDB();
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['teacher_id'])) {
-    $teacher_id = $_POST['teacher_id'];
-
+//var_dump($_POST);die();
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
+    $teacher_id = $_POST['id'];
+//    var_dump($teacher_id);die();
     // Call the deleteTeacher method from your database class
     $result = $db->deleteTeacher($teacher_id);
-
     if ($result) {
         // Redirect to a success page or display a success message
         $status = "success";
