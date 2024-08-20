@@ -410,6 +410,25 @@ class MyDB
             return false;
         }
     }
+
+    public function updateSchool($id, $name, $type){
+        $query = "UPDATE schools SET name = '$name', type = $type where id = $id";
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        return true;
+    }
+    public function deleteSchool($id){
+        $query = "UPDATE schools SET is_archived = 1 WHERE id = $id";
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        return true;
+    }
+    public function unArchiveSchool($id){
+        $query = "UPDATE schools SET is_archived = 0 WHERE id = $id";
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        return true;
+    }
     public function getAllTeachers()
     {
         $query = "SELECT t.id, t.`user`, t.is_archived, t.name, t.img, t.att_id FROM teacher t
@@ -528,10 +547,8 @@ class MyDB
                 $conn->query($query);
             }
 
-            // Update session_teachers table (if needed)
-            // Your logic to update session_teachers table goes here
 
-            // Update session_students table
+
             foreach ($students as $studentId) {
                 foreach ($sessions as $sessionId) {
                     $query = "INSERT INTO session_students (session_id, student_id) VALUES ($sessionId, $studentId)";
@@ -539,18 +556,12 @@ class MyDB
                 }
             }
 
-            // Update materials table (if needed)
-            // Your logic to update materials table goes here
 
-            // Commit transaction if all queries succeed
             $conn->commit();
 
-            // Return true to indicate success
             return true;
         } catch (Exception $e) {
-            // Rollback transaction if any query fails
             $conn->rollback();
-            // Log or handle the exception
             return false;
         }
     }

@@ -15,7 +15,6 @@ $type = $_POST['type'];
 
 
 
-
     $result = $db->addSchool($name, $type);
 
 

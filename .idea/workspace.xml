@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="generate monthly and yearly graphs">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix archiving teacher">
+      <change afterPath="$PROJECT_DIR$/page/editSchool.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generated_graphs/income_outcome_spline_graph.php" beforeDir="false" afterPath="$PROJECT_DIR$/generated_graphs/yearly_outcome.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generated_graphs/line_area_graph.php" beforeDir="false" afterPath="$PROJECT_DIR$/generated_graphs/monthly_outcome.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addSchool.php" beforeDir="false" afterPath="$PROJECT_DIR$/addSchool.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/newSchool.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newSchool.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,34 +68,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "PHP Script.index.php.executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "WebServerToolWindowPanel.toolwindow.highlight.mappings": "true",
-    "WebServerToolWindowPanel.toolwindow.highlight.symlinks": "true",
-    "WebServerToolWindowPanel.toolwindow.show.date": "false",
-    "WebServerToolWindowPanel.toolwindow.show.permissions": "false",
-    "WebServerToolWindowPanel.toolwindow.show.size": "false",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/xampp/htdocs/top",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.webide.settings.project.settings.php",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;PHP Script.index.php.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.mappings&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.highlight.symlinks&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.date&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.permissions&quot;: &quot;false&quot;,
+    &quot;WebServerToolWindowPanel.toolwindow.show.size&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/top&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.webide.settings.project.settings.php&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\top" />
@@ -153,7 +153,11 @@
       <workItem from="1723193190641" duration="77000" />
       <workItem from="1723193392801" duration="9515000" />
       <workItem from="1723288300319" duration="662000" />
-      <workItem from="1723896781602" duration="9430000" />
+      <workItem from="1723896781602" duration="9715000" />
+      <workItem from="1723914317254" duration="258000" />
+      <workItem from="1723962233960" duration="42000" />
+      <workItem from="1723996640813" duration="749000" />
+      <workItem from="1724129769634" duration="5757000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -367,7 +371,23 @@
       <option name="project" value="LOCAL" />
       <updated>1723907223583</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="add outcome graphs">
+      <option name="closed" value="true" />
+      <created>1723908915234</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1723908915234</updated>
+    </task>
+    <task id="LOCAL-00029" summary="fix archiving teacher">
+      <option name="closed" value="true" />
+      <created>1724131606954</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1724131606955</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -385,8 +405,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="commit unversioned files" />
-    <MESSAGE value="fix edit student and teacher" />
     <MESSAGE value="&#10;big updates" />
     <MESSAGE value="التاكد من المادة للبدأ بالحصة" />
     <MESSAGE value="تعديل عدد الساعات في التقرير تعديل على اضافة دورة ظهور جميع الموا]" />
@@ -410,7 +428,9 @@
     <MESSAGE value="remove archived students from teacher sessions pages and exclude them from attendances" />
     <MESSAGE value="add remaining fees report" />
     <MESSAGE value="generate monthly and yearly graphs" />
-    <option name="LAST_COMMIT_MESSAGE" value="generate monthly and yearly graphs" />
+    <MESSAGE value="add outcome graphs" />
+    <MESSAGE value="fix archiving teacher" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix archiving teacher" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -1,22 +1,8 @@
 <?php require 'header.php'; ?>
 <style>
-    #regForm {
-        background-color: #ffffff;
-        padding: 40px;
-        width: 100%;
-        min-width: 300px;
-    }
 
     h1 {
         text-align: center;
-    }
-
-    input.invalid {
-        background-color: #ffdddd;
-    }
-
-    .tab {
-        display: none;
     }
 
     button {
@@ -33,28 +19,6 @@
         opacity: 0.8;
     }
 
-    #prevBtn {
-        background-color: #bbbbbb;
-    }
-
-    .step {
-        height: 15px;
-        width: 15px;
-        margin: 0 2px;
-        background-color: #bbbbbb;
-        border: none;
-        border-radius: 50%;
-        display: inline-block;
-        opacity: 0.5;
-    }
-
-    .step.active {
-        opacity: 1;
-    }
-
-    .step.finish {
-        background-color: #04AA6D;
-    }
 </style>
 
 
@@ -66,8 +30,7 @@ if (!isset($_COOKIE['id'])) {
 $db = new MyDB();
 ?>
 
-<br>
-<br>
+
 
 <?php
 if (isset($_GET['message']) && isset($_GET['status'])) {
@@ -84,15 +47,20 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
 <ul class="nav nav-tabs justify-content-center mb-4">
     <li class="nav-item">
-        <a class="nav-link active" id="teachers-tab" data-toggle="tab" href="#teachers" role="tab"
+        <a class="nav-link active" id="new-school-tab" data-toggle="tab" href="#new_school" role="tab"
            aria-controls="teachers"
            aria-selected="false">إضافة مدرسة جديدة</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="schools-tab" data-toggle="tab" href="#schools" role="tab"
+           aria-controls="teachers"
+           aria-selected="false">قائمة المدارس</a>
     </li>
 
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade show active" id="teachers" role="tabpanel" aria-labelledby="teachers-tab">
+    <div class="tab-pane fade show active" id="new_school" role="tabpanel" aria-labelledby="new-school-tab">
         <div class="container col-md-6 shadow p-3 bg-body rounded mb-2 text-center" style="font-family: 'Cairo'">
             <h4 class="text-info text-center font-weight-bold">إضافة مدرسة جديدة</h4>
             <br>
@@ -106,24 +74,70 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
 
                     <div class="form-group col-md-12 mb-2">
-                        <label for="specs">نوع المدرسة:</label><br>
-                        <select id="filterSelect" class="form-control mb-2">
+                        <label for="filterSelect">نوع المدرسة:</label>
+                        <select id="filterSelect" name="type" class="form-control mb-2">
                             <option value=""></option>
                             <option value="1">مدرسة حكومية</option>
                             <option value="2">مدرسة خاصة</option>
 
-                            <!-- Add more class types as needed -->
                         </select>
-                        <?php $specs = $db->getSpecializations(); ?>
-
 
                     </div>
 
-                    <input type="hidden" name="role" value="2">
+
 
                     <button type="submit" class="btn btn-info text-white font-weight-bold">إضافة</button>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="tab-pane fade show" id="schools" role="tabpanel" aria-labelledby="schools-tab">
+        <!-- Specs Form -->
+        <div class="container col-md-6 shadow p-3 bg-body rounded mb-2 text-center" style="font-family: 'Cairo'">
+            <?php $schools = $db->getSchools();?>
+
+            <input type="text" id="searchInput" class="form-control mb-3" placeholder="ابحث عن مدرسة...">
+
+            <div id="specsContainer">
+                <?php foreach ($schools as $school) { ?>
+                    <div class="row school-item">
+                        <form action="editSchool.php" method="POST" class="d-flex align-items-center col-md-12 w-100">
+                            <div class="col-md-5 mb-3">
+                                <label for="new_school_<?=$school['id']?>" class="form-label">اسم المدرسة</label>
+                                <input type="text" value="<?=$school['name']?>" class="form-control" id="new_school_<?=$school['id']?>"
+                                       name="new_school"
+                                       required>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="type" class="form-label">نوع المدرسة:</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option selected disabled class="text-secondary">
+                                        <?php
+                                        switch ($school['type']) {
+                                            case 1: print "مدرسة حكومية"; break;
+                                            case 2: print "مدرسة خاصة"; break;
+                                        }
+                                        ?>
+                                    </option>
+                                    <option value="1">مدرسة حكومية</option>
+                                    <option value="2">مدرسة خاصة</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3 mt-3 d-flex align-items-end justify-content-between">
+                                <input hidden name="id" value="<?= $school['id'] ?>">
+                                <button type="submit" value="1" name="action" class="btn btn-primary ml-2 w-100">تعديل</button>
+                                <?php if($school['is_archived'] == 0){ ?>
+                                <button type="submit" value="2" name="action" class="btn btn-danger mr-2 w-100">أرشفة</button>
+                                <?php } else { ?>
+                                <button type="submit" value="3" name="action" class="btn btn-danger mr-2 w-100">إستعادة</button>
+                                <?php } ?>
+                            </div>
+                        </form>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
     </div>
 </div>
@@ -131,32 +145,19 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.getElementById('searchInput');
-        const filterSelect = document.getElementById('filterSelect');
-        const specItems = document.querySelectorAll('.spec-item');
+        const specItems = document.querySelectorAll('.school-item');
 
         searchInput.addEventListener('input', function () {
             const searchTerm = searchInput.value.toLowerCase();
-            filterSpecs(searchTerm, filterSelect.value);
-        });
-
-        filterSelect.addEventListener('change', function () {
-            const filterTerm = filterSelect.value;
-            filterSpecs(searchInput.value.toLowerCase(), filterTerm);
-        });
-
-        function filterSpecs(searchTerm, filterTerm) {
             specItems.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                const classType = item.getAttribute('data-class-type');
-                const matchesSearch = text.includes(searchTerm);
-                const matchesFilter = filterTerm === '' || classType === filterTerm;
-                if (matchesSearch && matchesFilter) {
+                const specName = item.querySelector('input[name="new_school"]').value.toLowerCase();
+                if (specName.includes(searchTerm)) {
                     item.style.display = '';
                 } else {
                     item.style.display = 'none';
                 }
             });
-        }
+        });
     });
 </script>
 
