@@ -34,12 +34,8 @@
             <div class="col-md-12">
                 <?php
 
-
                 if (isset($_GET['error'])) {
-                    if ($_GET['error'] == 1) {
-
-                        ?>
-
+                    if ($_GET['error'] == 1) { ?>
                         <div class="alert alert-danger" role="alert">
                             الايميل او كلمة المرور غير صحيح
                         </div>
@@ -58,7 +54,7 @@
                 ?>
             </div>
 
-            <img style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" src="../upload/super.jpg"
+            <img style="width: 250px; height: auto; object-fit: cover;" src="../upload/top_logo.jpg"
                  alt="">
 
             <h1 class="text-center m-4 text-success">أهلا بعودتك</h1>
