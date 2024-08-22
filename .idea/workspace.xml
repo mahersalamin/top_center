@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix archiving teacher">
-      <change afterPath="$PROJECT_DIR$/page/editSchool.php" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix reports layouts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addSchool.php" beforeDir="false" afterPath="$PROJECT_DIR$/addSchool.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/newSchool.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newSchool.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,7 +153,8 @@
       <workItem from="1723914317254" duration="258000" />
       <workItem from="1723962233960" duration="42000" />
       <workItem from="1723996640813" duration="749000" />
-      <workItem from="1724129769634" duration="5757000" />
+      <workItem from="1724129769634" duration="10048000" />
+      <workItem from="1724143348592" duration="2009000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -387,7 +384,39 @@
       <option name="project" value="LOCAL" />
       <updated>1724131606955</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="fix add school, implement edit archive and un archive school">
+      <option name="closed" value="true" />
+      <created>1724135823614</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1724135823614</updated>
+    </task>
+    <task id="LOCAL-00031" summary="remove unnecessary div">
+      <option name="closed" value="true" />
+      <created>1724140002541</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1724140002541</updated>
+    </task>
+    <task id="LOCAL-00032" summary="update remains report">
+      <option name="closed" value="true" />
+      <created>1724142416704</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1724142416704</updated>
+    </task>
+    <task id="LOCAL-00033" summary="fix reports layouts">
+      <option name="closed" value="true" />
+      <created>1724143471354</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1724143471354</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -405,10 +434,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="&#10;big updates" />
-    <MESSAGE value="التاكد من المادة للبدأ بالحصة" />
-    <MESSAGE value="تعديل عدد الساعات في التقرير تعديل على اضافة دورة ظهور جميع الموا]" />
-    <MESSAGE value="fix equation of teacher session amount" />
     <MESSAGE value="fix outcomes" />
     <MESSAGE value="add meetings to school backpack" />
     <MESSAGE value="fix meetings and otherreports" />
@@ -430,7 +455,11 @@
     <MESSAGE value="generate monthly and yearly graphs" />
     <MESSAGE value="add outcome graphs" />
     <MESSAGE value="fix archiving teacher" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix archiving teacher" />
+    <MESSAGE value="fix add school, implement edit archive and un archive school" />
+    <MESSAGE value="remove unnecessary div" />
+    <MESSAGE value="update remains report" />
+    <MESSAGE value="fix reports layouts" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix reports layouts" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -411,6 +411,34 @@ class MyDB
         }
     }
 
+    public function unarchiveStudent($student_id)
+    {
+        $conn = $this->connect();
+
+        // Begin a transaction
+        $conn->begin_transaction();
+
+        try {
+
+            $unarchiveQuery = "UPDATE students SET archived = 0 WHERE id = ?";
+            $stmt = $conn->prepare($unarchiveQuery);
+            $stmt->bind_param("i", $student_id);
+            $result = $stmt->execute();
+
+            // Commit the transaction if the query was successful
+            if ($result) {
+                $conn->commit();
+                return true;
+            } else {
+                $conn->rollback();
+                return false;
+            }
+        } catch (Exception $e) {
+            $conn->rollback();
+            return false;
+        }
+    }
+
     public function updateSchool($id, $name, $type){
         $query = "UPDATE schools SET name = '$name', type = $type where id = $id";
         $conn = $this->connect();

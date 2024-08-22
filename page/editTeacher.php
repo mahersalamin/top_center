@@ -12,7 +12,7 @@ $teacher_specializations = $db->getTeacherSpecializations($id);
 
 if ($teacher) {
     ?>
-    <div class="container my-5">
+    <div class="container my my-5">
         <div class="text-center">
             <div class="col-md-5 shadow p-1 bg-body rounded mx-auto mb-4">
                 <img class="img-fluid" src="../upload/<?php echo htmlspecialchars($teacher['img']); ?>"
@@ -80,10 +80,12 @@ if ($teacher) {
                     </div>
                 </div>
             </form>
+            <?php if($teacher['is_archived']==0){?>
             <form method="post" action="../deleteTeacher.php" class="d-inline-block">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
                 <button type="submit" class="btn btn-danger">أرشفة المعلم</button>
             </form>
+            <?php } ?>
         </div>
 
     </div>

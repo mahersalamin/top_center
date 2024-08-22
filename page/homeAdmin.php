@@ -138,7 +138,7 @@ if (!isset($_COOKIE['id'])) {
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
-                <div class="container text-center">
+                <div class="text-center m-2">
                     <!-- Search bar for students -->
                     <label for="studentSearchInput"></label><input type="text" class="form-control"
                                                                    id="studentSearchInput" placeholder="بحث عن طالب..."
@@ -238,11 +238,11 @@ if (!isset($_COOKIE['id'])) {
             </div>
 
             <div class="tab-pane fade" id="archived-students" role="tabpanel" aria-labelledby="archived-students-tab">
-                <div class="container text-center">
+                <div class="text-center m-2">
                     <!-- Search bar for students -->
-                    <label for="studentSearchInput"></label><input type="text" class="form-control"
-                                                                   id="studentSearchInput" placeholder="بحث عن طالب..."
-                                                                   onkeyup="filterStudents()">
+                    <label for="studentSearchInput"></label>
+                    <input type="text" class="form-control" id="studentSearchInput" placeholder="بحث عن طالب..."
+                           onkeyup="filterStudents()">
                 </div>
                 <div class="row justify-content-center" id="studentContainer">
 
@@ -299,7 +299,19 @@ if (!isset($_COOKIE['id'])) {
                                                     </button>
                                                 </form>
                                             </div>
+                                            <div class="col-md-auto">
+                                                <form action="unarchiveStudent.php" method="POST"
+                                                      enctype="multipart/form-data">
+                                                    <input type="hidden" name="id"
+                                                           value="<?php echo htmlspecialchars($student['id']); ?>">
+                                                    <button type="submit" name="status"
+                                                            class="btn btn-danger text-center">استعادة
+                                                    </button>
+                                                </form>
+
+                                            </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -310,7 +322,7 @@ if (!isset($_COOKIE['id'])) {
 
             <div class="tab-pane fade" id="teachers" role="tabpanel" aria-labelledby="teachers-tab">
                 <div class="row justify-content-center">
-                    <div class="container text-center">
+                    <div class="text-center m-2">
                         <!-- Search bar for teachers -->
                         <label for="teacherSearchInput"></label><input type="text" class="form-control" id="teacherSearchInput" placeholder="بحث عن معلم..."
                                                                        onkeyup="filterTeachers()">
@@ -345,7 +357,6 @@ if (!isset($_COOKIE['id'])) {
                         foreach ($teachers as $teacher) {
                             // Determine if teacher is archived
                             $isArchived = $teacher['is_archived'] ? 'archived-teacher' : '';
-                            $archivedBadge = $teacher['is_archived'] ? '<span class="archived-badge">في الأرشيف</span>' : '';
                             if ($teacher['is_archived'] == 0) {
                                 ?>
                                 <div class="ml-3 col-md-auto mb-3 teacher-card <?php echo $isArchived; ?>">
@@ -358,7 +369,6 @@ if (!isset($_COOKIE['id'])) {
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title" style="font-family: 'Cairo'">
-                                                <?php echo $archivedBadge; ?>
                                                 <a style="
                                     overflow: hidden;
                                     display: -webkit-box;
@@ -393,7 +403,7 @@ if (!isset($_COOKIE['id'])) {
 
             <div class="tab-pane fade" id="archived-teachers" role="tabpanel" aria-labelledby="archived-teachers-tab">
                 <div class="row justify-content-center">
-                    <div class="container text-center">
+                    <div class="text-center m-2">
                         <!-- Search bar for teachers -->
                         <input type="text" class="form-control" id="teacherSearchInput" placeholder="بحث عن معلم..."
                                onkeyup="filterTeachers()">
@@ -406,7 +416,6 @@ if (!isset($_COOKIE['id'])) {
                         foreach ($teachers as $teacher) {
                             // Determine if teacher is archived
                             $isArchived = $teacher['is_archived'] ? 'archived-teacher' : '';
-                            $archivedBadge = $teacher['is_archived'] ? '<span class="archived-badge">في الأرشيف</span>' : '';
                             if ($teacher['is_archived'] == 1) {
                                 ?>
                                 <div class="ml-3 col-md-auto mb-3 teacher-card <?php echo $isArchived; ?>">
@@ -419,7 +428,6 @@ if (!isset($_COOKIE['id'])) {
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title" style="font-family: 'Cairo'">
-                                                <?php echo $archivedBadge; ?>
                                                 <a style="
                                     overflow: hidden;
                                     display: -webkit-box;
