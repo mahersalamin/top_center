@@ -109,12 +109,13 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                 <div id="specsContainer">
                     <?php foreach ($specs as $spec) { ?>
                         <div class="row spec-item">
-                            <form action="../addSpecialization.php" method="POST" class="d-flex align-items-center w-100">
+                            <form action="../updateSpecialization.php" method="POST" class="d-flex align-items-center w-100">
                                 <div class="col-md-5 mb-3">
                                     <label for="new_spec" class="form-label">اسم التخصص</label>
                                     <input type="text" value="<?=$spec['name']?>" class="form-control" id="<?=$spec['id']?>"
                                            name="new_spec"
                                            required>
+                                    <input hidden name="id" value="<?=$spec['id']?>">
                                 </div>
 
                                 <div class="col-md-5 mb-3">

@@ -445,6 +445,12 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
+    public function updateSpecialization($id, $name, $type){
+        $query = "UPDATE spc SET name = '$name', class_type = $type where id = $id";
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        return true;
+    }
     public function deleteSchool($id){
         $query = "UPDATE schools SET is_archived = 1 WHERE id = $id";
         $conn = $this->connect();

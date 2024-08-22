@@ -209,14 +209,7 @@ if (!isset($_COOKIE['id'])) {
                                         <p class="card-text">الصف: <?php echo $BOD; ?></p>
                                         <hr>
                                         <p class="card-text">في الحصة: <?php echo $InSess == 1 ? 'نعم' : 'لا'; ?></p>
-                                        <hr>
-                                        <p class="card-text">المعلمون:
-                                        <ol>
-                                            <?php foreach ($teacher_names as $teacher_name) { ?>
-                                                <li><?php echo $teacher_name; ?></li>
-                                            <?php } ?>
-                                        </ol>
-                                        <hr>
+
                                         <div class="row">
                                             <div class="col-md-auto">
                                                 <form action="editStudent.php" method="POST"
