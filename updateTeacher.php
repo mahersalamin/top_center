@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $specs = $_POST['specs'];
+    $password = $_POST['password'];
 
     // Prepare the specs array to only include checked items
     $filteredSpecs = [];
@@ -21,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Update teacher data in the database
-    $success = $db->updateTeacher($id, $name, $email, $filteredSpecs);
+    $success = $db->updateTeacher($id, $name, $email, $filteredSpecs,$password);
 
     // Check if the update was successful
     if ($success) {

@@ -19,12 +19,24 @@ if ($teacher) {
                      alt="Teacher Image">
             </div>
 
-            <h1 class="display-4 fw-bold text-success"><?php echo htmlspecialchars($teacher['name']); ?></h1>
+            <h1 class="display-4 fw-bold text-success"><?php echo htmlspecialchars($teacher['name']); ?>
         </div>
 
         <div class="col-lg-6 mx-auto">
             <form id="teacherForm" action="../updateTeacher.php" method="POST" enctype="multipart/form-data">
                 <div class="card mb-4 text-right">
+                    <div class="card-header">
+
+                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-secondary"
+                               href="<?php echo $_COOKIE['role'] == 2 ? "bodyHomeUser.php" : ($_COOKIE['role'] == 1 ? "homeAdmin.php" : ""); ?>">
+                                &lt; رجوع
+                            </a>
+                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
+
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="mb-3">
                             <label for="name" class="form-label fw-bold">اسم المعلم</label>
@@ -37,46 +49,58 @@ if ($teacher) {
                                    value="<?php echo htmlspecialchars($teacher['user']); ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="specSearchInput" class="form-label fw-bold">اختر التخصصات</label>
-                            <input type="text" id="specSearchInput" class="form-control mb-2"
-                                   placeholder="ابحث عن تخصص...">
-                            <div id="specsContainer">
-                                <?php foreach ($specializations as $spec) {
-                                    $checked = in_array($spec['id'], array_column($teacher_specializations, 'spec'));
-                                    ?>
-                                    <div class="form-check">
-                                        <input class="form-check-input spec-checkbox " type="checkbox"
-                                               name="specs[<?php echo htmlspecialchars($spec['id']); ?>][price]"
-                                               value="50"
-                                               id="spec_<?php echo htmlspecialchars($spec['id']); ?>" <?php echo $checked ? 'checked' : ''; ?>>
-                                        <label class="form-check-label mr-3"
-                                               for="spec_<?php echo htmlspecialchars($spec['id']); ?>"><?php echo htmlspecialchars($spec['name']); ?></label>
-                                    </div>
-                                <?php } ?>
-                            </div>
+                            <label for="password" class="form-label fw-bold">كلمة مرور المعلم</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   value="<?php echo htmlspecialchars($teacher['password']); ?>" required>
+                            <label>
+                                <input type="checkbox" onclick="myFunction()"> اظهار كلمة المرور
+                            </label>
+                        </div>
+
+
+                    </div>
+                    <div class="card-footer">
+                        <label for="specSearchInput" class="form-label fw-bold">اختر التخصصات</label>
+                        <input type="text" id="specSearchInput" class="form-control mb-2"
+                               placeholder="ابحث عن تخصص...">
+                        <div id="specsContainer">
+                            <?php foreach ($specializations as $spec) {
+                                $checked = in_array($spec['id'], array_column($teacher_specializations, 'spec'));
+                                ?>
+                                <div class="form-check">
+                                    <input class="form-check-input spec-checkbox " type="checkbox"
+                                           name="specs[<?php echo htmlspecialchars($spec['id']); ?>][price]"
+                                           value="50"
+                                           id="spec_<?php echo htmlspecialchars($spec['id']); ?>" <?php echo $checked ? 'checked' : ''; ?>>
+                                    <label class="form-check-label mr-3"
+                                           for="spec_<?php echo htmlspecialchars($spec['id']); ?>"><?php echo htmlspecialchars($spec['name']); ?></label>
+                                </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
-
-                <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
-                    <a class="btn btn-secondary"
-                       href="<?php echo $_COOKIE['role'] == 2 ? "bodyHomeUser.php" : ($_COOKIE['role'] == 1 ? "homeAdmin.php" : ""); ?>">رجوع
-                        &gt;</a>
-                </div>
             </form>
-            <div class="d-flex justify-content-center mt-5">
-                <form method="post" action="../deleteTeacher.php" class="d-inline-block">
-                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                    <button type="submit" class="btn btn-danger">أرشفة المعلم</button>
-                </form>
-            </div>
-
+            <form method="post" action="../deleteTeacher.php" class="d-inline-block">
+                <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                <button type="submit" class="btn btn-danger">أرشفة المعلم</button>
+            </form>
         </div>
+
     </div>
 
+
+
+
     <script>
+        function myFunction() {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+
         document.getElementById('specSearchInput').addEventListener('keyup', function () {
             var input = this.value.toLowerCase();
             var labels = document.querySelectorAll('#specsContainer .form-check');
