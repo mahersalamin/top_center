@@ -501,24 +501,35 @@ class MyDB
         $conn = $this->connect();
         $materialsArray = $materials;
         $materials = implode(",", $materials);
+        $currentDateTime = date('Y-m-d H:i:s'); // Get the current datetime
+
+        // Insert into sessions table with created_at
         if ($sessionPackage == "حقيبة مدرسية") {
-            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, meetings, price) 
-              VALUES ('$session_name','$sessionPackage', '$materials', $isGroup, '0', $hours, $price)";
+            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, meetings, price, created_at) 
+                  VALUES ('$session_name', '$sessionPackage', '$materials', $isGroup, '0', $hours, $price, '$currentDateTime')";
         } else {
-            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price) 
-              VALUES ('$session_name','$sessionPackage', '$materials', $isGroup, $hours, $price)";
+            $query = "INSERT INTO sessions (session_name, type, material, is_group, hours, price, created_at) 
+                  VALUES ('$session_name', '$sessionPackage', '$materials', $isGroup, $hours, $price, '$currentDateTime')";
         }
-        //        var_dump($query);die();
+
         $conn->query($query);
         $sessionId = $conn->insert_id;
 
+        // Insert into session_students table with added_at
+        foreach ($students as $studentId) {
+            $query = "INSERT INTO session_students (session_id, student_id, added_at) 
+                  VALUES ('$sessionId', '$studentId', '$currentDateTime')";
+            $conn->query($query);
+        }
+
+        // Insert into session_teachers table with added_at
         foreach ($teachers as $teacher) {
             $teacherId = $teacher['id'];
             $percentage = $teacher['percentage'] / 100;
             $sessionAmount = ($price / count($students) / 2);
-
             $sessionAmountPerMaterial = $sessionAmount / count($materialsArray);
-            //            var_dump($sessionAmountPerMaterial);die();
+
+            // Determine the session amount for the teacher based on their materials
             $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
             $result = $conn->query($query);
             $teacherMaterials = [];
@@ -532,29 +543,16 @@ class MyDB
 
             foreach ($materialsArray as $value) {
                 if (in_array($value, $teacherMaterials)) {
-
                     $teacherSessionAmountPerTheirMaterials += $sessionAmountPerMaterial;
                 }
             }
 
             $teacherAllSessionAmount = $teacherSessionAmountPerTheirMaterials * count($students);
 
-            $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage) 
-                  VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage')";
-
+            $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage, added_at) 
+                  VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage', '$currentDateTime')";
             $conn->query($query);
         }
-
-        $studentSessionCost = $price / count($students);
-        foreach ($students as $student) {
-            $query = "INSERT INTO session_students (session_id, student_id, session_cost) 
-                  VALUES ('$sessionId', '$student', '$studentSessionCost')";
-            $conn->query($query);
-        }
-
-        // Close the connection
-
-        return true;
     }
 
 
@@ -612,23 +610,37 @@ class MyDB
     public function getRemainsData()
     {
         $conn = $this->connect();
-        $query = "SELECT
+        $query = "
+                    SELECT
                         ss.student_id,
+                        i.id AS payment_id,
+                        s.phone AS student_phone,
                         s.name AS student_name,
                         ss.session_id,
                         se.session_name,
                         ss.session_cost,
                         ss.total_payments,
-                        ss.session_cost - ss.total_payments AS amount_due
+                        ss.session_cost - ss.total_payments AS amount_due,
+                        MAX(i.date) AS last_payment_date,
+                        n.note AS session_note,
+                        ss.added_at AS session_added_at  -- Include the added_at datetime
                     FROM
                         session_students ss
                     JOIN
                         students s ON ss.student_id = s.id
                     JOIN
-                         sessions se ON ss.session_id = se.id
+                        sessions se ON ss.session_id = se.id
+                    LEFT JOIN 
+                        income i ON ss.session_id = i.session_id AND ss.student_id = i.student_id
+                    LEFT JOIN
+                        notes n ON ss.student_id = n.student_id AND ss.session_id = n.session_id
                     WHERE
                         ss.total_payments < ss.session_cost
-                        AND ss.payment_status != 'paid'; 
+                        AND ss.payment_status != 'paid'
+                    GROUP BY
+                        ss.student_id, s.phone, s.name, ss.session_id, se.session_name, ss.session_cost, ss.total_payments, n.note, ss.added_at
+                    ORDER BY
+                        last_payment_date DESC; 
                     "
         ;
         $result = $conn->query($query);

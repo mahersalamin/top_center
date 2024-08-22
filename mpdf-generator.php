@@ -39,7 +39,7 @@ function generate_income_report($headers, $tableData): string
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
@@ -97,22 +97,18 @@ function generate_outcome_report($headers, $tableData): string
     // Define the header HTML
     $date = date('Y-m-d');
 
-    $issuer = 'السكرتيرة'; // Example issuer, you can dynamically set this
+    $issuer = 'السكرتيرة';
 
-    $customerName = 'اسم المستلم'; // Example customer name, you can dynamically set this
 
 
 
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
             
-                <div style="float: left; width: 50%;">
-                    <h5>' . $customerName . '</h5>
-
-                </div>
+                
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
                     <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>
@@ -170,7 +166,7 @@ function generate_daily_report($headers, $tableData): string{
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
 
                 <div style="float: left; width: 50%;">
@@ -234,7 +230,7 @@ function generate_public_report($headers, $tableData): string {
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
@@ -295,7 +291,7 @@ function generate_sessions_report($headers, $tableData): string {
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
@@ -558,7 +554,7 @@ function generate_remains_report($headers, $tableData): string {
 
     $html = '
         <div style="direction: rtl; text-align: center; padding: 20px;">
-        <img src="' . $logoPath . '" style="width: 100px; height: auto; display: block; margin: 0 auto;">
+        <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
             
                 
@@ -619,7 +615,6 @@ try {
             $mpdf = new Mpdf(['default_font' => 'Cairo']);
             $mpdf->WriteHTML($inc_report);
 
-            // Output PDF directly to browser for download
             $mpdf->Output('income_report_' . $date . '_.pdf', 'D');
             break;
         case 'outcome_report':
@@ -628,12 +623,10 @@ try {
             }
 
             $outcome_report = generate_outcome_report($headers, $tableData);
-            // Initialize mPDF and set the HTML content
 
             $mpdf = new Mpdf(['default_font' => 'Cairo']);
             $mpdf->WriteHTML($outcome_report);
 
-            // Output PDF directly to browser for download
             $mpdf->Output('outcome_report_' . $date . '_.pdf', 'D');
             break;
         case 'all_stats_report':
@@ -764,14 +757,12 @@ try {
             if (empty($headers) || empty($tableData)) {
                 throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
             }
-//            var_dump($headers);die();
             $remains_report = generate_remains_report($headers, $tableData);
-            // Initialize mPDF and set the HTML content
 
             $mpdf = new Mpdf(['default_font' => 'Cairo']);
             $mpdf->WriteHTML($remains_report);
 
-            // Output PDF directly to browser for download
+
             $mpdf->Output('remains_report_' . $date . '_.pdf', 'D');
             break;
         default:

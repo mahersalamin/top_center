@@ -3,9 +3,7 @@
 $db = new MyDB();
 
 $students = $db->allStudents();
-//$studentSessions = $db->getEnrolledSessionsForStudent(1);
 $approvedAttendances = $db->getApprovedAttendances();
-// Fetch summary statistics
 $incomeStats = $db->getIncomeStatistics();
 $outcomeStats = $db->getOutcomeStatistics();
 $teachersStats = $db->getTeachersOutcomeStatistics();
@@ -480,26 +478,58 @@ $remainsData= $db->getRemainsData();
             <table class="table table-bordered" id="dt-filter-search-remains" >
                 <thead>
                 <tr>
-                    <th>رقم الطالب</th>
                     <th>اسم الطالب</th>
                     <th>اسم الدورة</th>
+                    <th>رقم الهاتف</th>
                     <th>السعر الأصلي</th>
                     <th>مجموع الدفعات</th>
                     <th>المبلغ المتبقي</th>
+                    <th>تاريخ آخر دفعة</th>
+                    <th>تاريخ الإضافة</th>
+                    <th>ملاحظات</th>
+                    <th></th>
 
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 foreach ($remainsData as $remains) {
-                    echo
-                    "<tr>";
-                    echo "<td>{$remains['student_id']}</td>";
+                    // Format last payment date
+                    $strip = "لا توجد دفعات";
+                    $date = $remains['last_payment_date'] ?? null;
+                    if ($date) {
+                        $createDate = new DateTime($date);
+                        $strip = $createDate->format('Y-m-d');
+                    }
+
+                    // Format session added date
+                    $sessionAddedAt = $remains['session_added_at'] ?? null;
+                    $addedDate = "لم يتم تسجيل التاريخ";
+                    if ($sessionAddedAt) {
+                        $createDateAdded = new DateTime($sessionAddedAt);
+                        $addedDate = $createDateAdded->format('Y-m-d H:i:s');
+                    }
+
+                    echo "<tr>";
                     echo "<td>{$remains['student_name']}</td>";
                     echo "<td>{$remains['session_name']}</td>";
+                    echo "<td>{$remains['student_phone']}</td>";
                     echo "<td>{$remains['session_cost']}</td>";
                     echo "<td>{$remains['total_payments']}</td>";
                     echo "<td>{$remains['amount_due']}</td>";
+                    echo "<td>{$strip}</td>";
+                    echo "<td>{$addedDate}</td>"; // Display session_added_at
+
+                    // Display the note with an id for updating it later
+                    $note = !empty($remains['session_note']) ? $remains['session_note'] : "لا توجد ملاحظات";
+                    echo "<td id='note-cell-{$remains['student_id']}-{$remains['session_id']}'>{$note}</td>";
+
+                    // Button and field for adding a new note
+                    echo "<td>";
+                    echo "<button type='button' class='btn btn-sm btn-warning' onclick='addNoteField({$remains['student_id']}, {$remains['session_id']})'>إضافة ملاحظة</button>";
+                    echo "<div id='note-field-{$remains['student_id']}-{$remains['session_id']}'></div>";
+                    echo "</td>";
+
                     echo "</tr>";
                 }
                 ?>
@@ -519,6 +549,48 @@ $remainsData= $db->getRemainsData();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <!-- pdfmake for PDF export -->
 
+<script>
+    function addNoteField(studentId, sessionId) {
+        var fieldId = 'note-field-' + studentId + '-' + sessionId;
+        var noteDiv = document.getElementById(fieldId);
+
+        if (!noteDiv.innerHTML) {
+            noteDiv.innerHTML = `
+            <input type="text" id="note-${studentId}-${sessionId}" placeholder="أدخل ملاحظة" />
+            <button type="button" class="btn btn-sm btn-success" onclick="saveNote(${studentId}, ${sessionId})">حفظ الملاحظة</button>
+        `;
+        }
+    }
+
+    function saveNote(studentId, sessionId) {
+        var note = document.getElementById('note-' + studentId + '-' + sessionId).value;
+
+        if (note) {
+            // Send the note to your PHP script to update the notes table using AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '../save_note.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('student_id=' + studentId + '&session_id=' + sessionId + '&note=' + encodeURIComponent(note));
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Update the note in the corresponding <td>
+                    var noteCell = document.querySelector(`#note-cell-${studentId}-${sessionId}`);
+                    if (noteCell) {
+                        noteCell.textContent = note;
+                    }
+                    alert('تم حفظ الملاحظة');
+
+                    // Optionally, clear the input field after saving the note
+                    var noteDiv = document.getElementById('note-field-' + studentId + '-' + sessionId);
+                    noteDiv.innerHTML = '';
+                }
+            };
+        } else {
+            alert('أدخل ملاحظة رجاءاً');
+        }
+    }
+</script>
 <script>
     $(document).ready(function () {
         var sessionData = {}; // Define sessionData in the outer scope
@@ -861,12 +933,12 @@ $remainsData= $db->getRemainsData();
         });
 
         let remains_table = $('#dt-filter-search-remains').DataTable({
-            "paging": true,          // Enable pagination
-            "lengthChange": true,    // Show length change options
-            "searching": true,       // Enable search functionality
-            "ordering": true,        // Enable column sorting
-            "info": true,            // Show table information
-            "autoWidth": false,      // Disable automatic column width adjustment
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
             "language": {
                 "paginate": {
                     "previous": "السابق",
@@ -889,16 +961,22 @@ $remainsData= $db->getRemainsData();
                     action: function (e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
-                        $('#dt-filter-search-remains thead th').each(function() {
-                            headers.push($(this).text());
+                        $('#dt-filter-search-remains thead th').each(function(index) {
+                            // Exclude last header
+                            if (index < $('#dt-filter-search-remains thead th').length - 1) {
+                                headers.push($(this).text());
+                            }
                         });
 
                         // Get the table data
                         var data = [];
                         dt.rows({ search: 'applied' }).every(function() {
                             let row = [];
-                            $(this.node()).find('td').each(function() {
-                                row.push($(this).text());
+                            $(this.node()).find('td').each(function(index) {
+                                // Exclude last column
+                                if (index < $(this).siblings().length) {
+                                    row.push($(this).text());
+                                }
                             });
                             data.push(row);
                         });
@@ -925,8 +1003,6 @@ $remainsData= $db->getRemainsData();
                     }
                 }
             ],
-
-
             initComplete: function () {
                 this.api().columns().every(function () {
                     let column = this;
@@ -943,6 +1019,7 @@ $remainsData= $db->getRemainsData();
                 });
             }
         });
+
 
         $('#lengthMenuRemains').on('change', function() {
             var length = $(this).val();
