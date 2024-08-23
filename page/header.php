@@ -181,6 +181,8 @@ foreach ($user
                             <a class="dropdown-item" href="MyRequest.php">تقرير الحصص الموافق عليها</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="daily_report.php">تقرير الحضور</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="charts.php">رسومات بيانية</a>
                         </div>
                     </li>
 

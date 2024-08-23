@@ -222,7 +222,7 @@ $teachers = $db->getAllTeachers();
 
                 <!-- Step 2: Students list -->
                 <div class="tab">
-                    <div class="col-md-12 font-weight-bold" style="height: 400px; overflow-y: auto;">
+                    <div class="col-md-12 font-weight-bold" >
                         <h4>الطلاب</h4>
                         <div class="mb-3">
                             <select id="classDropdown" class="form-control mb-2" onchange="filterStudents()">
@@ -443,7 +443,7 @@ $teachers = $db->getAllTeachers();
 
                 <!-- Step 1: Select Students -->
                 <div class="tab1">
-                    <div class="col-md-12 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                    <div class="col-md-12 font-weight-bold" >
                         <h4>الطلاب</h4>
                         <div class="mb-3">
                             <select id="classDropdown2" class="form-control mb-2" onchange="filterStudents2()">

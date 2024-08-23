@@ -17,12 +17,7 @@
 <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script>
 <style>
-    #regForm {
-        background-color: #ffffff;
-        padding: 40px;
-        width: 100%;
-        min-width: 300px;
-    }
+
 
     h1 {
         text-align: center;
@@ -34,7 +29,7 @@
         border: none;
         padding: 10px 20px;
         font-size: 17px;
-        font-family: Raleway;
+        font-family: serif;
         cursor: pointer;
     }
 
