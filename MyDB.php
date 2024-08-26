@@ -795,21 +795,7 @@ class MyDB
         // All updates successful
         return true;
     }
-//    public function getStudentData($id)
-//    {
-//        $conn = $this->connect();
-//        $query = "SELECT * FROM students WHERE id = ? AND archived = 0";
-//        $stmt = $conn->prepare($query);
-//
-//        if ($stmt === false) {
-//            die('Prepare failed: ' . $conn->error);
-//        }
-//
-//        $stmt->bind_param("i", $id);
-//        $stmt->execute();
-//        $result = $stmt->get_result();
-//        return $result->fetch_assoc();
-//    }
+
 
     public function deleteStudent($student_id)
     {
@@ -825,8 +811,7 @@ class MyDB
         if (!$result) {
             echo "Error: " . $conn->error;
         }
-        var_dump($result);
-        die();
+
         // Return true if deletion was successful, false otherwise
         return $result;
     }
@@ -1059,7 +1044,6 @@ GROUP BY students.id
             AND students.att_id != 0
             AND t.id = ?;
     ";
-//        echo($query);die();
         $stmt = $conn->prepare($query);
         if ($stmt === false) {
             die("Prepare failed: " . $conn->error);
@@ -1175,7 +1159,6 @@ GROUP BY students.id
         $sessions = [];
 
         while ($row = $result->fetch_assoc()) {
-            //            var_dump($row['session_hours']);die();
             $sessionID = $row['id'];
             if (!isset($sessions[$sessionID])) {
                 // Initialize session details if not already set
@@ -1402,7 +1385,6 @@ GROUP BY students.id
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
-        //        echo json_encode($rows);die();
         return $rows;
     }
 
@@ -1423,7 +1405,6 @@ GROUP BY students.id
         while ($row = $result->fetch_assoc()) {
             $rows[] = $row;
         }
-        //        echo json_encode($rows);die();
         return $rows;
     }
 
@@ -1546,8 +1527,7 @@ GROUP BY students.id
     public function addTeacher($user, $password, $name, $specs, $img, $role)
     {
         $conn = $this->connect();
-        echo json_encode($specs);
-        die();
+
         // Insert teacher basic information
         if ($img == "") {
             $query = "INSERT INTO teacher (user, password, name, role)
@@ -1567,7 +1547,6 @@ GROUP BY students.id
         // Get the ID of the newly inserted teacher
         $teacherId = $conn->insert_id;
 
-        //        var_dump($specs[1]);die();
         // Insert teacher specializations
         foreach ($specs as $specId => $specData) {
             if (isset($specData['id']) && isset($specData['price'])) {

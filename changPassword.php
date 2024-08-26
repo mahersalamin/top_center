@@ -8,7 +8,6 @@ require "MyDB.php";
 
 
     $db = new MyDB ();
-//var_dump($_POST);die();
 
     $result =  $db-> getPassword($id, $old);
     if($result){

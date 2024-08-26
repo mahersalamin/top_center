@@ -4,12 +4,8 @@
 require "MyDB.php";
 
 $db = new MyDB();
-//echo json_encode($_POST);die();
 
-//$teachers = $_POST['teachers'];
-//$hours = $_POST['hours'];
-//$price = $_POST['price'];
-//$materials = $_POST['materials'];
+
 $name = $_POST['name'];
 $phone = $_POST['phone'];
 $school_name = $_POST['school_name'];

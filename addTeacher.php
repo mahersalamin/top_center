@@ -6,7 +6,6 @@ require "MyDB.php";
 $db = new MyDB();
 
 
-// echo json_encode($_POST);die();
 
 $email = $_POST['email'];
 $password = $_POST['password'];

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix reports layouts">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="remove non-necessary files, split charts to new page">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +39,6 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/mpdf/mpdf" />
@@ -66,6 +65,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;JavaScript Debug.finance.php.executor&quot;: &quot;Coverage&quot;,
     &quot;PHP Script.index.php.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -83,7 +83,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.webide.settings.project.settings.php&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -155,6 +155,8 @@
       <workItem from="1723996640813" duration="749000" />
       <workItem from="1724129769634" duration="10048000" />
       <workItem from="1724143348592" duration="2009000" />
+      <workItem from="1724318425016" duration="10876000" />
+      <workItem from="1724667602874" duration="391000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -416,7 +418,55 @@
       <option name="project" value="LOCAL" />
       <updated>1724143471354</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="update teacher password">
+      <option name="closed" value="true" />
+      <created>1724319583418</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1724319583418</updated>
+    </task>
+    <task id="LOCAL-00035" summary="fix archive student, refactor student edit page layout">
+      <option name="closed" value="true" />
+      <created>1724321885088</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1724321885088</updated>
+    </task>
+    <task id="LOCAL-00036" summary="fix image for all reports, add notes to remains report and store them">
+      <option name="closed" value="true" />
+      <created>1724326380041</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1724326380041</updated>
+    </task>
+    <task id="LOCAL-00037" summary="update specialization and clean code">
+      <option name="closed" value="true" />
+      <created>1724327431696</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1724327431696</updated>
+    </task>
+    <task id="LOCAL-00038" summary="update logo">
+      <option name="closed" value="true" />
+      <created>1724327458323</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1724327458323</updated>
+    </task>
+    <task id="LOCAL-00039" summary="remove non-necessary files, split charts to new page">
+      <option name="closed" value="true" />
+      <created>1724397945005</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1724397945005</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -434,12 +484,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix outcomes" />
-    <MESSAGE value="add meetings to school backpack" />
-    <MESSAGE value="fix meetings and otherreports" />
-    <MESSAGE value="remove comment" />
-    <MESSAGE value="remove comment1" />
-    <MESSAGE value="add logo and fix reports" />
     <MESSAGE value="fix bugs, add schools, fix teacher special sessions view" />
     <MESSAGE value="archiving teacher" />
     <MESSAGE value="prevent archived teacher from signing in" />
@@ -459,10 +503,19 @@
     <MESSAGE value="remove unnecessary div" />
     <MESSAGE value="update remains report" />
     <MESSAGE value="fix reports layouts" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix reports layouts" />
+    <MESSAGE value="update teacher password" />
+    <MESSAGE value="fix archive student, refactor student edit page layout" />
+    <MESSAGE value="fix image for all reports, add notes to remains report and store them" />
+    <MESSAGE value="update specialization and clean code" />
+    <MESSAGE value="update logo" />
+    <MESSAGE value="remove non-necessary files, split charts to new page" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove non-necessary files, split charts to new page" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/top$finance_php.dat" NAME="finance.php Coverage Results" MODIFIED="1724326566324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="WipCoverageRunner" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
