@@ -404,7 +404,7 @@ $remainsData= $db->getRemainsData();
                     echo "<td>{$remains['total_payments']}</td>";
                     echo "<td>{$remains['amount_due']}</td>";
                     echo "<td>{$strip}</td>";
-                    echo "<td>{$addedDate}</td>"; // Display session_added_at
+                    echo "<td>{$addedDate}</td>";
 
                     // Display the note with an id for updating it later
                     $note = !empty($remains['session_note']) ? $remains['session_note'] : "لا توجد ملاحظات";
@@ -412,7 +412,7 @@ $remainsData= $db->getRemainsData();
 
                     // Button and field for adding a new note
                     echo "<td>";
-                    echo "<button type='button' class='btn btn-sm btn-warning' onclick='addNoteField({$remains['student_id']}, {$remains['session_id']})'>إضافة ملاحظة</button>";
+                    echo "<button type='button' class='btn btn-sm btn-primary' onclick='addNoteField({$remains['student_id']}, {$remains['session_id']})'>إضافة ملاحظة</button>";
                     echo "<div id='note-field-{$remains['student_id']}-{$remains['session_id']}'></div>";
                     echo "</td>";
 
@@ -937,4 +937,4 @@ $remainsData= $db->getRemainsData();
 
 
 </script>
-<?php require 'footer.php'; // Include the footer ?>
+<?php require 'footer.php'; ?>

@@ -445,8 +445,14 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
-    public function updateSpecialization($id, $name, $type){
-        $query = "UPDATE spc SET name = '$name', class_type = $type where id = $id";
+    public function updateSpecialization(int $id, string $name, string $type, int $active){
+        $query = "";
+        if(strlen($type) !== 0){
+            $query=", class_type = $type";
+        }
+
+        $query = "UPDATE spc SET name = '$name' ".$query.", active = $active where id = $id";
+//        var_dump($query);die();
         $conn = $this->connect();
         $result = $conn->query($query);
         return true;

@@ -1,11 +1,5 @@
 <?php require 'header.php'; ?>
 <style>
-    #regForm {
-        background-color: #ffffff;
-        padding: 40px;
-        width: 100%;
-        min-width: 300px;
-    }
 
     h1 {
         text-align: center;
@@ -15,9 +9,6 @@
         background-color: #ffdddd;
     }
 
-    .tab {
-        display: none;
-    }
 
     button {
         background-color: #04AA6D;
@@ -33,28 +24,7 @@
         opacity: 0.8;
     }
 
-    #prevBtn {
-        background-color: #bbbbbb;
-    }
 
-    .step {
-        height: 15px;
-        width: 15px;
-        margin: 0 2px;
-        background-color: #bbbbbb;
-        border: none;
-        border-radius: 50%;
-        display: inline-block;
-        opacity: 0.5;
-    }
-
-    .step.active {
-        opacity: 1;
-    }
-
-    .step.finish {
-        background-color: #04AA6D;
-    }
 </style>
 
 

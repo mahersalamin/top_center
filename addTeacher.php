@@ -40,9 +40,9 @@ if (isset($_FILES['file']) && $file_ex_lc) {
 
 if ($result) {
     $status = "success";
-    header("Location: ./page/newMission.php?status=$status&message=تم اضافة المعلم بنجاح");
+    header("Location: ./page/newMissionTeacher.php?status=$status&message=تم اضافة المعلم بنجاح");
 } else {
 
     $status = "error";
-    header("Location: ./page/newMission.php?status=$status&message=حدث خطأ");
+    header("Location: ./page/newMissionTeacher.php?status=$status&message=حدث خطأ");
 }

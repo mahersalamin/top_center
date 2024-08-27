@@ -118,7 +118,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                                     <input hidden name="id" value="<?=$spec['id']?>">
                                 </div>
 
-                                <div class="col-md-5 mb-3">
+                                <div class="col-md-3 mb-3">
                                     <label for="class_type" class="form-label">المرحلة الدراسية:</label>
                                     <select class="form-control" name="class_type" required>
                                         <option selected disabled>
@@ -134,6 +134,14 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                                         <option value="2">اعدادي</option>
                                         <option value="3">ثانوي</option>
                                     </select>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="active1">أرشفة</label>
+                                    <input type="radio" id="active1" name="active" value="1" <?php echo ($spec['active'] == 1) ? 'checked' : ''; ?>>
+
+                                    <label for="active2">إلغاء</label>
+                                    <input type="radio" id="active2" name="active" value="0" <?php echo ($spec['active'] == 0) ? 'checked' : ''; ?>>
                                 </div>
 
                                 <div class="col-md-2 mb-3 d-flex align-items-end">
