@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="clean code">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/addTeacher.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/newMissionSpecialization.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMissionSpecialization.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/newMissionTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMissionTeacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/updateSpecialization.php" beforeDir="false" afterPath="$PROJECT_DIR$/updateSpecialization.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,7 +158,7 @@
       <workItem from="1724143348592" duration="2009000" />
       <workItem from="1724318425016" duration="10876000" />
       <workItem from="1724667602874" duration="391000" />
-      <workItem from="1724682141555" duration="2924000" />
+      <workItem from="1724682141555" duration="5665000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -481,7 +476,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724682350923</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="update views, and archive specialization">
+      <option name="closed" value="true" />
+      <created>1724733691891</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1724733691891</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -499,7 +502,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="archiving teacher" />
     <MESSAGE value="prevent archived teacher from signing in" />
     <MESSAGE value="complete prevent archived teacher login" />
     <MESSAGE value="archiving students" />
@@ -524,7 +526,8 @@
     <MESSAGE value="update logo" />
     <MESSAGE value="remove non-necessary files, split charts to new page" />
     <MESSAGE value="clean code" />
-    <option name="LAST_COMMIT_MESSAGE" value="clean code" />
+    <MESSAGE value="update views, and archive specialization" />
+    <option name="LAST_COMMIT_MESSAGE" value="update views, and archive specialization" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -304,11 +304,20 @@ $remainsData= $db->getRemainsData();
             <div class="row">
                 <div class="col-md-12" style="direction: rtl; text-align: right;">
                     <h3>الملخص</h3>
-                    <div class="card" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                        <div class="card-body">
-                            <h5 class="card-title">الواردات</h5>
-                            <p>عدد الدفعات المستلمة: <?php echo $incomeStats['count']; ?></p>
-                            <p>المبلغ الكلي: <?php echo $incomeStats['total_amount']; ?></p>
+                    <div class="row">
+                        <div class="card col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                            <div class="card-body">
+                                <h5 class="card-title">الواردات</h5>
+                                <p>عدد الدفعات المستلمة: <?php echo $incomeStats['count']; ?></p>
+                                <p>المبلغ الكلي: <?php echo $incomeStats['total_amount']; ?></p>
+                            </div>
+
+                        </div>
+                        <div class="card  col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                            <div class="card-body">
+                                <h5 class="card-title">الرصيد الكلي</h5>
+                                <h6 class="text-success"><?php echo $totalBalance; ?></h6>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -318,6 +327,7 @@ $remainsData= $db->getRemainsData();
                                 <p>عدد الدفعات الصادرة: <?php echo $outcomeStats['count']; ?></p>
                                 <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
                             </div>
+
                         </div>
                         <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
                             <div class="card-body">
@@ -334,12 +344,7 @@ $remainsData= $db->getRemainsData();
                             </div>
                         </div>
                     </div>
-                    <div class="card mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                        <div class="card-body">
-                            <h5 class="card-title">الرصيد الكلي</h5>
-                            <h6 class="text-success"><?php echo $totalBalance; ?></h6>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -934,7 +939,5 @@ $remainsData= $db->getRemainsData();
 
         form.appendTo('body').submit();
     });
-
-
 </script>
 <?php require 'footer.php'; ?>
