@@ -524,14 +524,19 @@ class MyDB
                   VALUES ('$session_name', '$sessionPackage', '$materials', $isGroup, $hours, $price, '$currentDateTime')";
         }
 
-        $conn->query($query);
+        if (!$conn->query($query)) {
+            return "Error inserting into sessions: " . $conn->error; // Return error message if query fails
+        }
+
         $sessionId = $conn->insert_id;
 
         // Insert into session_students table with added_at
         foreach ($students as $studentId) {
             $query = "INSERT INTO session_students (session_id, student_id, added_at) 
                   VALUES ('$sessionId', '$studentId', '$currentDateTime')";
-            $conn->query($query);
+            if (!$conn->query($query)) {
+                return "Error inserting into session_students: " . $conn->error; // Return error message if query fails
+            }
         }
 
         // Insert into session_teachers table with added_at
@@ -544,6 +549,10 @@ class MyDB
             // Determine the session amount for the teacher based on their materials
             $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
             $result = $conn->query($query);
+            if (!$result) {
+                return "Error selecting teacher specializations: " . $conn->error; // Return error message if query fails
+            }
+
             $teacherMaterials = [];
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -563,9 +572,14 @@ class MyDB
 
             $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage, added_at) 
                   VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage', '$currentDateTime')";
-            $conn->query($query);
+            if (!$conn->query($query)) {
+                return "Error inserting into session_teachers: " . $conn->error; // Return error message if query fails
+            }
         }
+
+        return true; // Return true if all queries succeed
     }
+
 
 
     public function updateSessions($students, $sessions, $materials)
@@ -1530,18 +1544,19 @@ GROUP BY students.id
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-    public function addTeacher($user, $password, $name, $specs, $img, $role)
+    public function addTeacher($user, $password, $name, $specs, $img, $role, $id_number, $degree, $phone_number, $address)
     {
         $conn = $this->connect();
 
         // Insert teacher basic information
         if ($img == "") {
-            $query = "INSERT INTO teacher (user, password, name, role)
-                  VALUES ('$user', '$password', '$name', '$role')";
+            $query = "INSERT INTO teacher (user, password, name, role, id_number, degree, phone_number, address)
+                  VALUES ('$user', '$password', '$name', '$role', $id_number, '$degree', $phone_number, '$address')";
         } else {
-            $query = "INSERT INTO teacher (user, password, name, img, role)
-                  VALUES ('$user', '$password', '$name', '$img', '$role')";
+            $query = "INSERT INTO teacher (user, password, name, img, role, id_number, degree, phone_number, address)
+                  VALUES ('$user', '$password', '$name', '$img', '$role', $id_number, '$degree', $phone_number, '$address')";
         }
+//        var_dump($query);die();
 
         $result = $conn->query($query);
 

@@ -101,7 +101,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
         </div>
         <div class="tab-pane fade show" id="all-specs" role="tabpanel" aria-labelledby="all-specs-tab">
             <!-- Specs Form -->
-            <div class="container col-md-6 shadow p-3 bg-body rounded mb-2 text-center" style="font-family: 'Cairo'">
+            <div class="container col-md-10 shadow p-3 bg-body rounded mb-2 text-center" style="font-family: 'Cairo'">
                 <?php $specs = $db->getSpecializations(); ?>
 
                 <input type="text" id="searchInput" class="form-control mb-3" placeholder="ابحث عن التخصص...">
@@ -110,7 +110,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                     <?php foreach ($specs as $spec) { ?>
                         <div class="row spec-item">
                             <form action="../updateSpecialization.php" method="POST" class="d-flex align-items-center w-100">
-                                <div class="col-md-5 mb-3">
+                                <div class="col-md-4 mb-3">
                                     <label for="new_spec" class="form-label">اسم التخصص</label>
                                     <input type="text" value="<?=$spec['name']?>" class="form-control" id="<?=$spec['id']?>"
                                            name="new_spec"

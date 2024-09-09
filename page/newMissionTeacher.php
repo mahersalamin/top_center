@@ -79,6 +79,18 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                         <input required type="password" name="password" class="form-control"
                                placeholder="🔑 كلمة السر للمعلم">
                     </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <input required type="number" name="id_number" class="form-control" placeholder="رقم الهوية">
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <input required type="text" name="degree" class="form-control" placeholder="الدرجة العلمية">
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <input required type="text" name="phone_number" class="form-control" placeholder="رقم الهاتف">
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <input required type="text" name="address" class="form-control" placeholder="العنوان">
+                    </div>
                     <div class="form-group col-md-6 mb-2 ">
                         <input class="col-md form-control" type="file" name="file" title="Add photo">
                     </div>

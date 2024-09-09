@@ -1,48 +1,56 @@
 <?php
 
+require_once "MyDB.php";
 
-require "MyDB.php";
-
+// Initialize database connection
 $db = new MyDB();
 
+// Sanitize and validate input data
+$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+$password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$specs = filter_input(INPUT_POST, 'specs', FILTER_SANITIZE_STRING);
+$role = filter_input(INPUT_POST, 'role', FILTER_SANITIZE_STRING);
+$id_number = filter_input(INPUT_POST, 'id_number', FILTER_SANITIZE_STRING);
+$degree = filter_input(INPUT_POST, 'degree', FILTER_SANITIZE_STRING);
+$phone_number = filter_input(INPUT_POST, 'phone_number', FILTER_SANITIZE_STRING);
+$address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_STRING);
 
+// Handle file upload
+$file = $_FILES['file'] ?? null;
+$img = '';
 
-$email = $_POST['email'];
-$password = $_POST['password'];
-$name = $_POST['name'];
-$specs = $_POST['specs'];
-$role = $_POST['role'];
+if ($file && $file['error'] === UPLOAD_ERR_OK) {
+    // Define allowed file extensions and maximum file size
+    $allowed_exts = ['jpg', 'jpeg', 'png', 'gif'];
+    $max_file_size = 5 * 1024 * 1024; // 5 MB
 
+    $file_name = basename($file['name']);
+    $file_size = $file['size'];
+    $file_tmp_name = $file['tmp_name'];
 
-$file_name = $_FILES['file']['name'];
-$file_size = $_FILES['file']['size'];
-$file_tmp_name = $_FILES['file']['tmp_name'];
-$error = $_FILES['file']['error'];
+    // Validate file extension and size
+    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+    if (in_array($file_ext, $allowed_exts) && $file_size <= $max_file_size) {
+        $img = uniqid("file-", true) . '.' . $file_ext;
+        $file_upload_path = 'upload/' . $img;
 
-
-$file_ex = pathinfo($file_name, PATHINFO_EXTENSION);
-$file_ex_lc = strtolower($file_ex);
-
-
-if (isset($_FILES['file']) && $file_ex_lc) {
-
-    $img = uniqid("file-", true) . 'top' . $file_ex_lc;
-    $file_upload_path = 'upload/' . $img;
-    move_uploaded_file($file_tmp_name, $file_upload_path);
-
-    $result = $db->addTeacher($email, $password, $name, $specs, $img, $role);
-} else {
-    $result = $db->addTeacher($email, $password, $name, $specs, '', $role);
+        // Move uploaded file to the designated folder
+        if (!move_uploaded_file($file_tmp_name, $file_upload_path)) {
+            // Handle file upload error
+            $img = '';
+        }
+    } else {
+        // Invalid file extension or size
+        $img = '';
+    }
 }
 
+// Add teacher to the database
+$result = $db->addTeacher($email, $password, $name, $specs, $img, $role, $id_number, $degree, $phone_number, $address);
 
-// var_dump($result); die(' /result');
-
-if ($result) {
-    $status = "success";
-    header("Location: ./page/newMissionTeacher.php?status=$status&message=تم اضافة المعلم بنجاح");
-} else {
-
-    $status = "error";
-    header("Location: ./page/newMissionTeacher.php?status=$status&message=حدث خطأ");
-}
+// Redirect based on result
+$status = $result ? "success" : "error";
+$message = $result ? "تم اضافة المعلم بنجاح" : "حدث خطأ";
+header("Location: ./page/newMissionTeacher.php?status=$status&message=$message");
+exit;

@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/addTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/addTeacher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/assignPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/newMissionSpecialization.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMissionSpecialization.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/newMissionTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMissionTeacher.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +89,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;copyright&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -159,6 +164,10 @@
       <workItem from="1724318425016" duration="10876000" />
       <workItem from="1724667602874" duration="391000" />
       <workItem from="1724682141555" duration="5665000" />
+      <workItem from="1724930323606" duration="1020000" />
+      <workItem from="1725019142295" duration="225000" />
+      <workItem from="1725045313226" duration="9000" />
+      <workItem from="1725808711438" duration="2430000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>

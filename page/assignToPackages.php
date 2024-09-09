@@ -176,7 +176,7 @@ $teachers = $db->getAllTeachers();
     <?php
     if (isset($_GET['message']) && isset($_GET['status'])) {
         // Get the message and status from the query parameters
-        $message = $_GET['message'];
+        $message = urldecode($_GET['message']); // Decode the message
         $status = $_GET['status'];
 
         // Display the message based on the status
@@ -222,7 +222,7 @@ $teachers = $db->getAllTeachers();
 
                 <!-- Step 2: Students list -->
                 <div class="tab">
-                    <div class="col-md-12 font-weight-bold" >
+                    <div class="col-md-12 font-weight-bold">
                         <h4>الطلاب</h4>
                         <div class="mb-3">
                             <select id="classDropdown" class="form-control mb-2" onchange="filterStudents()">
@@ -291,7 +291,8 @@ $teachers = $db->getAllTeachers();
                             <label class="mr-2 form-check-label" for="group">جماعي</label>
                         </div>
                         <div class="form-group row justify-content-center mt-3" id="hours-div">
-                            <label for="hours" class="col-form-label">عدد الساعات (اللقاءات في حال اختيار حقيبة مدرسية):</label>
+                            <label for="hours" class="col-form-label">عدد الساعات (اللقاءات في حال اختيار حقيبة
+                                مدرسية):</label>
                             <div class="col-md-12">
                                 <input type="number" min="0" value="0" class="form-control" id="hours" name="hours"
                                        placeholder="عدد الساعات">
@@ -311,7 +312,8 @@ $teachers = $db->getAllTeachers();
                 <div class="tab">
                     <div class="row">
                         <!-- Column for Class Type 1 -->
-                        <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold"
+                             style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الأساسية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class1"
@@ -334,7 +336,8 @@ $teachers = $db->getAllTeachers();
                         </div>
 
                         <!-- Column for Class Type 2 -->
-                        <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold"
+                             style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الاعدادية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class2"
@@ -357,7 +360,8 @@ $teachers = $db->getAllTeachers();
                         </div>
 
                         <!-- Column for Class Type 3 -->
-                        <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold" style="height: 350px; overflow-y: auto;">
+                        <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold"
+                             style="height: 350px; overflow-y: auto;">
                             <h4>قائمة المواد الثانوية</h4>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input" type="checkbox" id="all_class3"
@@ -388,7 +392,8 @@ $teachers = $db->getAllTeachers();
                             <p><strong>المعلمين</strong></p>
                             <?php foreach ($teachers as $teacher) { ?>
                                 <div class="mr-2 form-check row justify-content-center">
-                                    <input class="form-check-input" type="checkbox" name="teachers[<?php echo $teacher['id']; ?>][id]"
+                                    <input class="form-check-input" type="checkbox"
+                                           name="teachers[<?php echo $teacher['id']; ?>][id]"
                                            id="teacher_<?php echo $teacher['id']; ?>"
                                            value="<?php echo $teacher['id']; ?>">
                                     <label class="form-check-label mr-2" for="teacher_<?php echo $teacher['id']; ?>">
@@ -443,7 +448,7 @@ $teachers = $db->getAllTeachers();
 
                 <!-- Step 1: Select Students -->
                 <div class="tab1">
-                    <div class="col-md-12 font-weight-bold" >
+                    <div class="col-md-12 font-weight-bold">
                         <h4>الطلاب</h4>
                         <div class="mb-3">
                             <select id="classDropdown2" class="form-control mb-2" onchange="filterStudents2()">
@@ -536,7 +541,6 @@ $teachers = $db->getAllTeachers();
 
     </div>
 </div>
-
 
 
 <script>
@@ -675,8 +679,6 @@ $teachers = $db->getAllTeachers();
 </script>
 
 
-
-
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <!-- DataTables Buttons JS -->
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
@@ -715,15 +717,15 @@ $teachers = $db->getAllTeachers();
                     action: function (e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
-                        $('#dt-filter-search-income thead th').each(function() {
+                        $('#dt-filter-search-income thead th').each(function () {
                             headers.push($(this).text());
                         });
 
                         // Get the table data
                         var data = [];
-                        dt.rows({ search: 'applied' }).every(function() {
+                        dt.rows({search: 'applied'}).every(function () {
                             let row = [];
-                            $(this.node()).find('td').each(function() {
+                            $(this.node()).find('td').each(function () {
                                 row.push($(this).text());
                             });
                             data.push(row);
@@ -772,7 +774,6 @@ $teachers = $db->getAllTeachers();
 
     });
 </script>
-
 
 
 <script>
@@ -856,11 +857,11 @@ $teachers = $db->getAllTeachers();
             secondary_div.style.visibility = 'visible';
 
             // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
-        } else if(selectedClassValues.some(value => parseInt(value) <= 6 )){
+        } else if (selectedClassValues.some(value => parseInt(value) <= 6)) {
             elementary_div.style.visibility = 'visible';
             mid_div.style.visibility = 'hidden';
             secondary_div.style.visibility = 'hidden';
-        }else {
+        } else {
             elementary_div.style.visibility = 'hidden';
             mid_div.style.visibility = 'visible';
             secondary_div.style.visibility = 'hidden';
@@ -889,8 +890,7 @@ $teachers = $db->getAllTeachers();
                 document.querySelector('input[name="session_package"]:checked').checked = false;
                 console.log("حقيبة 890")
 
-            }
-            else {
+            } else {
                 individualDiv.style.visibility = 'hidden';
                 console.log("حقيبة 894")
                 hoursDiv.style.visibility = 'visible';
