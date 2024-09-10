@@ -945,14 +945,14 @@ class MyDB
     }
 
 
-    public function updateTeacher($id, $name, $email, $specs,$password)
+    public function updateTeacher($id, $name, $email, $specs,$password,$id_number, $degree, $phone_number, $address)
     {
         $conn = $this->connect();
 
         // Update teacher basic information
-        $updateQuery = "UPDATE teacher SET name = ?, user = ?, password = ? WHERE id = ?";
+        $updateQuery = "UPDATE teacher SET name = ?, user = ?, password = ?,id_number= ?, degree= ?, phone_number= ?, address= ? WHERE id = ?";
         $stmt = $conn->prepare($updateQuery);
-        $stmt->bind_param("sssi", $name, $email, $password, $id);
+        $stmt->bind_param("sssisisi", $name, $email, $password,$id_number, $degree, $phone_number, $address, $id);
         $updateResult = $stmt->execute();
 
         if (!$updateResult) {

@@ -56,6 +56,38 @@ if ($teacher) {
                                 <input type="checkbox" onclick="myFunction()"> اظهار كلمة المرور
                             </label>
                         </div>
+                        <div class="mb-3">
+                            <label for="id_number" class="form-label fw-bold">رقم الهوية</label>
+
+                            <input id="id_number" required type="number"
+                                   value="<?php echo htmlspecialchars($teacher['id_number']); ?>"
+                                   name="id_number" class="form-control" placeholder="رقم الهوية">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="degree" class="form-label fw-bold">الدرجة العلمية</label>
+
+                            <input id="degree" required type="text"
+                                   value="<?php echo htmlspecialchars($teacher['degree']); ?>"
+                                   name="degree" class="form-control" placeholder="الدرجة العلمية">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="paphone_number" class="form-label fw-bold">رقم الهاتف</label>
+
+                            <input id="phone_number" required type="number"
+                                   value="<?php echo htmlspecialchars($teacher['phone_number']); ?>"
+                                   name="phone_number" class="form-control" placeholder="رقم الهاتف">
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label fw-bold">العنوان</label>
+
+                            <input id="address" required type="number"
+                                   value="<?php echo htmlspecialchars($teacher['address']); ?>"
+                                   name="address" class="form-control" placeholder="العنوان">
+
+                        </div>
 
 
                     </div>
@@ -80,17 +112,15 @@ if ($teacher) {
                     </div>
                 </div>
             </form>
-            <?php if($teacher['is_archived']==0){?>
-            <form method="post" action="../deleteTeacher.php" class="d-inline-block">
-                <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                <button type="submit" class="btn btn-danger">أرشفة المعلم</button>
-            </form>
+            <?php if ($teacher['is_archived'] == 0) { ?>
+                <form method="post" action="../deleteTeacher.php" class="d-inline-block">
+                    <input type="hidden" name="id" value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                    <button type="submit" class="btn btn-danger">أرشفة المعلم</button>
+                </form>
             <?php } ?>
         </div>
 
     </div>
-
-
 
 
     <script>
