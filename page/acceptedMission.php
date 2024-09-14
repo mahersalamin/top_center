@@ -43,16 +43,17 @@ $db = new MyDB();
                         <label>سجلات</label>
                     </div>
                 </div>
-                <table class="table table-bordered" id="report_table" width="100%" cellspacing="0">
+                <table class="table table-bordered text-right" id="report_table" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>حالة الحصة</th>
-                            <th>اسم الطالب</th>
-                            <th>المادة</th>
-                            <th>التاريخ</th>
-                            <th>وقت البدء</th>
-                            <th>وقت الإنتهاء</th>
-                            <th>وقت الحصة</th>
+                            <th class="text-right"> الرقم </th>
+                            <th class="text-right">حالة الحصة</th>
+                            <th class="text-right">اسم الطالب</th>
+                            <th class="text-right">المادة</th>
+                            <th class="text-right">التاريخ</th>
+                            <th class="text-right">وقت البدء</th>
+                            <th class="text-right">وقت الإنتهاء</th>
+                            <th class="text-right">وقت الحصة</th>
                         </tr>
                     </thead>
 
@@ -66,6 +67,7 @@ $db = new MyDB();
                      foreach ($acmi as $row) {
                     ?>
                     <tr>
+                    <td><?= $row['id']; ?></td>
                         <!-- approved -->
                         <td class="text text-<?php $row['aprove'] == 0 ? print "danger" : print "success" ?>">
 
@@ -78,7 +80,7 @@ $db = new MyDB();
 
                         </td>
                         <!-- name -->
-                        <td><?= $row['name']; ?></td>
+                        <td><?= $row['student_names']; ?></td>
                         <!-- name -->
                         <td><?= $row['session_name']; ?></td>
                         <!-- date -->

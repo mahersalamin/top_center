@@ -308,7 +308,7 @@ class MyDB
 
     public function getSpecializations()
     {
-        $query = "SELECT * FROM spc";
+        $query = "SELECT * FROM spc WHERE active <> 1";
         $conn = $this->connect();
         $result = $conn->query($query);
         $rows = array();
@@ -439,31 +439,35 @@ class MyDB
         }
     }
 
-    public function updateSchool($id, $name, $type){
+    public function updateSchool($id, $name, $type)
+    {
         $query = "UPDATE schools SET name = '$name', type = $type where id = $id";
         $conn = $this->connect();
         $result = $conn->query($query);
         return true;
     }
-    public function updateSpecialization(int $id, string $name, string $type, int $active){
+    public function updateSpecialization(int $id, string $name, string $type, int $active)
+    {
         $query = "";
-        if(strlen($type) !== 0){
-            $query=", class_type = $type";
+        if (strlen($type) !== 0) {
+            $query = ", class_type = $type";
         }
 
-        $query = "UPDATE spc SET name = '$name' ".$query.", active = $active where id = $id";
-//        var_dump($query);die();
+        $query = "UPDATE spc SET name = '$name' " . $query . ", active = $active where id = $id";
+        //        var_dump($query);die();
         $conn = $this->connect();
         $result = $conn->query($query);
         return true;
     }
-    public function deleteSchool($id){
+    public function deleteSchool($id)
+    {
         $query = "UPDATE schools SET is_archived = 1 WHERE id = $id";
         $conn = $this->connect();
         $result = $conn->query($query);
         return true;
     }
-    public function unArchiveSchool($id){
+    public function unArchiveSchool($id)
+    {
         $query = "UPDATE schools SET is_archived = 0 WHERE id = $id";
         $conn = $this->connect();
         $result = $conn->query($query);
@@ -471,8 +475,11 @@ class MyDB
     }
     public function getAllTeachers()
     {
-        $query = "SELECT t.id, t.`user`, t.is_archived, t.name, t.img, t.att_id FROM teacher t
-                    WHERE ROLE != 1  ORDER BY t.id ASC";
+        $query = "SELECT t.id, t.`user`, spc.name, ts.spec, t.is_archived, t.name, t.img, t.att_id 
+                    FROM teacher t
+                    join teacher_specializations ts on ts.teacher_id = t.id
+                    join spc on spc.id = ts.spec 
+                    WHERE t.role <> 1  ORDER BY t.id ASC";
 
 
         $conn = $this->connect();
@@ -667,8 +674,7 @@ class MyDB
                         ss.student_id, s.phone, s.name, ss.session_id, se.session_name, ss.session_cost, ss.total_payments, n.note, ss.added_at
                     ORDER BY
                         last_payment_date DESC; 
-                    "
-        ;
+                    ";
         $result = $conn->query($query);
         $rows = array();
 
@@ -750,7 +756,7 @@ class MyDB
                     INNER JOIN students AS s
                     ON s.att_id = a.id
                     SET a.`exit` = current_timestamp() WHERE a.session_id = ?";
-
+        
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id);
         $result = $stmt->execute();
@@ -771,6 +777,7 @@ class MyDB
                     INNER JOIN session_students ss ON s.id = ss.student_id
                     SET s.InSess = 0, s.att_id = 0 
                     WHERE ss.session_id = ?";
+        // var_dump($query3);die();
         $stmt3 = $conn->prepare($query3);
         $stmt3->bind_param("i", $id);
         $result3 = $stmt3->execute();
@@ -945,14 +952,14 @@ class MyDB
     }
 
 
-    public function updateTeacher($id, $name, $email, $specs,$password,$id_number, $degree, $phone_number, $address)
+    public function updateTeacher($id, $name, $email, $specs, $password, $id_number, $degree, $phone_number, $address)
     {
         $conn = $this->connect();
 
         // Update teacher basic information
         $updateQuery = "UPDATE teacher SET name = ?, user = ?, password = ?,id_number= ?, degree= ?, phone_number= ?, address= ? WHERE id = ?";
         $stmt = $conn->prepare($updateQuery);
-        $stmt->bind_param("sssisisi", $name, $email, $password,$id_number, $degree, $phone_number, $address, $id);
+        $stmt->bind_param("sssisisi", $name, $email, $password, $id_number, $degree, $phone_number, $address, $id);
         $updateResult = $stmt->execute();
 
         if (!$updateResult) {
@@ -967,10 +974,10 @@ class MyDB
         $stmt->execute();
 
         // Insert new specializations
-        
+
         foreach ($specs as $specId => $specData) {
             $price = isset($specData['price']) ? intval($specData['price']) : null;
-    
+
             // Check if the specialization exists
             $checkQuery = "SELECT * FROM teacher_specializations WHERE teacher_id = ? AND spec = ?";
             $stmt = $conn->prepare($checkQuery);
@@ -978,7 +985,7 @@ class MyDB
             if ($stmt === false) {
                 die('Prepare failed1: ' . $conn->error);
             }
-    
+
             $stmt->bind_param("ii", $id, $specId);
             $stmt->execute();
             $checkResult = $stmt->get_result();
@@ -1001,7 +1008,6 @@ class MyDB
                     return false;
                 }
             }
-            
         }
 
         // All updates successful
@@ -1082,6 +1088,8 @@ GROUP BY students.id
 
         return $students;
     }
+
+
 
     public function getActiveAttendance($t_id)
     {
@@ -1412,12 +1420,23 @@ GROUP BY students.id
     {
         $conn = $this->connect();
 
-        $query = "SELECT att.*, students.name AS name, spc.name AS session_name
-              FROM att
-              INNER JOIN students ON students.id = att.st_id
-              INNER JOIN spc ON spc.id = att.spc
-              WHERE att.tec_id = $id
-              ORDER BY att.id ";
+        $query = "SELECT 
+                    att.*, 
+                    GROUP_CONCAT(students.name SEPARATOR ', ') AS student_names, 
+                    spc.name AS session_name
+                FROM 
+                    att
+                INNER JOIN 
+                    students ON FIND_IN_SET(students.id, att.st_id) > 0
+                INNER JOIN 
+                    spc ON spc.id = att.spc
+                WHERE 
+                    att.tec_id = 4
+                GROUP BY 
+                    att.id
+                ORDER BY 
+                    att.id DESC;"
+        ;
 
         $result = $conn->query($query);
         $rows = array();
@@ -1459,7 +1478,7 @@ GROUP BY students.id
     public function OpenATT($sessionId, $teacherId, $sNames, $material)
     {
         $conn = $this->connect();
-
+        
         // Get material ID
         $materialToIdQuery = "SELECT id FROM spc WHERE name = ?";
         $materialStmt = $conn->prepare($materialToIdQuery);
@@ -1491,7 +1510,7 @@ GROUP BY students.id
         }
 
         $studentIdsStr = implode(",", $studentIds);
-
+        
         // Insert attendance record
         $query = "INSERT INTO att (st_id, tec_id, spc, session_id) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
@@ -1505,12 +1524,12 @@ GROUP BY students.id
             // Update students' attendance status
             foreach ($studentIds as $studentId) {
                 $updateQuery = "UPDATE students SET att_id = ?, InSess = 1 WHERE id = ?";
+                
                 $updateStmt = $conn->prepare($updateQuery);
                 $updateStmt->bind_param("ii", $attId, $studentId);
                 $result2 = $updateStmt->execute();
                 if (!$result2) {
-                    $success = false;
-                    break;
+                    return false; // Fail if any student update fails
                 }
             }
 
@@ -1556,7 +1575,7 @@ GROUP BY students.id
             $query = "INSERT INTO teacher (user, password, name, img, role, id_number, degree, phone_number, address)
                   VALUES ('$user', '$password', '$name', '$img', '$role', $id_number, '$degree', $phone_number, '$address')";
         }
-//        var_dump($query);die();
+        //        var_dump($query);die();
 
         $result = $conn->query($query);
 

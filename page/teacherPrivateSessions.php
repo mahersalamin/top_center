@@ -33,6 +33,7 @@ $privateSessions = $db->getTeacherPrivateSessions($_COOKIE['id'], $type);
 
 
 $activeAttendanceStudents = $db->getActiveAttendanceStudents($_COOKIE['id']);
+// echo json_encode($activeAttendanceStudents);die();
 $teacherMaterials = $db->getTeacherSpecializations($_COOKIE['id']);
 $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
 //echo json_encode($teacherMaterialsNames);die();
