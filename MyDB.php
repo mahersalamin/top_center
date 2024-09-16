@@ -475,7 +475,7 @@ class MyDB
     }
     public function getAllTeachers()
     {
-        $query = "SELECT t.id, t.`user`, spc.name, ts.spec, t.is_archived, t.name, t.img, t.att_id 
+        $query = "SELECT t.id, t.`user`, spc.name as specializations, ts.spec, t.is_archived, t.name, t.img, t.att_id 
                     FROM teacher t
                     join teacher_specializations ts on ts.teacher_id = t.id
                     join spc on spc.id = ts.spec 
@@ -507,16 +507,9 @@ class MyDB
         }
         return $rows;
     }
-    public function addSession(
-        $session_name,
-        $students,
-        $sessionPackage,
-        $materials,
-        $isGroup,
-        $price,
-        $hours,
-        $teachers
-    ) {
+
+    public function addSession($session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers)
+    {
         $conn = $this->connect();
         $materialsArray = $materials;
         $materials = implode(",", $materials);
@@ -546,39 +539,25 @@ class MyDB
             }
         }
 
+        // Calculate amounts
+        $totalPrice = $price;
+        // $centerShare = $totalPrice * 0.50; // 50% to the center
+        $teacherShare = $totalPrice * 0.50; // 50% to be distributed among teachers
+
+        // Determine the total number of specializations
+        $totalSpecializations = 0;
+        foreach ($teachers as $teacherId => $teacherData) {
+            $totalSpecializations += count($teacherData['specializations']);
+        }
+
         // Insert into session_teachers table with added_at
-        foreach ($teachers as $teacher) {
-            $teacherId = $teacher['id'];
-            $percentage = $teacher['percentage'] / 100;
-            $sessionAmount = ($price / count($students) / 2);
-            $sessionAmountPerMaterial = $sessionAmount / count($materialsArray);
-
-            // Determine the session amount for the teacher based on their materials
-            $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
-            $result = $conn->query($query);
-            if (!$result) {
-                return "Error selecting teacher specializations: " . $conn->error; // Return error message if query fails
-            }
-
-            $teacherMaterials = [];
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $teacherMaterials[] = $row['spec'];
-                }
-            }
-
-            $teacherSessionAmountPerTheirMaterials = 0;
-
-            foreach ($materialsArray as $value) {
-                if (in_array($value, $teacherMaterials)) {
-                    $teacherSessionAmountPerTheirMaterials += $sessionAmountPerMaterial;
-                }
-            }
-
-            $teacherAllSessionAmount = $teacherSessionAmountPerTheirMaterials * count($students);
+        foreach ($teachers as $teacherId => $teacherData) {
+            $percentage = $teacherData['percentage'] / 100;
+            $teacherSpecializationsCount = count($teacherData['specializations']);
+            $teacherShareAmount = ($teacherSpecializationsCount / $totalSpecializations) * $teacherShare;
 
             $query = "INSERT INTO session_teachers (session_id, teacher_id, session_amount, percentage, added_at) 
-                  VALUES ('$sessionId', '$teacherId', '$teacherAllSessionAmount', '$percentage', '$currentDateTime')";
+                  VALUES ('$sessionId', '$teacherId', '$teacherShareAmount', '$percentage', '$currentDateTime')";
             if (!$conn->query($query)) {
                 return "Error inserting into session_teachers: " . $conn->error; // Return error message if query fails
             }
@@ -586,6 +565,9 @@ class MyDB
 
         return true; // Return true if all queries succeed
     }
+
+
+
 
 
 
@@ -756,7 +738,7 @@ class MyDB
                     INNER JOIN students AS s
                     ON s.att_id = a.id
                     SET a.`exit` = current_timestamp() WHERE a.session_id = ?";
-        
+
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $id);
         $result = $stmt->execute();
@@ -981,7 +963,7 @@ class MyDB
             // Check if the specialization exists
             $checkQuery = "SELECT * FROM teacher_specializations WHERE teacher_id = ? AND spec = ?";
             $stmt = $conn->prepare($checkQuery);
-    
+
             if ($stmt === false) {
                 die('Prepare failed1: ' . $conn->error);
             }
@@ -989,8 +971,8 @@ class MyDB
             $stmt->bind_param("ii", $id, $specId);
             $stmt->execute();
             $checkResult = $stmt->get_result();
-    
-              
+
+
             // Insert new specialization
             if (isset($specData['price'])) {
                 $insertSpecQuery = "INSERT INTO teacher_specializations (teacher_id, spec) VALUES (?, ?)";
@@ -1164,7 +1146,24 @@ GROUP BY students.id
         return $rows;
     }
 
-    public function fetchAllSessionsWithDetails()
+    public function getSessionDataDetailed($sessionId)
+    {
+        $conn->$this->connect();
+        $query = "SELECT s.*, st.*, ss.*,s.hours AS session_hours,
+                   ss.hours AS student_hours,  GROUP_CONCAT(DISTINCT stu.name) AS student_names, GROUP_CONCAT(DISTINCT t.name) AS teacher_names,
+                   GROUP_CONCAT(DISTINCT spc.name) AS materials
+                    FROM sessions s
+                     LEFT JOIN session_teachers st ON s.id = st.session_id
+                     LEFT JOIN session_students ss ON s.id = ss.session_id
+                     LEFT JOIN students stu ON ss.student_id = stu.id
+                     LEFT JOIN teacher t ON st.teacher_id = t.id
+                     LEFT JOIN spc ON FIND_IN_SET(spc.id, s.material) > 0
+             where s.id = $sessionId
+                     GROUP BY s.id
+            ORDER BY s.id desc";
+        $result = $conn->query($query);
+    }
+    public function getSessionsDataDetailed()
     {
         $conn = $this->connect(); // Assuming you have a method to establish a database connection
 
@@ -1431,12 +1430,11 @@ GROUP BY students.id
                 INNER JOIN 
                     spc ON spc.id = att.spc
                 WHERE 
-                    att.tec_id = 4
+                    att.tec_id = $id
                 GROUP BY 
                     att.id
                 ORDER BY 
-                    att.id DESC;"
-        ;
+                    att.id DESC;";
 
         $result = $conn->query($query);
         $rows = array();
@@ -1478,7 +1476,7 @@ GROUP BY students.id
     public function OpenATT($sessionId, $teacherId, $sNames, $material)
     {
         $conn = $this->connect();
-        
+
         // Get material ID
         $materialToIdQuery = "SELECT id FROM spc WHERE name = ?";
         $materialStmt = $conn->prepare($materialToIdQuery);
@@ -1510,7 +1508,7 @@ GROUP BY students.id
         }
 
         $studentIdsStr = implode(",", $studentIds);
-        
+
         // Insert attendance record
         $query = "INSERT INTO att (st_id, tec_id, spc, session_id) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
@@ -1524,7 +1522,7 @@ GROUP BY students.id
             // Update students' attendance status
             foreach ($studentIds as $studentId) {
                 $updateQuery = "UPDATE students SET att_id = ?, InSess = 1 WHERE id = ?";
-                
+
                 $updateStmt = $conn->prepare($updateQuery);
                 $updateStmt->bind_param("ii", $attId, $studentId);
                 $result2 = $updateStmt->execute();

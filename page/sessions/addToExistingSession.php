@@ -65,7 +65,7 @@ $sessions = $db->getSessionsDataDetailed();
             </div>
         </div>
 
-        <!-- Step 3: Select Materials -->
+        <!-- Step 3: Select Materials
         <div class="tab1">
             <div class="col-md-12 font-weight-bold" style="height: 350px; overflow-y: auto;">
                 <h4>قائمة المواد</h4>
@@ -85,7 +85,7 @@ $sessions = $db->getSessionsDataDetailed();
                     </div>
                 <?php } ?>
             </div>
-        </div>
+        </div> -->
 
         <!-- Navigation Buttons -->
         <div style="overflow:auto;">
@@ -103,7 +103,7 @@ $sessions = $db->getSessionsDataDetailed();
         <div style="text-align:center;margin-top:40px;">
             <span class="step1"></span>
             <span class="step1"></span>
-            <span class="step1"></span>
+            <!-- <span class="step1"></span> -->
         </div>
     </form>
 </div>

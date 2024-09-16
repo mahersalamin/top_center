@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="prevent SQL injection">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="add edit session form">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/editTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/editTeacher.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,10 +100,10 @@
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\top\page" />
+      <recent name="C:\xampp\htdocs\top\page\sessions" />
       <recent name="C:\xampp\htdocs\top" />
       <recent name="C:\xampp\htdocs\top\views" />
       <recent name="C:\xampp\htdocs\top\controllers" />
-      <recent name="C:\xampp\htdocs\top\config" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -163,7 +164,9 @@
       <workItem from="1725019142295" duration="225000" />
       <workItem from="1725045313226" duration="9000" />
       <workItem from="1725808711438" duration="3335000" />
-      <workItem from="1725955118809" duration="316000" />
+      <workItem from="1725955118809" duration="1262000" />
+      <workItem from="1726315453613" duration="6193000" />
+      <workItem from="1726337628129" duration="6175000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -505,7 +508,39 @@
       <option name="project" value="LOCAL" />
       <updated>1725903125966</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="update teacher data form">
+      <option name="closed" value="true" />
+      <created>1725955714782</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1725955714782</updated>
+    </task>
+    <task id="LOCAL-00045" summary="update teacherPrivateSessions.php and some queries">
+      <option name="closed" value="true" />
+      <created>1726337663843</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1726337663843</updated>
+    </task>
+    <task id="LOCAL-00046" summary="split sessions tabs">
+      <option name="closed" value="true" />
+      <created>1726431740729</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1726431740729</updated>
+    </task>
+    <task id="LOCAL-00047" summary="add edit session form">
+      <option name="closed" value="true" />
+      <created>1726431833175</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1726431833175</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -523,10 +558,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="archiving students" />
-    <MESSAGE value="fix archiving teacher bug" />
-    <MESSAGE value="add unarchiveTeacher.php" />
-    <MESSAGE value="updating reports" />
     <MESSAGE value="add archived students and teachers tab" />
     <MESSAGE value="fix teacher archived sign in" />
     <MESSAGE value="remove archived students from teacher sessions pages and exclude them from attendances" />
@@ -548,7 +579,11 @@
     <MESSAGE value="update views, and archive specialization" />
     <MESSAGE value="fix bugs, add new data to the teacher" />
     <MESSAGE value="prevent SQL injection" />
-    <option name="LAST_COMMIT_MESSAGE" value="prevent SQL injection" />
+    <MESSAGE value="update teacher data form" />
+    <MESSAGE value="update teacherPrivateSessions.php and some queries" />
+    <MESSAGE value="split sessions tabs" />
+    <MESSAGE value="add edit session form" />
+    <option name="LAST_COMMIT_MESSAGE" value="add edit session form" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
