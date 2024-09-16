@@ -40,11 +40,11 @@
                             <div class="mr-2 mb-2 form-check row justify-content-center student-row"
                                 data-class="<?php echo $student['class']; ?>">
                                 <input class="form-check-input" type="checkbox" name="students[]"
-                                    id="session_<?php echo $student['id']; ?>"
+                                    id="students2_<?php echo $student['id']; ?>"
                                     value="<?php echo $student['id']; ?>"
                                     oninput="getClassValue(<?= $student['class'] ?>, this)">
                                 <label class="mr-2 form-check-label"
-                                    for="session_<?php echo $student['id']; ?>">
+                                    for="students2_<?php echo $student['id']; ?>">
                                     <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                                 </label>
                             </div>

@@ -9,7 +9,7 @@ $sessions = $db->getSessionsDataDetailed();
 <div class="tab-pane fade show" id="student-to-package" role="tabpanel"
      aria-labelledby="student-to-package-tab">
     <form id="studentToPackageForm" method="post" enctype="application/x-www-form-urlencoded"
-          action="../../assignPackages.php">
+          action="../assignPackages.php">
         <label>
             <input hidden name="pkg" value="student-to-package">
         </label>
@@ -38,9 +38,9 @@ $sessions = $db->getSessionsDataDetailed();
                         <div class="mr-2 mb-2 form-check row justify-content-center student-row2"
                              data-class="<?php echo $student['class']; ?>">
                             <input class="form-check-input" type="checkbox" name="students[]"
-                                   id="session_<?php echo $student['id']; ?>"
+                                   id="students_<?php echo $student['id']; ?>"
                                    value="<?php echo $student['id']; ?>">
-                            <label class="mr-2 form-check-label" for="session_<?php echo $student['id']; ?>">
+                            <label class="mr-2 form-check-label" for="students_<?php echo $student['id']; ?>">
                                 <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                             </label>
                         </div>
