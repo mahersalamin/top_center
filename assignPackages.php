@@ -8,15 +8,28 @@ $db = new MyDB();
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $success = false;
-
+    
     // Check the type of package
     if ($_POST['pkg'] == 'student-to-package') {
+        
         $student_ids = $_POST['students'];
         $sessions = $_POST['sessions'];
-        $materials = $_POST['materials'];
-
+        
         // Update student data in the database
-        $success = $db->updateSessions($student_ids, $sessions, $materials);
+        $success = $db->updateSessions($student_ids, $sessions);
+        if ($success === true) {
+            header("Location: page/assignToPackages.php?status=success&message=" . urlencode("تم التعيين بنجاح"));
+            exit;
+        } else if (is_string($success)) {
+            // If $success is an error message string, pass the error message in the URL
+            header("Location: page/assignToPackages.php?status=error&message=" . urlencode($success));
+            exit;
+        } else {
+            // Handle generic failure
+            header("Location: page/assignToPackages.php?status=error&message=" . urlencode("فشل التعيين"));
+            exit;
+        }
+        // var_dump($success);die();
     } else if ($_POST['pkg'] == 'package') {
         $price = 0;
         $session_name = $_POST['session_name'];

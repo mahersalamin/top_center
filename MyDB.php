@@ -510,6 +510,7 @@ class MyDB
 
     public function addSession($session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers)
     {
+        // var_dump($session_name, $students, $sessionPackage, $materials, $isGroup, $price, $hours, $teachers);die();
         $conn = $this->connect();
         $materialsArray = $materials;
         $materials = implode(",", $materials);
@@ -529,11 +530,11 @@ class MyDB
         }
 
         $sessionId = $conn->insert_id;
-
+        $studentSessionPrice = $price/ count($students);
         // Insert into session_students table with added_at
         foreach ($students as $studentId) {
-            $query = "INSERT INTO session_students (session_id, student_id, added_at) 
-                  VALUES ('$sessionId', '$studentId', '$currentDateTime')";
+            $query = "INSERT INTO session_students (session_id, student_id, session_cost, added_at) 
+                  VALUES ('$sessionId', '$studentId', $studentSessionPrice, '$currentDateTime')";
             if (!$conn->query($query)) {
                 return "Error inserting into session_students: " . $conn->error; // Return error message if query fails
             }
@@ -571,41 +572,129 @@ class MyDB
 
 
 
-    public function updateSessions($students, $sessions, $materials)
+    public function updateSessions($students, $sessions)
     {
         $conn = $this->connect();
-
+    
         // Start transaction to ensure atomicity
         $conn->begin_transaction();
-
+    
         try {
+            // Step 1: Update is_group status based on the number of students
             $is_group = count($students) > 1 ? 1 : 0;
-
-            // Update sessions table
-            foreach ($sessions as $session) {
-                $sessionId = $session;
-                $query = "UPDATE sessions SET is_group = $is_group WHERE id = $sessionId";
-                $conn->query($query);
+    
+            // Prepare to fetch session details
+            $sessionIds = implode(',', array_map('intval', $sessions));
+    
+            // Get existing session details (price and materials)
+            $query = "SELECT id, price, material FROM sessions WHERE id IN ($sessionIds)";
+            $result = $conn->query($query);
+    
+            $sessionsData = [];
+            while ($row = $result->fetch_assoc()) {
+                $sessionsData[$row['id']] = [
+                    'price' => $row['price'],
+                    'students_count' => 0, // Will be updated later
+                    'materials' => explode(',', $row['material']) // List of materials for the session
+                ];
             }
-
-
-
+    
+            // Count the current number of students in each session
+            $query = "SELECT session_id, COUNT(student_id) as student_count FROM session_students WHERE session_id IN ($sessionIds) GROUP BY session_id";
+            $result = $conn->query($query);
+    
+            while ($row = $result->fetch_assoc()) {
+                $sessionId = $row['session_id'];
+                if (isset($sessionsData[$sessionId])) {
+                    $sessionsData[$sessionId]['students_count'] = $row['student_count'];
+                }
+            }
+    
+            // Step 2: Update session_students table with new students
             foreach ($students as $studentId) {
                 foreach ($sessions as $sessionId) {
-                    $query = "INSERT INTO session_students (session_id, student_id) VALUES ($sessionId, $studentId)";
+                    // Check if the student is already in the session
+                    $query = "INSERT IGNORE INTO session_students (session_id, student_id) VALUES ($sessionId, $studentId)";
                     $conn->query($query);
                 }
             }
-
-
+    
+            // Step 3: Update session prices based on the new student count and update student costs
+            foreach ($sessions as $sessionId) {
+                if (isset($sessionsData[$sessionId])) {
+                    $oldStudentCount = $sessionsData[$sessionId]['students_count'];
+                    $newStudentCount = $oldStudentCount + count($students);
+    
+                    // Calculate the new price
+                    $oldPrice = $sessionsData[$sessionId]['price'];
+                    $pricePerStudent = $oldPrice / $oldStudentCount;
+                    $newPrice = $pricePerStudent * $newStudentCount;
+    
+                    // Update the session price
+                    $query = "UPDATE sessions SET price = $newPrice, is_group = $is_group WHERE id = $sessionId";
+                    $conn->query($query);
+    
+                    // Recalculate the cost for each student in the session
+                    $newPricePerStudent = $newPrice / $newStudentCount;
+    
+                    // Update the session cost for all students in session_students table
+                    $query = "UPDATE session_students SET session_cost = $newPricePerStudent WHERE session_id = $sessionId";
+                    $conn->query($query);
+    
+                    // Step 4: Calculate and update the teacher's session amount based on specializations
+                    $materials = $sessionsData[$sessionId]['materials']; // Materials for the session
+                    $totalSpecializations = count($materials); // Total number of specializations in the session
+                    $sessionShare = $newPrice / 2; // 50% of the session price goes to the teachers
+    
+                    // Get teachers teaching in this session
+                    $query = "SELECT teacher_id FROM session_teachers WHERE session_id = $sessionId";
+                    $teachersResult = $conn->query($query);
+    
+                    while ($teacherRow = $teachersResult->fetch_assoc()) {
+                        $teacherId = $teacherRow['teacher_id'];
+    
+                        // Get the teacher's specializations
+                        $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
+                        $teacherSpecsResult = $conn->query($query);
+    
+                        $teacherSpecializations = [];
+                        while ($specRow = $teacherSpecsResult->fetch_assoc()) {
+                            $teacherSpecializations[] = $specRow['spec'];
+                        }
+    
+                        // Count how many specializations the teacher has in this session
+                        $linkedSpecializations = 0;
+                        foreach ($materials as $material) {
+                            if (in_array($material, $teacherSpecializations)) {
+                                $linkedSpecializations++;
+                            }
+                        }
+    
+                        // Calculate the teacher's share
+                        $teacherShare = ($sessionShare * $linkedSpecializations) / $totalSpecializations;
+    
+                        // Update session_teachers table with the new session amount for the teacher
+                        $query = "UPDATE session_teachers 
+                                  SET session_amount = $teacherShare 
+                                  WHERE session_id = $sessionId AND teacher_id = $teacherId";
+                        $conn->query($query);
+                    }
+                }
+            }
+    
+            // Commit transaction
             $conn->commit();
-
+    
             return true;
         } catch (Exception $e) {
             $conn->rollback();
             return false;
         }
     }
+    
+
+
+
 
 
     public function getClasses()

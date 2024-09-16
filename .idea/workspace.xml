@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="add edit session form">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix sessions and teacher share">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/assignPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/sessions/addNewSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addNewSession.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/sessions/addToExistingSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addToExistingSession.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -167,6 +169,7 @@
       <workItem from="1725955118809" duration="1262000" />
       <workItem from="1726315453613" duration="6193000" />
       <workItem from="1726337628129" duration="6175000" />
+      <workItem from="1726480005627" duration="2407000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -540,7 +543,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726431833175</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="fix sessions and teacher share">
+      <option name="closed" value="true" />
+      <created>1726480041002</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1726480041002</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,7 +569,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add archived students and teachers tab" />
     <MESSAGE value="fix teacher archived sign in" />
     <MESSAGE value="remove archived students from teacher sessions pages and exclude them from attendances" />
     <MESSAGE value="add remaining fees report" />
@@ -583,7 +593,8 @@
     <MESSAGE value="update teacherPrivateSessions.php and some queries" />
     <MESSAGE value="split sessions tabs" />
     <MESSAGE value="add edit session form" />
-    <option name="LAST_COMMIT_MESSAGE" value="add edit session form" />
+    <MESSAGE value="fix sessions and teacher share" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix sessions and teacher share" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
