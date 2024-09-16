@@ -169,10 +169,7 @@ function generate_daily_report($headers, $tableData): string{
         <img src="' . $logoPath . '" style="width: 200px; height: auto; display: block; margin: 0 auto;">
             <div class="receipt-header">
 
-                <div style="float: left; width: 50%;">
-                    <h5>' . $customerName . '</h5>
-
-                </div>
+                
                 <div style="float: right; width: 50%; text-align: right;">
                     <h5>' . $companyName . '</h5>
                     <p style="direction: ltr">' . $companyPhone1 . '<i class="fa fa-phone"></i></p>

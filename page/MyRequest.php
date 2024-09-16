@@ -13,7 +13,10 @@ require '../dbconnection.php';
 <!-- JSZip for Excel export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
-    table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    table.dataTable thead th,
+    table.dataTable thead td,
+    table.dataTable tfoot th,
+    table.dataTable tfoot td {
         text-align: center;
     }
 </style>
@@ -36,77 +39,77 @@ require '../dbconnection.php';
 
         <table id="dt-filter-search" class="table" cellspacing="0" width="100%">
             <thead>
-            <tr>
-                <th class="th-sm">الرقم</th>
-                <th class="th-sm">اسم الطالب</th>
-                <th class="th-sm">اسم المعلم</th>
-                <th class="th-sm">الدورة</th>
-                <th class="th-sm">التاريخ</th>
-                <th class="th-sm">وقت البدء</th>
-                <th class="th-sm">وقت الإنتهاء</th>
-                <th class="th-sm">مدة الحصة</th>
-            </tr>
+                <tr>
+                    <th class="th-sm">الرقم</th>
+                    <th class="th-sm">اسم الطالب</th>
+                    <th class="th-sm">اسم المعلم</th>
+                    <th class="th-sm">الدورة</th>
+                    <th class="th-sm">التاريخ</th>
+                    <th class="th-sm">وقت البدء</th>
+                    <th class="th-sm">وقت الإنتهاء</th>
+                    <th class="th-sm">مدة الحصة</th>
+                </tr>
             </thead>
             <tbody>
 
-            <?php
-            $db = new MyDB();
-            $d = date('d/m/Y');
-            $approvedSessions = $db->getApprovedAttendances();
-            foreach ($approvedSessions as $row){
-            ?>
-            <tr>
+                <?php
+                $db = new MyDB();
+                $d = date('d/m/Y');
+                $approvedSessions = $db->getApprovedAttendances();
+                foreach ($approvedSessions as $row) {
+                ?>
+                    <tr>
 
-                <td>
-                    <?php echo $row['id']; ?>
-                </td>
-                <td>
-                    <?php echo $row['sname']; ?>
-                </td>
-                <td>
-                    <?php echo $row['tname']; ?>
-                </td>
-                <td>
-                    <?php echo $row['session_name']; ?>
-                </td>
-                <td>
-                    <?php echo $row['date']; ?>
-                </td>
-                <td>
-                    <?php echo $row['enter']; ?>
-                </td>
+                        <td>
+                            <?php echo $row['id']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['sname']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['tname']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['session_name']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['date']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['enter']; ?>
+                        </td>
 
-                <td>
-                    <?php echo $row['exit']; ?>
-                </td>
-                <td>
-                    <?php echo $row['total']; ?>
-                </td>
+                        <td>
+                            <?php echo $row['exit']; ?>
+                        </td>
+                        <td>
+                            <?php echo $row['total']; ?>
+                        </td>
 
 
-                <?php } ?>
+                    <?php } ?>
 
-            </tr>
+                    </tr>
 
             </tbody>
             <tfoot>
-            <tr>
-                <th>الرقم</th>
-                <th>اسم الطالب
-                </th>
-                <th>اسم المعلم
-                </th>
-                <th>الدورة
-                </th>
-                <th>تاريخ الحصة
-                </th>
-                <th>وقت البدء
-                </th>
-                <th>وقت الإنتهاء
-                </th>
-                <th>مدة الحصة
-                </th>
-            </tr>
+                <tr>
+                    <th>الرقم</th>
+                    <th>اسم الطالب
+                    </th>
+                    <th>اسم المعلم
+                    </th>
+                    <th>الدورة
+                    </th>
+                    <th>تاريخ الحصة
+                    </th>
+                    <th>وقت البدء
+                    </th>
+                    <th>وقت الإنتهاء
+                    </th>
+                    <th>مدة الحصة
+                    </th>
+                </tr>
             </tfoot>
         </table>
 
@@ -114,9 +117,7 @@ require '../dbconnection.php';
 
 
     <script>
-
-
-        $(document).ready(function () {
+        $(document).ready(function() {
             let table = $('#dt-filter-search').DataTable({
                 "paging": true,
                 "lengthChange": true,
@@ -138,25 +139,33 @@ require '../dbconnection.php';
                     "search": "بحث:",
                     "zeroRecords": "لم يتم العثور على تطابقات"
                 },
-                "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "الكل"] ],
-                "order": [[0, 'desc']],
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "الكل"]
+                ],
+                "order": [
+                    [0, 'desc']
+                ],
                 serverSide: false,
                 dom: 'Bfrtip',
                 buttons: [
                     'excel', 'print', {
                         text: 'PDF',
-                        action: function (e, dt, button, config) {
+                        action: function(e, dt, button, config) {
                             // Get the table headers, skipping the last two
                             let headers = [];
-                            $('#report_table thead th').each(function(index) {
+                            $('#dt-filter-search thead th').each(function(index) {
                                 if (index < 9) { // Assuming there are 7 columns, change this if different
                                     headers.push($(this).text());
                                 }
                             });
-
+                            console.log(headers);
+                            
                             // Get the table data, skipping the last two columns
                             let data = [];
-                            dt.rows({ search: 'applied' }).every(function() {
+                            dt.rows({
+                                search: 'applied'
+                            }).every(function() {
                                 let row = [];
                                 $(this.node()).find('td').each(function(index) {
                                     if (index < 9) { // Assuming there are 7 columns, change this if different
@@ -189,12 +198,12 @@ require '../dbconnection.php';
                     }
                 ],
 
-                initComplete: function () {
-                    this.api().columns().every(function () {
+                initComplete: function() {
+                    this.api().columns().every(function() {
                         let column = this;
                         let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                             .appendTo($(column.footer()).empty())
-                            .on('change input', function () {
+                            .on('change input', function() {
                                 let val = $(this).val()
 
                                 column
@@ -212,8 +221,3 @@ require '../dbconnection.php';
             });
         });
     </script>
-
-
-
-
-

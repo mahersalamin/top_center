@@ -17,8 +17,6 @@
 <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.3/js/buttons.print.min.js"></script>
 <style>
-
-
     h1 {
         text-align: center;
     }
@@ -43,7 +41,8 @@
     }
 
     .scrollable-checkbox-list {
-        max-height: 300px; /* Adjust as needed */
+        max-height: 300px;
+        /* Adjust as needed */
         overflow-y: auto;
     }
 
@@ -91,74 +90,71 @@ $attendances = $db->dailyReport();
     </div>
     <table class="table table-bordered" id="daily_table">
         <thead>
-        <tr>
-            <th>التاريخ</th>
-            <th>المعلم</th>
-            <th>الطلاب</th>
-            <th>الحصة</th>
-            <th>مدة الحصة</th>
-            <th>عدد ساعات الدورة الكلي</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>التاريخ</th>
+                <th>المعلم</th>
+                <th>الطلاب</th>
+                <th>الحصة</th>
+                <th>مدة الحصة</th>
+                <th>عدد ساعات الدورة الكلي</th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
 
-        <?php if (!empty($attendances)) { ?>
-            <?php foreach ($attendances as $attendance) { ?>
-                <tr>
-                    <td><?= $attendance['date']; ?></td>
-                    <td><?= $attendance['tname']; ?></td>
-                    <td>
-                        <span class="student-names"><?= htmlspecialchars($attendance['snames']); ?></span>
-                        <button class="btn btn-primary btn-edit-students"
+            <?php if (!empty($attendances)) { ?>
+                <?php foreach ($attendances as $attendance) { ?>
+                    <tr>
+                        <td><?= $attendance['date']; ?></td>
+                        <td><?= $attendance['tname']; ?></td>
+                        <td>
+                            <span class="student-names"><?= htmlspecialchars($attendance['snames']); ?></span>
+                            <button class="btn btn-primary btn-edit-students"
                                 data-attendance-id="<?= $attendance['id']; ?>"
                                 data-student-id="<?= $attendance['st_id']; ?>"
                                 data-snames="<?= htmlspecialchars($attendance['snames']); ?>"
-                                data-session-id="<?= $attendance['session_id']; ?>"
-                        >تعديل
-                        </button>
-                    </td>
-                    <td><?= $attendance['session_name']; ?></td>
-                    <td><?= $attendance['total']; ?></td>
-                    <td><?= $attendance['hours']; ?></td>
-                    <td>
-                        <?php if ($attendance['processed'] == 1) { ?>
-                            <button class="btn btn-danger accept-attendance"
+                                data-session-id="<?= $attendance['session_id']; ?>">تعديل
+                            </button>
+                        </td>
+                        <td><?= $attendance['session_name']; ?></td>
+                        <td><?= $attendance['total']; ?></td>
+                        <td><?= $attendance['hours']; ?></td>
+                        <td>
+                            <?php if ($attendance['processed'] == 1) { ?>
+                                <button class="btn btn-danger accept-attendance"
                                     data-accept="0"
                                     data-session-id="<?php echo $attendance['session_id']; ?>"
                                     data-attendance-id="<?php echo $attendance['id']; ?>"
                                     data-student-ids="<?php echo $attendance['st_id']; ?>"
                                     data-hours="<?= $attendance['hours']; ?>">
-                                تراجع عن التأكيد
-                            </button>
-                        <?php } else { ?>
-                            <button class="btn btn-success accept-attendance"
+                                    تراجع عن التأكيد
+                                </button>
+                            <?php } else { ?>
+                                <button class="btn btn-success accept-attendance"
                                     data-accept="1"
                                     data-session-id="<?php echo $attendance['session_id']; ?>"
                                     data-attendance-id="<?php echo $attendance['id']; ?>"
                                     data-student-ids="<?php echo $attendance['st_id']; ?>"
                                     data-hours="<?php echo $attendance['hours']; ?>">
-                                تأكيد الحصة
-                            </button>
+                                    تأكيد الحصة
+                                </button>
 
-                        <?php } ?>
-                    </td>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            <?php } else { ?>
+                <tr>
+                    <td colspan="5" class="text-center">لا يوجد سجلات</td>
                 </tr>
             <?php } ?>
-        <?php } else { ?>
-            <tr>
-                <td colspan="5" class="text-center">لا يوجد سجلات</td>
-            </tr>
-        <?php } ?>
         </tbody>
     </table>
 
 </div>
 
 <script>
-
-
-    $('.btn-edit-students').on('click', function () {
+    $('.btn-edit-students').on('click', function() {
         let attendanceId = $(this).data('attendance-id');
         let studentsIdsString = $(this).data('student-id') || ''; // Ensure it's a string
         let sessionId = $(this).data('session-id');
@@ -173,7 +169,9 @@ $attendances = $db->dailyReport();
         }
 
 
-        $.post('../fetch-student-names.php', {session_id: sessionId}, function (data) {
+        $.post('../fetch-student-names.php', {
+            session_id: sessionId
+        }, function(data) {
             // Clear the current checkbox list
             $('#checkbox-list').empty();
 
@@ -192,7 +190,7 @@ $attendances = $db->dailyReport();
             // Debugging: Log the student IDs and checkbox IDs
             studentsIds = studentsIds.map(id => id.toString().trim());
 
-            $('#checkbox-list .student-checkbox').each(function () {
+            $('#checkbox-list .student-checkbox').each(function() {
                 let $checkbox = $(this);
                 let studentId = $checkbox.val(); // Get the student ID from the checkbox value
 
@@ -214,13 +212,13 @@ $attendances = $db->dailyReport();
         }, 'json');
     });
 
-    $('#update-students-btn').on('click', function () {
+    $('#update-students-btn').on('click', function() {
         // Get the attendance ID and session ID from the edit student container
         let attendanceId = $('#edit-student-container').data('attendance-id');
         let sessionId = $('#edit-student-container').data('session-id');
 
         let checkedStudentIds = [];
-        $('#checkbox-list .student-checkbox:checked').each(function () {
+        $('#checkbox-list .student-checkbox:checked').each(function() {
             checkedStudentIds.push($(this).val());
         });
 
@@ -229,7 +227,7 @@ $attendances = $db->dailyReport();
             attendance_id: attendanceId,
             session_id: sessionId,
             student_ids: checkedStudentIds.join(',')
-        }, function (response) {
+        }, function(response) {
             // Handle the response from the server
             if (response.success) {
                 alert('تم تعديل الأسماء بنجاح');
@@ -241,12 +239,11 @@ $attendances = $db->dailyReport();
             }
         }, 'json');
     });
-
 </script>
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         let table = $('#daily_table').DataTable({
             "paging": true,
             "lengthChange": true,
@@ -268,26 +265,42 @@ $attendances = $db->dailyReport();
                 "search": "بحث:",
                 "zeroRecords": "لم يتم العثور على تطابقات"
             },
-            "order": [[0, 'desc']],
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "الكل"]],
+            "order": [
+                [0, 'desc']
+            ],
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "الكل"]
+            ],
             serverSide: false,
             dom: 'Bfrtip',
             buttons: [
                 'excel', 'print', {
                     text: 'PDF',
-                    action: function (e, dt, button, config) {
-                        // Get the table headers
+                    action: function(e, dt, button, config) {
+                        // Get the table headers (excluding the last column)
                         let headers = [];
-                        $('#daily_table thead th').each(function () {
-                            headers.push($(this).text());
+                        $('#daily_table thead th').each(function(index) {
+                            if (index < 6) { // Exclude the last header (7th header, index starts at 0)
+                                headers.push($(this).text());
+                            }
                         });
 
-                        // Get the table data
+                        // Get the table data (excluding the last column and ignoring buttons inside the student names column)
                         let data = [];
-                        dt.rows({search: 'applied'}).every(function () {
+                        dt.rows({
+                            search: 'applied'
+                        }).every(function() {
                             let row = [];
-                            $(this.node()).find('td').each(function () {
-                                row.push($(this).text());
+                            $(this.node()).find('td').each(function(index) {
+                                if (index < 6) { // Exclude the last column (7th column, index starts at 0)
+                                    // If it's the student column, exclude the button text
+                                    if ($(this).find('.btn-edit-students').length > 0) {
+                                        row.push($(this).find('.student-names').text()); // Only push student names, not the button
+                                    } else {
+                                        row.push($(this).text()); // For other columns, push the cell text
+                                    }
+                                }
                             });
                             data.push(row);
                         });
@@ -313,15 +326,16 @@ $attendances = $db->dailyReport();
                         form.appendTo('body').submit();
                     }
                 }
+
             ],
 
 
-            initComplete: function () {
-                this.api().columns().every(function () {
+            initComplete: function() {
+                this.api().columns().every(function() {
                     let column = this;
-                     $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
+                    $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                         .appendTo($(column.footer()).empty())
-                        .on('change input', function () {
+                        .on('change input', function() {
                             let val = $(this).val()
 
                             column
@@ -333,13 +347,13 @@ $attendances = $db->dailyReport();
             }
         });
 
-        $('#lengthMenu').on('change', function () {
+        $('#lengthMenu').on('change', function() {
             let length = $(this).val();
             table.page.len(length).draw();
         });
 
 
-        $('.accept-attendance').click(function () {
+        $('.accept-attendance').click(function() {
             let sessionId = $(this).data('session-id');
             let attendanceId = $(this).data('attendance-id');
             let studentIds = $(this).data('student-ids');
@@ -356,13 +370,13 @@ $attendances = $db->dailyReport();
                     hours: hours,
                     accept: accept
                 },
-                success: function (response) {
+                success: function(response) {
                     // console.log(response)
                     response = JSON.parse(response)
                     alert(response.message);
                     location.reload();
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
