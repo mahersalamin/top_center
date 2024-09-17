@@ -80,7 +80,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                                placeholder="🔑 كلمة السر للمعلم">
                     </div>
                     <div class="form-group col-md-6 mb-2">
-                        <input required type="number" name="id_number" class="form-control" placeholder="رقم الهوية">
+                        <input required type="number" name="id_number" maxlength="9" minlength="9" min="111111111" max="999999999" class="form-control" placeholder="رقم الهوية">
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <input required type="text" name="degree" class="form-control" placeholder="الدرجة العلمية">
@@ -96,7 +96,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                     </div>
 
                     <div class="form-group col-md-12 mb-2">
-                        <label for="specs">التخصصات:</label><br>
+                        <label class="font-weight-bold" for="filterSelect">التخصصات:</label><br>
                         <select id="filterSelect" class="form-control mb-2">
                             <option value="">كل المراحل الدراسية</option>
                             <option value="1">ابتدائي</option>
