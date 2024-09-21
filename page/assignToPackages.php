@@ -159,15 +159,15 @@
     }
 
     .specializations-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Adjust spacing between items */
-}
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Adjust spacing between items */
+    }
 
-.specialization-item {
-    flex: 1 1 calc(33.333% - 10px); /* Adjust based on the desired item width and gap */
-    box-sizing: border-box;
-}
+    .specialization-item {
+        flex: 1 1 calc(33.333% - 10px); /* Adjust based on the desired item width and gap */
+        box-sizing: border-box;
+    }
 </style>
 <?php
 
@@ -178,7 +178,7 @@ $db = new MyDB();
 $sessions = $db->getSessionsDataDetailed();
 $materials = $db->getSpecializations();
 $students = $db->allStudents();
-$teachers = $db->getAllTeachers();
+$teachers = $db->getAllTeachers2();
 
 $teacherSpecializations = [];
 
@@ -206,7 +206,6 @@ foreach ($teachers as $teacher) {
 // Convert to JSON for use in JavaScript
 $teacherSpecializationsJson = json_encode($teacherSpecializations);
 
-// echo($teacherSpecializationsJson);die();
 
 ?>
 

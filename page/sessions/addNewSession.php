@@ -3,7 +3,7 @@
 <!--    اضافة دورات جديدة    -->
 <div class="tab-pane fade show active" id="new-package" role="tabpanel" aria-labelledby="new-package-tab">
     <form id="multiStepForm" method="post" enctype="application/x-www-form-urlencoded"
-        action="../assignPackages.php">
+          action="../assignPackages.php">
         <label>
             <input hidden name="pkg" value="package">
         </label>
@@ -32,19 +32,19 @@
                         <?php } ?>
                     </select>
                     <input type="text" id="searchInput" class="form-control" onkeyup="filterStudents()"
-                        placeholder="ابحث عن طالب...">
+                           placeholder="ابحث عن طالب...">
                 </div>
                 <div id="studentCheckboxes">
                     <?php foreach ($students as $student) {
                         if ($student['archived'] != 1) { ?>
                             <div class="mr-2 mb-2 form-check row justify-content-center student-row"
-                                data-class="<?php echo $student['class']; ?>">
+                                 data-class="<?php echo $student['class']; ?>">
                                 <input class="form-check-input" type="checkbox" name="students[]"
-                                    id="students2_<?php echo $student['id']; ?>"
-                                    value="<?php echo $student['id']; ?>"
-                                    oninput="getClassValue(<?= $student['class'] ?>, this)">
+                                       id="students2_<?php echo $student['id']; ?>"
+                                       value="<?php echo $student['id']; ?>"
+                                       oninput="getClassValue(<?= $student['class'] ?>, this)">
                                 <label class="mr-2 form-check-label"
-                                    for="students2_<?php echo $student['id']; ?>">
+                                       for="students2_<?php echo $student['id']; ?>">
                                     <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                                 </label>
                             </div>
@@ -62,17 +62,17 @@
                     <div class="row justify-content-between">
                         <label class="mr-2" for="1">دورة خاصة</label>
                         <input class="form-check-input" type="radio" name="session_package" id="1"
-                            value="دورة خاصة" oninput="getPrivateValue()">
+                               value="دورة خاصة" oninput="getPrivateValue()">
                     </div>
                     <div id="school_backpack" class="row justify-content-between">
                         <label class="mr-2" for="2">حقيبة مدرسية</label>
                         <input class="form-check-input" type="radio" name="session_package" id="2"
-                            value="حقيبة مدرسية" oninput="getPrivateValue()">
+                               value="حقيبة مدرسية" oninput="getPrivateValue()">
                     </div>
                     <div class="row justify-content-between">
                         <label class="mr-2" for="3">اشتراك شهري</label>
                         <input class="form-check-input" type="radio" name="session_package" id="3"
-                            value="اشتراك شهري" oninput="getPrivateValue()">
+                               value="اشتراك شهري" oninput="getPrivateValue()">
                     </div>
                 </div>
             </div>
@@ -95,14 +95,14 @@
                         مدرسية):</label>
                     <div class="col-md-12">
                         <input type="number" min="0" value="0" class="form-control" id="hours" name="hours"
-                            placeholder="عدد الساعات">
+                               placeholder="عدد الساعات">
                     </div>
                 </div>
                 <div class="form-group row justify-content-center mt-3" id="price-div">
                     <label for="price" class="col-form-label">السعر لكل طالب:</label>
                     <div class="col-md-12">
                         <input type="number" class="form-control" min="0" id="price" name="price"
-                            placeholder="السعر لكل طالب">
+                               placeholder="السعر لكل طالب">
                     </div>
                 </div>
             </div>
@@ -113,61 +113,61 @@
             <div class="row">
                 <!-- Column for Class Type 1 -->
                 <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold"
-                    style="height: 350px; overflow-y: auto;">
+                     style="height: 350px; overflow-y: auto;">
                     <h4>قائمة المواد الأساسية</h4>
 
                     <?php foreach ($materials as $material) {
                         if ($material['class_type'] == 1) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class1" type="checkbox" name="materials2[]"
-                                    id="material1_<?php echo $material['id']; ?>"
-                                    value="<?php echo $material['id']; ?>">
+                                       id="material1_<?php echo $material['id']; ?>"
+                                       value="<?php echo $material['id']; ?>">
                                 <label class="mr-2 form-check-label"
-                                    for="material1_<?php echo $material['id']; ?>">
+                                       for="material1_<?php echo $material['id']; ?>">
                                     <?php echo $material['name']; ?>
                                 </label>
                             </div>
-                    <?php }
+                        <?php }
                     } ?>
                 </div>
 
                 <!-- Column for Class Type 2 -->
                 <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold"
-                    style="height: 350px; overflow-y: auto;">
+                     style="height: 350px; overflow-y: auto;">
                     <h4>قائمة المواد الاعدادية</h4>
 
                     <?php foreach ($materials as $material) {
                         if ($material['class_type'] == 2) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class2" type="checkbox" name="materials2[]"
-                                    id="material2_<?php echo $material['id']; ?>"
-                                    value="<?php echo $material['id']; ?>">
+                                       id="material2_<?php echo $material['id']; ?>"
+                                       value="<?php echo $material['id']; ?>">
                                 <label class="mr-2 form-check-label"
-                                    for="material2_<?php echo $material['id']; ?>">
+                                       for="material2_<?php echo $material['id']; ?>">
                                     <?php echo $material['name']; ?>
                                 </label>
                             </div>
-                    <?php }
+                        <?php }
                     } ?>
                 </div>
 
                 <!-- Column for Class Type 3 -->
                 <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold"
-                    style="height: 350px; overflow-y: auto;">
+                     style="height: 350px; overflow-y: auto;">
                     <h4>قائمة المواد الثانوية</h4>
 
                     <?php foreach ($materials as $material) {
                         if ($material['class_type'] == 3) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class3" type="checkbox" name="materials2[]"
-                                    id="material3_<?php echo $material['id']; ?>"
-                                    value="<?php echo $material['id']; ?>">
+                                       id="material3_<?php echo $material['id']; ?>"
+                                       value="<?php echo $material['id']; ?>">
                                 <label class="mr-2 form-check-label"
-                                    for="material3_<?php echo $material['id']; ?>">
+                                       for="material3_<?php echo $material['id']; ?>">
                                     <?php echo $material['name']; ?>
                                 </label>
                             </div>
-                    <?php }
+                        <?php }
                     } ?>
                 </div>
             </div>
@@ -180,49 +180,52 @@
                     <p><strong>المعلمين</strong></p>
 
                     <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
-                        <?php if ($teacher['percentage'] != 1) { ?>
-                            <div class="mr-2 form-check row justify-content-center teacher-row"
-                                data-teacher-id="<?php echo htmlspecialchars($teacher['id']); ?>">
+                        <div class="card mb-3 teacher-card" style="width: 18rem;">
+                            <!-- Card Header: Teacher Name -->
+                            <div class="card-header">
                                 <input class="form-check-input" type="checkbox"
-                                    name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]"
-                                    id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>"
-                                    value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                                <label class="form-check-label mr-2"
-                                    for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
+                                       name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]"
+                                       id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>"
+                                       value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                                <label class="form-check-label mr-4"
+                                       for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
                                     <?php echo htmlspecialchars($teacher['name']); ?>
                                 </label>
+                            </div>
 
-                                <!-- Display specializations as checkboxes -->
-                                <div class="form-check">
-                                    <div class="specializations-container">
-                                        <?php foreach ($teacher['specializations'] as $spec) { ?>
-                                            <div class="specialization-item">
-                                                <input class="form-check-input"
-                                                    type="checkbox"
-                                                    name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]"
-                                                    id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>"
-                                                    value="<?php echo htmlspecialchars($spec[0]); ?>">
-                                                <label class="form-check-label mr-4"
-                                                    for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
-                                                    <?php echo htmlspecialchars($spec[1]); ?>
-                                                </label>
-                                            </div>
-                                        <?php } ?>
-                                    </div>
+                            <!-- Card Body: Specializations -->
+                            <div class="card-body">
+                                <h5 class="card-title">التخصصات</h5>
+                                <div class="specializations-container">
+                                    <?php foreach ($teacher['specializations'] as $spec) { ?>
+                                        <div class="specialization-item">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]"
+                                                   id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>"
+                                                   value="<?php echo htmlspecialchars($spec[0]); ?>">
+                                            <label class="form-check-label mr-4"
+                                                   for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
+                                                <?php echo htmlspecialchars($spec[1]); ?>
+                                            </label>
+                                        </div>
+                                    <?php } ?>
                                 </div>
+                            </div>
 
-
-                                <!-- Percentage field -->
-                                <select class="form-control percentage-select ml-2"
-                                    name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
-                                    id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>">
+                            <!-- Card Footer: Percentage -->
+                            <div class="card-footer text-center">
+                                <select class="form-control percentage-select"
+                                        name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
+                                        id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>">
                                     <option value="" <?php echo $teacher['percentage'] === '' ? 'selected' : ''; ?> disabled>اختر النسب</option>
                                     <option value="50" <?php echo $teacher['percentage'] === '50' ? 'selected' : ''; ?>>50%</option>
                                     <option value="75" <?php echo $teacher['percentage'] === '75' ? 'selected' : ''; ?>>75%</option>
                                 </select>
                             </div>
-                        <?php } ?>
+                        </div>
                     <?php } ?>
+
 
                 </div>
             </div>

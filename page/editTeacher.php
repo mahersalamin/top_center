@@ -83,7 +83,7 @@ if ($teacher) {
                         <div class="mb-3">
                             <label for="address" class="form-label fw-bold">العنوان</label>
 
-                            <input id="address" required type="number"
+                            <input id="address" required type="text"
                                    value="<?php echo htmlspecialchars($teacher['address']); ?>"
                                    name="address" class="form-control" placeholder="العنوان">
 

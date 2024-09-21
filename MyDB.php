@@ -308,7 +308,7 @@ class MyDB
 
     public function getSpecializations()
     {
-        $query = "SELECT * FROM spc WHERE active <> 1";
+        $query = "SELECT * FROM spc";
         $conn = $this->connect();
         $result = $conn->query($query);
         $rows = array();
@@ -475,11 +475,31 @@ class MyDB
     }
     public function getAllTeachers()
     {
+        $query = "SELECT t.id, t.`user`, t.is_archived, t.name, t.img, t.att_id 
+                    FROM teacher t
+                    WHERE t.role <> 1 ORDER BY t.id ASC";
+
+
+
+        $conn = $this->connect();
+        $result = $conn->query($query);
+        $rows = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        //        $conn->close();
+
+        return $rows;
+    }
+
+    public function getAllTeachers2()
+    {
         $query = "SELECT t.id, t.`user`, spc.name as specializations, ts.spec, t.is_archived, t.name, t.img, t.att_id 
                     FROM teacher t
                     join teacher_specializations ts on ts.teacher_id = t.id
                     join spc on spc.id = ts.spec 
-                    WHERE t.role <> 1  ORDER BY t.id ASC";
+                    WHERE t.role <> 1 AND t.is_archived = 0  ORDER BY t.id ASC";
 
 
         $conn = $this->connect();
