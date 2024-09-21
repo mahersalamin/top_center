@@ -19,7 +19,7 @@ $sessions = $db->getSessionsDataDetailed();
             <div class="col-md-12 font-weight-bold">
                 <h4>الطلاب</h4>
                 <div class="mb-3">
-                    <label for="classDropdown2"></label><select id="classDropdown2" class="form-control mb-2" onchange="filterStudents2()">
+                    <label for="classDropdown2"></label><select id="classDropdown2" class="form-select mb-2" onchange="filterStudents2()">
                         <option value="">اختر الصف</option>
                         <?php
                         // Get unique classes

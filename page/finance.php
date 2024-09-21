@@ -173,7 +173,7 @@ $remainsData= $db->getRemainsData();
                         </div>
                         <div class="form-group">
                             <label for="outcome_type">النوع</label>
-                            <select type="text" class="form-control" id="outcome_type" name="outcome_type" required>
+                            <select type="text" class="form-select" id="outcome_type" name="outcome_type" required>
                                 <option value="" selected disabled>اختر النوع</option>
                                 <option value="مستلزمات مكتب">مستلزمات مكتب</option>
                                 <option value="أجور">أجور</option>
@@ -181,7 +181,7 @@ $remainsData= $db->getRemainsData();
                         </div>
                         <div class="form-group">
                             <label for="outcome_receiver">المستلم</label>
-                            <select class="form-control" id="outcome_receiver" name="outcome_receiver" required>
+                            <select class="form-select" id="outcome_receiver" name="outcome_receiver" required>
                                 <option value="" selected disabled>اختر المستلم</option>
                                 <option value="0">مستفيد خارجي</option>
                                 <?php
@@ -194,7 +194,7 @@ $remainsData= $db->getRemainsData();
                         </div>
                         <div id="teacher-sessions-div" class="form-group">
                             <label for="teacher-sessions">الدورة</label>
-                            <select class="form-control" id="teacher-sessions" name="teacher_sessions" required>
+                            <select class="form-select" id="teacher-sessions" name="teacher_sessions" required>
                                 <!-- Options will be populated dynamically via AJAX -->
                                 <option disabled selected>اختر معلم لعرض الدورات</option>
                             </select>
@@ -241,7 +241,7 @@ $remainsData= $db->getRemainsData();
                     <div class="row">
                         <div class="col-md-6">
                             <label for="lengthMenuOutcome">عرض</label>
-                            <select id="lengthMenuOutcome" class="form-control form-control-sm" style="width: auto; display: inline-block;">
+                            <select id="lengthMenuOutcome" class="form-select form-control-sm" style="width: auto; display: inline-block;">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>

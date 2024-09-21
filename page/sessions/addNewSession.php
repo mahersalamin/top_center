@@ -22,7 +22,7 @@
             <div class="col-md-12 font-weight-bold">
                 <h4>الطلاب</h4>
                 <div class="mb-3">
-                    <select id="classDropdown" class="form-control mb-2" onchange="filterStudents()">
+                    <select id="classDropdown" class="form-select mb-2" onchange="filterStudents()">
                         <option value="">اختر الصف</option>
                         <?php
                         $classes = array_unique(array_column($students, 'class'));
@@ -117,7 +117,7 @@
                     <h4>قائمة المواد الأساسية</h4>
 
                     <?php foreach ($materials as $material) {
-                        if ($material['class_type'] == 1) { ?>
+                        if ($material['class_type'] == 1 && $material['active'] == 0) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class1" type="checkbox" name="materials2[]"
                                        id="material1_<?php echo $material['id']; ?>"
@@ -137,7 +137,7 @@
                     <h4>قائمة المواد الاعدادية</h4>
 
                     <?php foreach ($materials as $material) {
-                        if ($material['class_type'] == 2) { ?>
+                        if ($material['class_type'] == 2 && $material['active'] == 0) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class2" type="checkbox" name="materials2[]"
                                        id="material2_<?php echo $material['id']; ?>"
@@ -157,7 +157,7 @@
                     <h4>قائمة المواد الثانوية</h4>
 
                     <?php foreach ($materials as $material) {
-                        if ($material['class_type'] == 3) { ?>
+                        if ($material['class_type'] == 3 && $material['active'] == 0) { ?>
                             <div class="mr-2 form-check row justify-content-center">
                                 <input class="form-check-input class3" type="checkbox" name="materials2[]"
                                        id="material3_<?php echo $material['id']; ?>"
@@ -215,7 +215,7 @@
 
                             <!-- Card Footer: Percentage -->
                             <div class="card-footer text-center">
-                                <select class="form-control percentage-select"
+                                <select class="form-select percentage-select"
                                         name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
                                         id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>">
                                     <option value="" <?php echo $teacher['percentage'] === '' ? 'selected' : ''; ?> disabled>اختر النسب</option>

@@ -97,7 +97,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
                     <div class="form-group col-md-12 mb-2">
                         <label class="font-weight-bold" for="filterSelect">التخصصات:</label><br>
-                        <select id="filterSelect" class="form-control mb-2">
+                        <select id="filterSelect" class="form-select mb-2">
                             <option value="">كل المراحل الدراسية</option>
                             <option value="1">ابتدائي</option>
                             <option value="2">اعدادي</option>

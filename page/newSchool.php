@@ -75,7 +75,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
                     <div class="form-group col-md-12 mb-2">
                         <label for="filterSelect">نوع المدرسة:</label>
-                        <select id="filterSelect" name="type" class="form-control mb-2">
+                        <select id="filterSelect" name="type" class="form-select mb-2">
                             <option value=""></option>
                             <option value="1">مدرسة حكومية</option>
                             <option value="2">مدرسة خاصة</option>
@@ -111,7 +111,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
                             <div class="col-md-4 mb-3">
                                 <label for="type" class="form-label">نوع المدرسة:</label>
-                                <select class="form-control" id="type" name="type" required>
+                                <select class="form-select" id="type" name="type" required>
                                     <option selected disabled class="text-secondary">
                                         <?php
                                         switch ($school['type']) {

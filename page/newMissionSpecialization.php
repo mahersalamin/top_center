@@ -87,7 +87,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
                     <div class="mb-3">
                         <label for="new_spec" class="form-label">المرحلة الدراسية:</label>
-                        <select class="form-control" name="class_type" required>
+                        <select class="form-select" name="class_type" required>
                             <option selected disabled>اختر المرحلة الدراسية</option>
                             <option value="1">ابتدائي</option>
                             <option value="2">اعدادي</option>
@@ -120,7 +120,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
 
                                 <div class="col-md-3 mb-3">
                                     <label for="class_type" class="form-label">المرحلة الدراسية:</label>
-                                    <select class="form-control" name="class_type" required>
+                                    <select class="form-select" name="class_type" required>
                                         <option selected disabled>
                                             <?php
                                             switch ($spec['class_type']) {
