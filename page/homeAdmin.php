@@ -340,7 +340,7 @@ if (!isset($_COOKIE['id'])) {
                                 color : blue
                             "> إضافة معلم جديد</a>
                                     </h5>
-                                    <a href="newMission.php" class="btn btn-success">إضافة</a>
+                                    <a href="newMissionTeacher.php" class="btn btn-success">إضافة</a>
                                 </div>
                             </div>
                         </div>

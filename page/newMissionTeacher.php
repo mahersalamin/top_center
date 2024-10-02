@@ -108,7 +108,8 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                         <input type="text" id="searchInput" class="form-control mb-2" placeholder="اكتب للبحث...">
 
                         <div class="form-group col-md-12 mb-2" style="height: 350px; overflow-y: auto;">
-                            <?php foreach ($specs as $spec) { ?>
+                            <?php foreach ($specs as $spec) {
+                                if($spec['active'] != 1){    ?>
                                 <div class="mr-2 mb-2 form-check row justify-content-center  spec-item" data-class-type="<?php echo $spec['class_type']; ?>">
                                     <input class="form-check-input" type="checkbox"
                                            name="specs[<?php echo $spec['id']; ?>][id]"
@@ -116,7 +117,7 @@ if (isset($_GET['message']) && isset($_GET['status'])) {
                                     <label class="form-check-label"
                                            for="spec_<?php echo $spec['id']; ?>"><?php echo $spec['name']; ?></label>
                                 </div>
-                            <?php } ?>
+                            <?php }} ?>
                         </div>
                     </div>
 

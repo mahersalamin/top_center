@@ -45,6 +45,7 @@ if ($file && $file['error'] === UPLOAD_ERR_OK) {
         $img = '';
     }
 }
+//var_dump($email, $password, $name, $specs, $img, $role, $id_number, $degree, $phone_number, $address);die();
 
 // Add teacher to the database
 $result = $db->addTeacher($email, $password, $name, $specs, $img, $role, $id_number, $degree, $phone_number, $address);

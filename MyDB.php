@@ -1682,7 +1682,8 @@ GROUP BY students.id
             $query = "INSERT INTO teacher (user, password, name, img, role, id_number, degree, phone_number, address)
                   VALUES ('$user', '$password', '$name', '$img', '$role', $id_number, '$degree', $phone_number, '$address')";
         }
-        //        var_dump($query);die();
+//
+//        var_dump($specs);die();
 
         $result = $conn->query($query);
 
@@ -1693,13 +1694,12 @@ GROUP BY students.id
 
         // Get the ID of the newly inserted teacher
         $teacherId = $conn->insert_id;
-
         // Insert teacher specializations
         foreach ($specs as $specId => $specData) {
-            if (isset($specData['id']) && isset($specData['price'])) {
-                $price = $specData['id'];
-                $insertSpecQuery = "INSERT INTO teacher_specializations (teacher_id, spec, price) 
-                                VALUES ('$teacherId', '$specId', '$price')";
+            if (isset($specData['id'])) {
+
+                $insertSpecQuery = "INSERT INTO teacher_specializations (teacher_id, spec) 
+                                VALUES ('$teacherId', '$specId')";
                 //                var_dump($insertSpecQuery);die();
                 $insertSpecResult = $conn->query($insertSpecQuery);
 

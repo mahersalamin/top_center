@@ -180,7 +180,7 @@
                     <p><strong>المعلمين</strong></p>
 
                     <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
-                        <div class="card mb-3 teacher-card" style="width: 18rem;">
+                        <div class="card mb-3 teacher-card">
                             <!-- Card Header: Teacher Name -->
                             <div class="card-header">
                                 <input class="form-check-input" type="checkbox"
