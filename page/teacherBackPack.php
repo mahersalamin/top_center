@@ -27,7 +27,6 @@
     .show {
         display: block;
     }
-
 </style>
 <?php
 
@@ -45,56 +44,58 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
 
     <?php
     if ($activeAtt) {
-        ?>
+    ?>
         <table class="table table-striped text-dark">
             <thead>
-            <tr>
-                <th scope='col'>اسم الطالب</th>
-                <th scope='col'>رقم الهاتف</th>
-                <th scope='col'>وقت البدء</th>
-                <th scope='col'>اسم الدورة</th>
-                <th scope='col'></th> <!-- Empty column for buttons -->
-            </tr>
+                <tr>
+                    <th scope='col'>اسم الطالب</th>
+                    <th scope='col'>رقم الهاتف</th>
+                    <th scope='col'>وقت البدء</th>
+                    <th scope='col'>اسم الدورة</th>
+                    <th scope='col'></th> <!-- Empty column for buttons -->
+                </tr>
             </thead>
             <tbody>
-            <?php foreach ($activeAtt as $data) { ?>
-                <tr>
-                    <td><?php echo $data['name']; ?></td>
-                    <td><?php echo $data['phone']; ?></td>
-                    <td><?php echo $data['enter']; ?></td>
-                    <td><?php echo $data['session_name']; ?></td>
-                    <td>
-                        <?php if ($data['InSess'] == 0) { ?>
-                            <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="id_tech" value="<?php echo $_COOKIE['id']; ?>">
-                                <button type="submit" value="1" name="status" class="btn btn-outline-success">بدء حصة
-                                    ✓
-                                </button>
-                            </form>
-                        <?php } else { ?>
-                            <form action="../ChangRequestStatus.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="id" value="<?php echo $data['session_id']; ?>">
-                                <input type="hidden" name="type" value="<?php echo $type ?>">
-                                <button type="submit" value="0" name="status" class="btn btn-outline-danger">انهاء ✕
-                                </button>
-                            </form>
-                        <?php } ?>
-                    </td>
-                </tr>
-            <?php } ?>
+                <?php foreach ($activeAtt as $data) { ?>
+                    <tr>
+                        <td><?php echo $data['name']; ?></td>
+                        <td><?php echo $data['phone']; ?></td>
+                        <td><?php echo $data['enter']; ?></td>
+                        <td><?php echo $data['session_name']; ?></td>
+                        <td>
+                            <?php if ($data['InSess'] == 0) { ?>
+                                <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id_tech" value="<?php echo $_COOKIE['id']; ?>">
+                                    <button type="submit" value="1" name="status" class="btn btn-outline-success">بدء حصة
+                                        ✓
+                                    </button>
+                                </form>
+                            <?php } else { ?>
+                                <form action="../ChangRequestStatus.php" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" value="<?php echo $data['session_id']; ?>">
+                                    <input type="hidden" name="type" value="<?php echo $type ?>">
+                                    <button type="submit" value="0" name="status" class="btn btn-outline-danger">انهاء ✕
+                                    </button>
+                                </form>
+                            <?php } ?>
+                        </td>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
-        <?php
+    <?php
     }
     ?>
 
 
     <div class="row">
 
-        <?php foreach ($backpacks
+        <?php foreach (
+            $backpacks
 
-                       as $backpack) {
-            ?>
+            as $backpack
+        ) {
+        ?>
 
             <div class="col-md-3">
                 <div class="card">
@@ -125,11 +126,11 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="teacher_meetings">عدد اللقاءات الكلي</label>
-                                    <input class="form-control" value="<?=$backpack['meetings'] ?>" id="teacher_meetings" type="number" readonly>
+                                    <input class="form-control" value="<?= $backpack['meetings'] ?>" id="teacher_meetings" type="number" readonly>
                                 </div>
                                 <div class="col-md-12">
                                     <label for="teacher_finished_meetings">عدد اللقاءات</label>
-                                    <input class="form-control" value="<?=$backpack['meetings_count'] ?>" id="teacher_finished_meetings" type="number" readonly>
+                                    <input class="form-control" value="<?= $backpack['meetings_count'] ?>" id="teacher_finished_meetings" type="number" readonly>
                                 </div>
                             </div>
                         </div>
@@ -141,8 +142,8 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
                             <input type="hidden" name="type" value="<?php echo $type ?>">
 
                             <input type="hidden"
-                                   name="student_name"
-                                   value="<?php echo $backpack['student_names']; ?>">
+                                name="student_name"
+                                value="<?php echo $backpack['student_names']; ?>">
                             <input type="hidden" name="pSessionID" value="<?php echo $backpack['id']; ?>">
 
 
@@ -153,12 +154,16 @@ $activeAtt = $db->getActiveAttendanceStudents($_COOKIE['id']);
 
         <?php } ?>
     </div>
+    <?php if (!$backpacks) {
+    ?>
+        <div class="col-md-12">
+            <div class="alert alert-warning" role="alert">
+                لا توجد جلسات خاصة بعد!
+            </div>
+        </div>
+    <?php } ?>
 </div>
 
 
+
 <?php require 'footer.php'; ?>
-
-
-
-
-

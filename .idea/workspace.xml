@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="update select style">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix teachers add bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/addTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/addTeacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/homeAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/homeAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/newMissionTeacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/newMissionTeacher.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,7 +169,7 @@
       <workItem from="1726906089495" duration="3214000" />
       <workItem from="1726915584460" duration="6023000" />
       <workItem from="1726931448562" duration="534000" />
-      <workItem from="1727891145533" duration="1357000" />
+      <workItem from="1727891145533" duration="2815000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -202,14 +198,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00010" summary="add meetings to school backpack">
-      <option name="closed" value="true" />
-      <created>1721886327083</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1721886327083</updated>
     </task>
     <task id="LOCAL-00011" summary="fix meetings and otherreports">
       <option name="closed" value="true" />
@@ -563,7 +551,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726930427423</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="fix teachers add bug">
+      <option name="closed" value="true" />
+      <created>1727899498855</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1727899498855</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,7 +588,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix add school, implement edit archive and un archive school" />
     <MESSAGE value="remove unnecessary div" />
     <MESSAGE value="update remains report" />
     <MESSAGE value="fix reports layouts" />
@@ -617,7 +612,8 @@
     <MESSAGE value="simple edit" />
     <MESSAGE value="fix bugs" />
     <MESSAGE value="update select style" />
-    <option name="LAST_COMMIT_MESSAGE" value="update select style" />
+    <MESSAGE value="fix teachers add bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix teachers add bug" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
