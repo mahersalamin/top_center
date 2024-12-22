@@ -20,6 +20,83 @@ class MyDB
     }
 
 
+    function logSecretaryLogin($teacher_id)
+    {
+        // Get today's date
+        $today = date('Y-m-d');
+        $conn = $this->connect();
+        // Check if a login record already exists for today with no logout
+        $query = "SELECT id FROM secretary_timesheet 
+              WHERE teacher_id = ? 
+              AND DATE(login_datetime) = ? 
+              AND logout_datetime IS NULL";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("is", $teacher_id, $today);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            // A login record already exists for today, so do nothing
+            return "تم تسجيل الدخول بالفعل لهذا اليوم.";
+        }
+
+        // Log the login time
+        $loginTime = date('Y-m-d H:i:s');
+        $insertQuery = "INSERT INTO secretary_timesheet (teacher_id, login_datetime) VALUES (?, ?)";
+        $insertStmt = $conn->prepare($insertQuery);
+        $insertStmt->bind_param("is", $teacher_id, $loginTime);
+
+        if ($insertStmt->execute()) {
+            return "تم تسجيل الدخول بنجاح.";
+        } else {
+            die("خطأ أثناء تسجيل الدخول: " . $insertStmt->error);
+        }
+    }
+
+
+    function logSecretaryLogout($teacher_id)
+    {
+        // Get today's date
+        $today = date('Y-m-d');
+        $conn = $this->connect();
+        // Check if a login record already exists for today with no logout
+        $query = "SELECT id FROM secretary_timesheet 
+              WHERE teacher_id = ? 
+              AND DATE(login_datetime) = ? 
+              AND logout_datetime IS NULL";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("is", $teacher_id, $today);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($row = $result->fetch_assoc()) {
+            // A login record exists, update its logout time
+            $logoutTime = date('Y-m-d H:i:s');
+            $updateQuery = "UPDATE secretary_timesheet SET logout_datetime = ? WHERE id = ?";
+            $updateStmt = $conn->prepare($updateQuery);
+            $updateStmt->bind_param("si", $logoutTime, $row['id']);
+
+            if ($updateStmt->execute()) {
+                return "تم تحديث وقت تسجيل الخروج بنجاح.";
+            } else {
+                die("خطأ في تسجيل الخروج: " . $updateStmt->error);
+            }
+        }
+
+        // No record exists, so insert a new record with the logout time
+        $logoutTime = date('Y-m-d H:i:s');
+        $insertQuery = "INSERT INTO secretary_timesheet (teacher_id, login_datetime, logout_datetime) 
+                    VALUES (?, ?, ?)";
+        $insertStmt = $conn->prepare($insertQuery);
+        $insertStmt->bind_param("iss", $teacher_id, $logoutTime, $logoutTime);
+
+        if ($insertStmt->execute()) {
+            return "تم تسجيل الخروج بنجاح.";
+        } else {
+            die("خطأ في تسجيل الخروج: " . $insertStmt->error);
+        }
+    }
+
     public function getAllStudents() // for admin
     {
         $conn = $this->connect();

@@ -306,6 +306,11 @@ $remainsData= $db->getRemainsData();
         <!-- Summary Tab -->
 
         <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
+            <?php
+            if($_COOKIE['role'] == 1){
+
+         ?>
+
             <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
             <div class="row">
@@ -354,7 +359,8 @@ $remainsData= $db->getRemainsData();
 
                 </div>
             </div>
-
+<?php    }
+            ?>
         </div>
         <!-- Remains Tab -->
 

@@ -2,6 +2,7 @@
 
 require 'header.php';
 $db = new MyDB();
+$tec_id = $_COOKIE['id'];
 
 if (!isset($_COOKIE['id'])) {
 
@@ -40,6 +41,37 @@ if (!isset($_COOKIE['id'])) {
             echo '<div class="alert alert-danger alert-dismissible" role="alert">' . $message . '<span type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></span>' . '</div>';
         }
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $response = "";
+        if (isset($_POST['login'])) {
+            $response = $db->logSecretaryLogin($tec_id);
+        }
+
+        if (isset($_POST['logout'])) {
+            $response = $db->logSecretaryLogout($tec_id);
+        }
+
+        // Pass the response to the client-side for alert
+        echo "<script>
+        alert('$response');
+        window.location.href = window.location.href; // Refresh the page after showing the alert
+    </script>";
+    }
+
+
+    ?>
+    <?php
+        if($tec_id == 3){
+
+    ?>
+    <div class="container" style="text-align: center; margin-top: 20px;">
+        <form method="POST">
+            <button type="submit" name="login" class="btn btn-primary" style="margin: 10px;">تسجيل دخول</button>
+            <button type="submit" name="logout" class="btn btn-danger" style="margin: 10px;">تسجيل خروج</button>
+        </form>
+    </div>
+<?php }
     ?>
     <div class="container text-center mt-5 color-white">
         <h1>الحصص الجارية</h1>
@@ -102,9 +134,8 @@ if (!isset($_COOKIE['id'])) {
     ?>
 
     <?php
-    $tec_id = $_COOKIE['id'];
     $rr = $_COOKIE['role'];
-    if ($rr == 1) {
+    if ($rr == 1 || $rr == 3) {
     } else {
         header("location:signin.php");
     }

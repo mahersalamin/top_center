@@ -114,7 +114,7 @@ foreach ($user
             <ul class="navbar-nav">
 
                 <li class="nav-item"><a class="nav-link " aria-current="page" 3
-                                        href= <?php $_COOKIE['role'] == 1 ? print "homeAdmin.php" : print "bodyHomeUser.php" ?>>الرئيسية</a>
+                                        href= <?php $_COOKIE['role'] == 1 || $_COOKIE['role'] == 3 ? print "homeAdmin.php" : print "bodyHomeUser.php" ?>>الرئيسية</a>
                 </li>
 
 
@@ -122,7 +122,7 @@ foreach ($user
                 </li>
 
                 <?php
-                if ($_COOKIE['role'] == 1) {
+                if ($_COOKIE['role'] == 1 || $_COOKIE['role'] == 3) {
                     ?>
 
                     <li class="nav-item dropdown">

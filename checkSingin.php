@@ -30,7 +30,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             setcookie("name", $name, time() + 2000);
             setcookie("role", $role, time() + 2000);
 
-            if ($role == 1) {
+            if ($role == 1 || $role == 3) {
                 header("location:page/homeAdmin.php");
             } else {
                 header("location:page/bodyHomeUser.php");
