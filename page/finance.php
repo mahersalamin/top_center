@@ -306,62 +306,118 @@ $remainsData= $db->getRemainsData();
         <!-- Summary Tab -->
 
         <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
-            <?php
-            if($_COOKIE['role'] == 1){
-
-         ?>
+            <?php if ($_COOKIE['role'] == 1): ?>
 
             <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
-            <div class="row">
-                <div class="col-md-12" style="direction: rtl; text-align: right;">
-                    <h3>الملخص</h3>
-                    <div class="row">
-                        <div class="card col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                            <div class="card-body">
-                                <h5 class="card-title">الواردات</h5>
-                                <p>عدد الدفعات المستلمة: <?php echo $incomeStats['count']; ?></p>
-                                <p>المبلغ الكلي: <?php echo $incomeStats['total_amount']; ?></p>
-                            </div>
+                <!-- Month and Year Selector for Secretary Report -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h3>تقرير السكرتارية</h3>
+                        <div class="form-group">
+                            <label for="reportMonth">اختر الشهر</label>
+                            <select id="reportMonth" class="form-control" style="width: 150px; display: inline-block;">
+                                <?php for ($i = 1; $i <= 12; $i++): ?>
+                                    <option value="<?php echo $i; ?>">
+                                        <?php echo $i; ?>
+                                    </option>
+                                <?php endfor; ?>
+                            </select>
+
+                            <label for="reportYear" class="ml-3">اختر السنة</label>
+                            <select id="reportYear" class="form-control" style="width: 150px; display: inline-block;">
+                                <?php for ($year = date('Y'); $year >= 2000; $year--): ?>
+                                    <option value="<?php echo $year; ?>">
+                                        <?php echo $year; ?>
+                                    </option>
+                                <?php endfor; ?>
+                            </select>
+                            <button id="generateSecretaryPdf" class="btn btn-primary">تقرير دوام السكرتيرة</button>
 
                         </div>
-                        <div class="card  col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                            <div class="card-body">
-                                <h5 class="card-title">الرصيد الكلي</h5>
-                                <h6 class="text-success"><?php echo $totalBalance; ?></h6>
-                            </div>
+                        <div id="secretaryTimesheetReport" class="container mt-4" style="border: 1px solid #ddd; padding: 20px; border-radius: 4px;">
+                            <p>تقرير أوقات تسجيل الدخول والخروج للسكرتيرة حسب الشهر والسنة المختارة.</p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                            <div class="card-body">
-                                <h5 class="card-title">كل المصاريف</h5>
-                                <p>عدد الدفعات الصادرة: <?php echo $outcomeStats['count']; ?></p>
-                                <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
-                            </div>
-
-                        </div>
-                        <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                            <div class="card-body">
-                                <h5 class="card-title">مصاريف المعلمين</h5>
-                                <p>عدد الدفعات الصادرة للمعلمين: <?php echo $teachersStats['count']; ?></p>
-                                <p>المبلغ الكلي: <?php echo $teachersStats['total_amount']; ?></p>
-                            </div>
-                        </div>
-                        <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
-                            <div class="card-body">
-                                <h5 class="card-title">مصاريف خارجية</h5>
-                                <p>عدد الدفعات الصادرة الى جهات خارجية: <?php echo $othersStats['count']; ?></p>
-                                <p>المبلغ الكلي: <?php echo $othersStats['total_amount']; ?></p>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
-<?php    }
-            ?>
+
+                <!-- Summary Information -->
+                <div class="row">
+                    <div class="col-md-12" style="direction: rtl; text-align: right;">
+                        <h3>الملخص</h3>
+                        <div class="row">
+                            <div class="card col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">الواردات</h5>
+                                    <p>عدد الدفعات المستلمة: <?php echo $incomeStats['count']; ?></p>
+                                    <p>المبلغ الكلي: <?php echo $incomeStats['total_amount']; ?></p>
+                                </div>
+                            </div>
+                            <div class="card col-md-6" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">الرصيد الكلي</h5>
+                                    <h6 class="text-success"><?php echo $totalBalance; ?></h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">كل المصاريف</h5>
+                                    <p>عدد الدفعات الصادرة: <?php echo $outcomeStats['count']; ?></p>
+                                    <p>المبلغ الكلي: <?php echo $outcomeStats['total_amount']; ?></p>
+                                </div>
+                            </div>
+                            <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">مصاريف المعلمين</h5>
+                                    <p>عدد الدفعات الصادرة للمعلمين: <?php echo $teachersStats['count']; ?></p>
+                                    <p>المبلغ الكلي: <?php echo $teachersStats['total_amount']; ?></p>
+                                </div>
+                            </div>
+                            <div class="card col-md-4 mt-4" style="border: 1px solid #ddd; border-radius: 4px; padding: 20px;">
+                                <div class="card-body">
+                                    <h5 class="card-title">مصاريف خارجية</h5>
+                                    <p>عدد الدفعات الصادرة الى جهات خارجية: <?php echo $othersStats['count']; ?></p>
+                                    <p>المبلغ الكلي: <?php echo $othersStats['total_amount']; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
+
+        <script>
+            $('#generateSecretaryPdf').on('click', function () {
+                let selectedMonth = $('#reportMonth').val(); // Get selected month
+                let selectedYear = $('#reportYear').val(); // Get selected year
+
+                let form = $('<form>', {
+                    action: '../mpdf-generator.php',
+                    method: 'POST'
+                });
+
+                form.append($('<input>', {
+                    type: 'hidden',
+                    name: 'reportType',
+                    value: 'secretary_timesheet_report'
+                }));
+                form.append($('<input>', {
+                    type: 'hidden',
+                    name: 'headers',
+                    value: selectedMonth
+                }));
+                form.append($('<input>', {
+                    type: 'hidden',
+                    name: 'tableData',
+                    value: selectedYear
+                }));
+
+                form.appendTo('body').submit();
+            });
+        </script>
+
         <!-- Remains Tab -->
 
         <div class="tab-pane fade" id="remains" role="tabpanel" aria-labelledby="remains-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">

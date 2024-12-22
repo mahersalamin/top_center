@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="وارد خارجي">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="add secretary user and privileges">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkSingin.php" beforeDir="false" afterPath="$PROJECT_DIR$/checkSingin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mpdf-generator.php" beforeDir="false" afterPath="$PROJECT_DIR$/mpdf-generator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/homeAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/homeAdmin.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,7 +173,7 @@
       <workItem from="1726931448562" duration="534000" />
       <workItem from="1727891145533" duration="2815000" />
       <workItem from="1734881509127" duration="964000" />
-      <workItem from="1734883217185" duration="6945000" />
+      <workItem from="1734883217185" duration="8971000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -205,14 +202,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00013" summary="remove comment1">
-      <option name="closed" value="true" />
-      <created>1721895456501</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1721895456501</updated>
     </task>
     <task id="LOCAL-00014" summary="add logo and fix reports">
       <option name="closed" value="true" />
@@ -566,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734888794450</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="add secretary user and privileges">
+      <option name="closed" value="true" />
+      <created>1734892849659</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1734892849659</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -595,7 +592,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix reports layouts" />
     <MESSAGE value="update teacher password" />
     <MESSAGE value="fix archive student, refactor student edit page layout" />
     <MESSAGE value="fix image for all reports, add notes to remains report and store them" />
@@ -620,7 +616,8 @@
     <MESSAGE value="fix teachers add bug" />
     <MESSAGE value="update student class" />
     <MESSAGE value="وارد خارجي" />
-    <option name="LAST_COMMIT_MESSAGE" value="وارد خارجي" />
+    <MESSAGE value="add secretary user and privileges" />
+    <option name="LAST_COMMIT_MESSAGE" value="add secretary user and privileges" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

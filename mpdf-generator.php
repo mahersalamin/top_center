@@ -586,6 +586,83 @@ function generate_remains_report($headers, $tableData): string {
     return $html;
 }
 
+function generateSecretaryTimesheetReport($month, $year) {
+    // Assuming you have a database connection $db already
+    $db = new MyDB();
+    $conn = $db->connect();
+    global $companyPhone1, $companyAddress, $companyPhone2, $companyName, $logoPath;
+
+    // Step 1: Fetch data from secretary_timesheet based on the selected month and year
+    $query = "SELECT * FROM secretary_timesheet WHERE MONTH(login_datetime) = ? AND YEAR(login_datetime) = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("ii", $month, $year);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+
+
+
+    // Step 3: Prepare the HTML content for the PDF
+    $html = '<html>';
+    $html .= '<head>';
+    $html .= '<style>';
+    $html .= 'body { direction: rtl; text-align: right; font-family: "Cairo", sans-serif; }';
+    $html .= 'table { width: 100%; border-collapse: collapse; }';
+    $html .= 'th, td { border: 1px solid #ddd; padding: 8px; }';
+    $html .= 'th { background-color: #f2f2f2; }';
+    $html .= 'h1 { text-align: center; }';
+    $html .= '.header { text-align: center; margin-bottom: 20px; }';
+    $html .= '.signature { margin-top: 30px; border-top: 1px solid #000; text-align: right; padding-top: 10px; }';
+    $html .= '</style>';
+    $html .= '</head>';
+    $html .= '<body>';
+
+    // Header with company details and logo
+    $html .= '<div class="header">';
+    $html .= "<img src='{$logoPath}' style='width: 150px; height: auto; display: block; margin: 0 auto;'>";
+    $html .= '<h1>تقرير دوام السكرتيرة</h1>';
+    $html .= "<p><strong>اسم الشركة:</strong> {$companyName}</p>";
+    $html .= "<p><strong>عنوان الشركة:</strong> {$companyAddress}</p>";
+    $html .= "<p><strong>رقم هاتف الشركة:</strong> {$companyPhone1}</p>";
+    $html .= "<p><strong>رقم هاتف الشركة:</strong> {$companyPhone2}</p>";
+    $html .= '</div>';
+
+    // Report header
+    $html .= '<p><strong>الشهر:</strong> ' . $month . ' <strong>السنة:</strong> ' . $year . '</p>';
+
+    // Step 5: Table with timesheet data
+    $html .= '<table>';
+    $html .= '<thead>';
+    $html .= '<tr>';
+    $html .= '<th style="text-align: center;">#</th>';
+    $html .= '<th style="text-align: center;">تاريخ الدخول</th>';
+    $html .= '<th style="text-align: center;">تاريخ الخروج</th>';
+    $html .= '</tr>';
+    $html .= '</thead>';
+    $html .= '<tbody>';
+
+    // Loop through the timesheet data and generate the table rows
+    $counter = 1;
+    while ($row = $result->fetch_assoc()) {
+        $loginTime = date("d-m-Y H:i", strtotime($row['login_datetime']));
+        $logoutTime = date("d-m-Y H:i", strtotime($row['logout_datetime']));
+
+        $html .= '<tr>';
+        $html .= '<td style="text-align: center;">' . $counter++ . '</td>';
+        $html .= '<td style="text-align: center;">' . $loginTime . '</td>';
+        $html .= '<td style="text-align: center;">' . $logoutTime . '</td>';
+        $html .= '</tr>';
+    }
+
+    $html .= '</tbody>';
+    $html .= '</table>';
+
+    // Close the HTML content
+    $html .= '</div>';
+
+    return $html;
+}
+
 try {
 
     $type = $_POST['reportType'];
@@ -761,6 +838,18 @@ try {
 
 
             $mpdf->Output('remains_report_' . $date . '_.pdf', 'D');
+            break;
+        case 'secretary_timesheet_report':
+            if (empty($headers) || empty($tableData)) {
+                throw new Exception('لم يتم ارسال بيانات او البيانات غير صالحة');
+            }
+            $secretary_report = generateSecretaryTimesheetReport($headers, $tableData);
+
+            $mpdf = new Mpdf(['default_font' => 'Cairo']);
+            $mpdf->WriteHTML($secretary_report);
+
+
+            $mpdf->Output('secretary_report_' . $date . '_.pdf', 'D');
             break;
         default:
             throw new Exception('No data received or data is invalid.');
