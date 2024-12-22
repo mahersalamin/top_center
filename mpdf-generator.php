@@ -7,6 +7,8 @@ $companyPhone1 = "0569204082";
 $companyPhone2 = "02-2750628";
 $logoPath = './upload/top_logo.jpg';
 $companyAddress = 'بيت لحم / شارع القدس الخليل / مجمع ابو سرور ط2';
+$date = date('d/m/Y');
+
 use Mpdf\Mpdf;
 
 function generate_income_report($headers, $tableData): string
@@ -292,6 +294,7 @@ function generate_sessions_report($headers, $tableData): string {
             <div class="receipt-header">
                 <div style="float: left; width: 50%;">
                     <h5>' . $customerName . '</h5>
+                    <p>التاريخ: ' . $date . '</p>
 
                 </div>
                 <div style="float: right; width: 50%; text-align: right;">
@@ -308,10 +311,7 @@ function generate_sessions_report($headers, $tableData): string {
             ' . $htmlTable . '
 
             <div class="receipt-footer" style="padding: 20px 0;">
-                <div style="float: right; width: 20%;">
-                    <p><b>التاريخ: </b> ' . $date . '</p>
-
-                </div>
+              
                 <div style="float: left; width: 20%;">
                     <p><b>' . $issuer . '</b> </p>
 

@@ -58,7 +58,14 @@ $remainsData= $db->getRemainsData();
                         </div>
                         <div class="form-group">
                             <label for="income_payer">الدافع</label>
-                            <input type="text" class="form-control" id="income_payer" name="income_payer" required>
+                            <div class="input-group">
+                                <select class="form-control" id="income_payer_select" onchange="toggleIncomePayerInput()">
+                                    <option value="" selected>اختر</option>
+                                    <option value="وارد خارجي">وارد خارجي</option>
+                                    <option value="other">أخرى (إدخال نص)</option>
+                                </select>
+                                <input type="text" class="form-control" id="income_payer_input" name="income_payer" style="display: none;" placeholder="أدخل النص هنا">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="income_student">الطالب</label>
@@ -439,6 +446,22 @@ $remainsData= $db->getRemainsData();
 <!-- JSZip for Excel export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <!-- pdfmake for PDF export -->
+
+<script>
+    function toggleIncomePayerInput() {
+        const selectElement = document.getElementById('income_payer_select');
+        const inputElement = document.getElementById('income_payer_input');
+
+        if (selectElement.value === "other") {
+            inputElement.style.display = "block";
+            inputElement.required = true;
+        } else {
+            inputElement.style.display = "none";
+            inputElement.required = false;
+            inputElement.value = selectElement.value; // Update input value with selected option
+        }
+    }
+</script>
 
 <script>
     function addNoteField(studentId, sessionId) {

@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix teachers add bug">
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="update student class">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/editStudent.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/editStudent.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mpdf-generator.php" beforeDir="false" afterPath="$PROJECT_DIR$/mpdf-generator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +173,7 @@
       <workItem from="1726931448562" duration="534000" />
       <workItem from="1727891145533" duration="2815000" />
       <workItem from="1734881509127" duration="964000" />
-      <workItem from="1734883217185" duration="1796000" />
+      <workItem from="1734883217185" duration="3863000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -201,14 +202,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00011" summary="fix meetings and otherreports">
-      <option name="closed" value="true" />
-      <created>1721894768396</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1721894768396</updated>
     </task>
     <task id="LOCAL-00012" summary="remove comment">
       <option name="closed" value="true" />
@@ -562,7 +555,15 @@
       <option name="project" value="LOCAL" />
       <updated>1727899498855</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="update student class">
+      <option name="closed" value="true" />
+      <created>1734885326837</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1734885326838</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -591,7 +592,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="remove unnecessary div" />
     <MESSAGE value="update remains report" />
     <MESSAGE value="fix reports layouts" />
     <MESSAGE value="update teacher password" />
@@ -616,7 +616,8 @@
     <MESSAGE value="fix bugs" />
     <MESSAGE value="update select style" />
     <MESSAGE value="fix teachers add bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix teachers add bug" />
+    <MESSAGE value="update student class" />
+    <option name="LAST_COMMIT_MESSAGE" value="update student class" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
