@@ -988,12 +988,12 @@ class MyDB
     }
 
 
-    public function updateStudent($id, $name, $phone, $selectedTeachers)
+    public function updateStudent($id, $name, $phone, $class, $selectedTeachers)
     {
         $conn = $this->connect();
 
         // Update student basic information
-        $updateQuery = "UPDATE students SET name = '$name', phone = '$phone' WHERE id = '$id'";
+        $updateQuery = "UPDATE students SET name = '$name', phone = '$phone', class = '$class' WHERE id = '$id'";
         $updateResult = $conn->query($updateQuery);
 
         if (!$updateResult) {

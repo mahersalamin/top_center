@@ -9,10 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $phone = $_POST['phone'];
+    $class = $_POST['class'];
     $selectedTeachers = isset($_POST['emp']) ? $_POST['emp'] : [];
 
     // Update student data in the database
-    $success = $db->updateStudent($id, $name, $phone, $selectedTeachers);
+    $success = $db->updateStudent($id, $name, $phone, $class, $selectedTeachers);
     // Check if the update was successful
     if ($success) {
         // Redirect to appropriate page based on user role

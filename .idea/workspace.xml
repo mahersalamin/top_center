@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix teachers add bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/editStudent.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/editStudent.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,6 +171,8 @@
       <workItem from="1726915584460" duration="6023000" />
       <workItem from="1726931448562" duration="534000" />
       <workItem from="1727891145533" duration="2815000" />
+      <workItem from="1734881509127" duration="964000" />
+      <workItem from="1734883217185" duration="1796000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>

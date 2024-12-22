@@ -6,6 +6,7 @@
 $id = $_POST['id'];
 $db = new MyDB();
 $student = $db->getStudentData($id);
+$classes = $db->getClasses();
 
 
 if ($student) {
@@ -52,6 +53,18 @@ if ($student) {
                                    value="<?php echo $student['phone']; ?>">
 
                         </div>
+                        <select class="mb-3 form-select" id="class" name="class">
+                            <option disabled selected value="">الصف <?php echo $student['class'] ?>  </option>
+
+                            <?php
+                            foreach ($classes as $class) {
+                                ?>
+                                <option value="<?= $class['id'] ?>"> <?php echo $class['name']; ?></option>
+
+                                <?php
+                            }
+                            ?>
+                        </select>
                         <div class="mb-3">
                             <p style="color: black; display: inline; font-weight: bold"> المعلمون</p>
                             <?php
