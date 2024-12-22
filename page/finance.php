@@ -311,7 +311,7 @@ $remainsData= $db->getRemainsData();
             <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
                 <!-- Month and Year Selector for Secretary Report -->
-                <div class="row mt-4">
+                <div id="secretary-report" class="row mt-4">
                     <div class="col-md-12">
                         <h3>تقرير السكرتارية</h3>
                         <div class="form-group">
@@ -1007,7 +1007,13 @@ $remainsData= $db->getRemainsData();
 
 <script>
     $('#generatePdf').on('click', function() {
-        let htmlContent = $('#summary').html(); // Get the HTML content of the div
+        let htmlContent = $('#summary').clone();
+
+        // Remove the div with id="secretary-report" from the copied content
+        htmlContent.find('#secretary-report').remove();
+
+        // Get the HTML string of the modified content
+        let htmlString = htmlContent.html();
 
         let form = $('<form>', {
             action: '../mpdf-generator.php',
@@ -1019,7 +1025,7 @@ $remainsData= $db->getRemainsData();
         })).append($('<input>', {
             type: 'hidden',
             name: 'htmlContent',
-            value: htmlContent
+            value: htmlString
         }));
 
         form.appendTo('body').submit();

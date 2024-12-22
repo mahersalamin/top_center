@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="add secretary user and privileges">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mpdf-generator.php" beforeDir="false" afterPath="$PROJECT_DIR$/mpdf-generator.php" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="secretary timesheet report">
       <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -173,7 +171,7 @@
       <workItem from="1726931448562" duration="534000" />
       <workItem from="1727891145533" duration="2815000" />
       <workItem from="1734881509127" duration="964000" />
-      <workItem from="1734883217185" duration="8971000" />
+      <workItem from="1734883217185" duration="9292000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -202,14 +200,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00014" summary="add logo and fix reports">
-      <option name="closed" value="true" />
-      <created>1722245776728</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1722245776729</updated>
     </task>
     <task id="LOCAL-00015" summary="fix bugs, add schools, fix teacher special sessions view">
       <option name="closed" value="true" />
@@ -563,7 +553,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734892849659</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="secretary timesheet report">
+      <option name="closed" value="true" />
+      <created>1734894583602</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1734894583602</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,7 +590,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update teacher password" />
     <MESSAGE value="fix archive student, refactor student edit page layout" />
     <MESSAGE value="fix image for all reports, add notes to remains report and store them" />
     <MESSAGE value="update specialization and clean code" />
@@ -617,7 +614,8 @@
     <MESSAGE value="update student class" />
     <MESSAGE value="وارد خارجي" />
     <MESSAGE value="add secretary user and privileges" />
-    <option name="LAST_COMMIT_MESSAGE" value="add secretary user and privileges" />
+    <MESSAGE value="secretary timesheet report" />
+    <option name="LAST_COMMIT_MESSAGE" value="secretary timesheet report" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
