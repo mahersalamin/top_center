@@ -11,10 +11,20 @@ if (isset($_POST['income_submit'])) {
     $cashier = $_POST['income_cashier'];
     $amount = $_POST['income_amount'];
     $payer = $_POST['income_payer'];
-    $studentId = $_POST['income_student'];
-    $sessionId = $_POST['income_session'];
+    
+    // Check if "وارد خارجي" is selected and set studentId and sessionId accordingly
+    if ($payer === 'وارد خارجي') {
+        $studentId = -1; // Use the dummy student ID
+        $sessionId = -1; // Optionally set session_id to 0
+    } else {
+        $studentId = $_POST['income_student'];
+        $sessionId = $_POST['income_session'];
+    }
+    
+    
     $notes = $_POST['income_notes'];
 
+    // Insert the income record
     $query = "INSERT INTO income (date, cashier, amount, payer, student_id, session_id, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
 
@@ -29,82 +39,77 @@ if (isset($_POST['income_submit'])) {
 
     $executeResult = $stmt->execute();
     if (!$executeResult) {
+        
         die('Error in executing SQL query: ' . $stmt->error);
     }
 
     $stmt->close();
 
-// Fetch current total_payments and session_cost
-    $query = "SELECT total_payments, session_cost FROM session_students WHERE student_id = ? AND session_id = ?";
-    $stmt = $conn->prepare($query);
+    // Fetch current total_payments and session_cost if student_id and session_id are set
+    if ($studentId !== 0 && $sessionId !== 0) {
+        $query = "SELECT total_payments, session_cost FROM session_students WHERE student_id = ? AND session_id = ?";
+        $stmt = $conn->prepare($query);
 
-    if (!$stmt) {
-        die('Error in preparing SQL statement: ' . $db->error);
+        if (!$stmt) {
+            die('Error in preparing SQL statement: ' . $db->error);
+        }
+
+        $bindResult = $stmt->bind_param('ss', $studentId, $sessionId);
+        if (!$bindResult) {
+            die('Error in binding parameters: ' . $stmt->error);
+        }
+
+        $executeResult = $stmt->execute();
+        if (!$executeResult) {
+            
+            die('Error in executing SQL query: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $currentTotalPayments = $row['total_payments'];
+        $sessionCost = $row['session_cost'];
+
+        $newTotalPayments = $currentTotalPayments + $amount;
+        $newPaymentStatus = ($newTotalPayments >= $sessionCost) ? 'مدفوع بالكامل' : 'مدفوع جزئياً';
+
+        $stmt->close();
+
+        // Update total_payments and payment_status
+        $query = "UPDATE session_students SET total_payments = ?, payment_status = ? WHERE student_id = ? AND session_id = ?";
+        $stmt = $conn->prepare($query);
+
+        if (!$stmt) {
+            die('Error in preparing SQL statement: ' . $db->error);
+        }
+
+        $bindResult = $stmt->bind_param('dsss', $newTotalPayments, $newPaymentStatus, $studentId, $sessionId);
+        if (!$bindResult) {
+            die('Error in binding parameters: ' . $stmt->error);
+        }
+
+        $executeResult = $stmt->execute();
+        if (!$executeResult) {
+            
+            die('Error in executing SQL query: ' . $stmt->error);
+        }
     }
 
-    $bindResult = $stmt->bind_param('ss', $studentId, $sessionId);
-    if (!$bindResult) {
-        die('Error in binding parameters: ' . $stmt->error);
-    }
-
-    $executeResult = $stmt->execute();
-    if (!$executeResult) {
-        die('Error in executing SQL query: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-
-    $currentTotalPayments = $row['total_payments'];
-    $sessionCost = $row['session_cost'];
-
-    $newTotalPayments = $currentTotalPayments + $amount;
-    $newPaymentStatus = ($newTotalPayments >= $sessionCost) ? 'مدفوع بالكامل' : 'مدفوع جزئياً';
-
-    $stmt->close();
-
-// Update total_payments and payment_status
-    $query = "UPDATE session_students SET total_payments = ?, payment_status = ? WHERE student_id = ? AND session_id = ?";
-    $stmt = $conn->prepare($query);
-
-    if (!$stmt) {
-        die('Error in preparing SQL statement: ' . $db->error);
-    }
-
-    $bindResult = $stmt->bind_param('dsss', $newTotalPayments, $newPaymentStatus, $studentId, $sessionId);
-    if (!$bindResult) {
-        die('Error in binding parameters: ' . $stmt->error);
-    }
-
-    $executeResult = $stmt->execute();
-    if (!$executeResult) {
-        die('Error in executing SQL query: ' . $stmt->error);
-    }
+    // Fetch student and session details for the receipt
     $query = "SELECT s.name AS student_name, ss.session_name FROM students s
           JOIN session_students sst ON sst.student_id = s.id
           JOIN sessions ss ON ss.id = sst.session_id
           WHERE ss.id = ? AND s.id = ?";
-    $stmt = $conn->prepare($query);
-
-    if (!$stmt) {
-        die('Error in preparing SQL statement: ' . $db->error);
-    }
-
+$stmt = $conn->prepare($query);
+// Check if both studentId and sessionId are provided, otherwise use default values for external income
+if ($studentId !== 0 && $sessionId !== 0) {
+    // Bind parameters when both studentId and sessionId are valid
     $bindResult = $stmt->bind_param('ii', $sessionId, $studentId);
-    if (!$bindResult) {
-        die('Error in binding parameters: ' . $stmt->error);
-    }
-
-    $executeResult = $stmt->execute();
-    if (!$executeResult) {
-        die('Error in executing SQL query: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-
-    $studentName = $row['student_name'];
-    $sessionName = $row['session_name'];
+} else {
+    // Default values for external income
+    $studentName = 'N/A';
+    $sessionName = 'N/A';
     $receiptData = [
         'date' => $date,
         'cashier' => $cashier,
@@ -113,11 +118,43 @@ if (isset($_POST['income_submit'])) {
         'student_name' => $studentName,
         'session_name' => $sessionName,
         'notes' => $notes,
-        'total_payments' => $newTotalPayments,
-        'session_cost' => $sessionCost,
-        'payment_status' => $newPaymentStatus,
+        'total_payments' => $newTotalPayments ?? 0,
+        'session_cost' => $sessionCost ?? 0,
+        'payment_status' => $newPaymentStatus ?? 'N/A',
     ];
-//    var_dump(95);die();
+    // Since there are no valid studentId/sessionId, no need to execute query for these values
+    // Skip the query execution for this case
+    
+}
+
+// Proceed with the execution if parameters are valid
+$executeResult = $stmt->execute();
+if (!$executeResult) {
+    die('Error in executing SQL query: ' . $stmt->error);
+}
+
+// Fetch result for valid student and session
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+$studentName = $row['student_name'];
+$sessionName = $row['session_name'];
+
+// Prepare receipt data
+$receiptData = [
+    'date' => $date,
+    'cashier' => $cashier,
+    'amount' => $amount,
+    'payer' => $payer,
+    'student_name' => $studentName,
+    'session_name' => $sessionName,
+    'notes' => $notes,
+    'total_payments' => $newTotalPayments ?? 0,
+    'session_cost' => $sessionCost ?? 0,
+    'payment_status' => $newPaymentStatus ?? 'N/A',
+];
+
+    // Use cURL to send the receipt data to the PDF generator
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, 'http://localhost/top/mpdf-generator.php');
     curl_setopt($ch, CURLOPT_POST, 1);
@@ -135,6 +172,7 @@ if (isset($_POST['income_submit'])) {
     }
 
     curl_close($ch);
+
     $fileName = "{$studentName}_receipt_{$date}.pdf";
     if ($httpCode == 200 && !empty($response)) {
         header('Content-Type: application/pdf');
@@ -144,8 +182,11 @@ if (isset($_POST['income_submit'])) {
     } else {
         echo "Failed to generate PDF.";
     }
+
     exit();
 }
+
+
 
 // Handle form submission for outcomes
 if (isset($_POST['outcome_submit'])) {

@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="secretary timesheet report">
-      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="fix summary report from secretary div showing up">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +171,8 @@
       <workItem from="1726931448562" duration="534000" />
       <workItem from="1727891145533" duration="2815000" />
       <workItem from="1734881509127" duration="964000" />
-      <workItem from="1734883217185" duration="9292000" />
+      <workItem from="1734883217185" duration="10055000" />
+      <workItem from="1735386765256" duration="438000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -200,14 +201,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00015" summary="fix bugs, add schools, fix teacher special sessions view">
-      <option name="closed" value="true" />
-      <created>1722245809928</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1722245809928</updated>
     </task>
     <task id="LOCAL-00016" summary="archiving teacher">
       <option name="closed" value="true" />
@@ -561,7 +554,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734894583602</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="fix summary report from secretary div showing up">
+      <option name="closed" value="true" />
+      <created>1734894892591</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1734894892591</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -590,7 +591,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix archive student, refactor student edit page layout" />
     <MESSAGE value="fix image for all reports, add notes to remains report and store them" />
     <MESSAGE value="update specialization and clean code" />
     <MESSAGE value="update logo" />
@@ -615,7 +615,8 @@
     <MESSAGE value="وارد خارجي" />
     <MESSAGE value="add secretary user and privileges" />
     <MESSAGE value="secretary timesheet report" />
-    <option name="LAST_COMMIT_MESSAGE" value="secretary timesheet report" />
+    <MESSAGE value="fix summary report from secretary div showing up" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix summary report from secretary div showing up" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

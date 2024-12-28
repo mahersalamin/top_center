@@ -78,6 +78,16 @@ $remainsData= $db->getRemainsData();
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="session_type_filter">نوع الدورة</label>
+                            <select class="form-control" id="session_type_filter">
+                                <option value="">الكل</option>
+                                <option value="دورة خاصة">دورة خاصة</option>
+                                <option value="حقيبة مدرسية">حقيبة مدرسية</option>
+                                <option value="اشتراك شهري">اشتراك شهري</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label for="income_session">الدورة</label>
                             <select class="form-control" id="income_session" name="income_session" required>
                                 <!-- Options will be populated dynamically via AJAX -->
@@ -138,10 +148,14 @@ $remainsData= $db->getRemainsData();
                         <?php
                         $incomes = $db->getAllIncomes();
                         foreach ($incomes as $income) {
+                            $date = new DateTime($income['date']);
+
+                            // Format the date in the desired format (yyyy-mm-dd)
+                            $formatted_date = $date->format('Y-m-d');
                             echo
                             "<tr>";
                             echo "<td>{$income['id']}</td>";
-                            echo "<td>{$income['date']}</td>";
+                            echo "<td>{$formatted_date}</td>";
                             echo "<td>{$income['cashier']}</td>";
                             echo "<td>{$income['payer']}</td>";
                             echo "<td>{$income['student']}</td>";
@@ -523,6 +537,32 @@ $remainsData= $db->getRemainsData();
             inputElement.value = selectElement.value; // Update input value with selected option
         }
     }
+    $(document).ready(function () {
+
+
+        $('#income_payer_select').change(function () {
+            if ($(this).val() === "وارد خارجي") {
+                // Hide the required divs when "وارد خارجي" is selected
+                $('#income_student').closest('.form-group').hide();
+                $('#income_student').val(0).removeAttr('required'); // Set value to 0 and remove required
+
+                $('#session_type_filter').closest('.form-group').hide();
+                $('#income_session').closest('.form-group').hide();
+            } else {
+                // Show the divs again when something else is selected
+                $('#income_student').closest('.form-group').show();
+                $('#income_student').attr('required', true); // Re-add required attribute
+                $('#income_session').closest('.form-group').show();
+                $('#session_type_filter').closest('.form-group').show();
+            }
+
+            // Also handle the input visibility toggle
+            toggleIncomePayerInput();
+        });
+
+        // Trigger change event on page load to set initial visibility
+        $('#income_payer_select').trigger('change');
+    });
 </script>
 
 <script>
@@ -574,15 +614,17 @@ $remainsData= $db->getRemainsData();
         $('#income_student').change(function () {
             var studentId = $(this).val();
             $.ajax({
-                url: '../get_enrolled_sessions.php', // Endpoint URL
-                type: 'POST',
-                data: {student_id: studentId},
-                dataType: 'json',
-                success: function (response) {
-                    $('#income_session').empty();
-                    sessionData = {}; // Re-initialize sessionData for the new student
+            url: '../get_enrolled_sessions.php', // Endpoint URL
+            type: 'POST',
+            data: { student_id: studentId },
+            dataType: 'json',
+            success: function (response) {
+                $('#income_session').empty();
+                sessionData = {}; // Re-initialize sessionData for the new student
 
-                    $.each(response, function (index, session) {
+                // Function to populate sessions
+                function populateSessions(sessions) {
+                    $.each(sessions, function (index, session) {
                         $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
                         sessionData[session.id] = {
                             price: session.session_cost,
@@ -605,11 +647,26 @@ $remainsData= $db->getRemainsData();
 
                     // Trigger change to update fields for the initially selected option
                     $('#income_session').trigger('change');
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
                 }
-            });
+
+                // Initial population without filter
+                populateSessions(response);
+
+                // Add filtering logic
+                $('#session_type_filter').change(function () {
+                    var selectedType = $(this).val();
+                    var filteredSessions = selectedType ? response.filter(function (session) {
+                        return session.type === selectedType;
+                    }) : response; // Show all sessions if no type is selected
+
+                    $('#income_session').empty(); // Clear current options
+                    populateSessions(filteredSessions); // Re-populate with filtered sessions
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
         });
 
         $('#outcome_type').change(function () {
