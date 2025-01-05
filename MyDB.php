@@ -107,10 +107,12 @@ class MyDB
 
         // Use LIKE operator to find students where the teacher ID is within the tec_id string
         $query = "SELECT students.*,
-            GROUP_CONCAT(teacher.name) AS teacher_names
-            FROM students
-            LEFT JOIN teacher ON teacher.id=students.tec_id
-            GROUP BY students.id ";
+                    GROUP_CONCAT(teacher.name) AS teacher_names
+                    FROM students
+                    LEFT JOIN teacher ON teacher.id = students.tec_id
+                    WHERE students.id != -1
+                    GROUP BY students.id;
+                ";
 
         $result = $conn->query($query);
         $rows = array();
