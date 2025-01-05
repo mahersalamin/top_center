@@ -56,46 +56,50 @@ class MyDB
 
     function logSecretaryLogout($teacher_id)
     {
-        // Get today's date
-        $today = date('Y-m-d');
+        // Define the start and end of the current day
+        $todayStart = date('Y-m-d 00:00:00');
+        $todayEnd = date('Y-m-d 23:59:59');
+        $currentTime = date('Y-m-d H:i:s');
         $conn = $this->connect();
-        // Check if a login record already exists for today with no logout
-        $query = "SELECT id FROM secretary_timesheet 
+
+        // Query to find today's record for the teacher
+        $query = "SELECT id, logout_datetime FROM secretary_timesheet 
               WHERE teacher_id = ? 
-              AND DATE(login_datetime) = ? 
-              AND logout_datetime IS NULL";
+              AND login_datetime BETWEEN ? AND ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("is", $teacher_id, $today);
+        $stmt->bind_param("iss", $teacher_id, $todayStart, $todayEnd);
         $stmt->execute();
         $result = $stmt->get_result();
-
         if ($row = $result->fetch_assoc()) {
-            // A login record exists, update its logout time
-            $logoutTime = date('Y-m-d H:i:s');
+            // If a record exists, check logout_datetime
+            $recordId = $row['id'];
+
+            // Update the logout time regardless of whether it's NULL or already set
             $updateQuery = "UPDATE secretary_timesheet SET logout_datetime = ? WHERE id = ?";
             $updateStmt = $conn->prepare($updateQuery);
-            $updateStmt->bind_param("si", $logoutTime, $row['id']);
+            $updateStmt->bind_param("si", $currentTime, $recordId);
 
             if ($updateStmt->execute()) {
                 return "تم تحديث وقت تسجيل الخروج بنجاح.";
             } else {
-                die("خطأ في تسجيل الخروج: " . $updateStmt->error);
+                die("خطأ في تحديث تسجيل الخروج: " . $updateStmt->error);
+            }
+        } else {
+            // No record exists for today, insert a new record
+            $insertQuery = "INSERT INTO secretary_timesheet (teacher_id, login_datetime, logout_datetime) 
+                        VALUES (?, ?, ?)";
+            $insertStmt = $conn->prepare($insertQuery);
+            $insertStmt->bind_param("iss", $teacher_id, $currentTime, $currentTime);
+
+            if ($insertStmt->execute()) {
+                return "تم إنشاء سجل جديد وتسجيل الخروج بنجاح.";
+            } else {
+                die("خطأ في إنشاء السجل: " . $insertStmt->error);
             }
         }
-
-        // No record exists, so insert a new record with the logout time
-        $logoutTime = date('Y-m-d H:i:s');
-        $insertQuery = "INSERT INTO secretary_timesheet (teacher_id, login_datetime, logout_datetime) 
-                    VALUES (?, ?, ?)";
-        $insertStmt = $conn->prepare($insertQuery);
-        $insertStmt->bind_param("iss", $teacher_id, $logoutTime, $logoutTime);
-
-        if ($insertStmt->execute()) {
-            return "تم تسجيل الخروج بنجاح.";
-        } else {
-            die("خطأ في تسجيل الخروج: " . $insertStmt->error);
-        }
     }
+
+
 
     public function getAllStudents() // for admin
     {
@@ -627,7 +631,7 @@ class MyDB
         }
 
         $sessionId = $conn->insert_id;
-        $studentSessionPrice = $price/ count($students);
+        $studentSessionPrice = $price / count($students);
         // Insert into session_students table with added_at
         foreach ($students as $studentId) {
             $query = "INSERT INTO session_students (session_id, student_id, session_cost, added_at) 
@@ -672,21 +676,21 @@ class MyDB
     public function updateSessions($students, $sessions)
     {
         $conn = $this->connect();
-    
+
         // Start transaction to ensure atomicity
         $conn->begin_transaction();
-    
+
         try {
             // Step 1: Update is_group status based on the number of students
             $is_group = count($students) > 1 ? 1 : 0;
-    
+
             // Prepare to fetch session details
             $sessionIds = implode(',', array_map('intval', $sessions));
-    
+
             // Get existing session details (price and materials)
             $query = "SELECT id, price, material FROM sessions WHERE id IN ($sessionIds)";
             $result = $conn->query($query);
-    
+
             $sessionsData = [];
             while ($row = $result->fetch_assoc()) {
                 $sessionsData[$row['id']] = [
@@ -695,18 +699,18 @@ class MyDB
                     'materials' => explode(',', $row['material']) // List of materials for the session
                 ];
             }
-    
+
             // Count the current number of students in each session
             $query = "SELECT session_id, COUNT(student_id) as student_count FROM session_students WHERE session_id IN ($sessionIds) GROUP BY session_id";
             $result = $conn->query($query);
-    
+
             while ($row = $result->fetch_assoc()) {
                 $sessionId = $row['session_id'];
                 if (isset($sessionsData[$sessionId])) {
                     $sessionsData[$sessionId]['students_count'] = $row['student_count'];
                 }
             }
-    
+
             // Step 2: Update session_students table with new students
             foreach ($students as $studentId) {
                 foreach ($sessions as $sessionId) {
@@ -715,50 +719,50 @@ class MyDB
                     $conn->query($query);
                 }
             }
-    
+
             // Step 3: Update session prices based on the new student count and update student costs
             foreach ($sessions as $sessionId) {
                 if (isset($sessionsData[$sessionId])) {
                     $oldStudentCount = $sessionsData[$sessionId]['students_count'];
                     $newStudentCount = $oldStudentCount + count($students);
-    
+
                     // Calculate the new price
                     $oldPrice = $sessionsData[$sessionId]['price'];
                     $pricePerStudent = $oldPrice / $oldStudentCount;
                     $newPrice = $pricePerStudent * $newStudentCount;
-    
+
                     // Update the session price
                     $query = "UPDATE sessions SET price = $newPrice, is_group = $is_group WHERE id = $sessionId";
                     $conn->query($query);
-    
+
                     // Recalculate the cost for each student in the session
                     $newPricePerStudent = $newPrice / $newStudentCount;
-    
+
                     // Update the session cost for all students in session_students table
                     $query = "UPDATE session_students SET session_cost = $newPricePerStudent WHERE session_id = $sessionId";
                     $conn->query($query);
-    
+
                     // Step 4: Calculate and update the teacher's session amount based on specializations
                     $materials = $sessionsData[$sessionId]['materials']; // Materials for the session
                     $totalSpecializations = count($materials); // Total number of specializations in the session
                     $sessionShare = $newPrice / 2; // 50% of the session price goes to the teachers
-    
+
                     // Get teachers teaching in this session
                     $query = "SELECT teacher_id FROM session_teachers WHERE session_id = $sessionId";
                     $teachersResult = $conn->query($query);
-    
+
                     while ($teacherRow = $teachersResult->fetch_assoc()) {
                         $teacherId = $teacherRow['teacher_id'];
-    
+
                         // Get the teacher's specializations
                         $query = "SELECT ts.spec FROM teacher_specializations ts WHERE ts.teacher_id = $teacherId";
                         $teacherSpecsResult = $conn->query($query);
-    
+
                         $teacherSpecializations = [];
                         while ($specRow = $teacherSpecsResult->fetch_assoc()) {
                             $teacherSpecializations[] = $specRow['spec'];
                         }
-    
+
                         // Count how many specializations the teacher has in this session
                         $linkedSpecializations = 0;
                         foreach ($materials as $material) {
@@ -766,10 +770,10 @@ class MyDB
                                 $linkedSpecializations++;
                             }
                         }
-    
+
                         // Calculate the teacher's share
                         $teacherShare = ($sessionShare * $linkedSpecializations) / $totalSpecializations;
-    
+
                         // Update session_teachers table with the new session amount for the teacher
                         $query = "UPDATE session_teachers 
                                   SET session_amount = $teacherShare 
@@ -778,17 +782,17 @@ class MyDB
                     }
                 }
             }
-    
+
             // Commit transaction
             $conn->commit();
-    
+
             return true;
         } catch (Exception $e) {
             $conn->rollback();
             return false;
         }
     }
-    
+
 
 
 
@@ -1759,8 +1763,8 @@ GROUP BY students.id
             $query = "INSERT INTO teacher (user, password, name, img, role, id_number, degree, phone_number, address)
                   VALUES ('$user', '$password', '$name', '$img', '$role', $id_number, '$degree', $phone_number, '$address')";
         }
-//
-//        var_dump($specs);die();
+        //
+        //        var_dump($specs);die();
 
         $result = $conn->query($query);
 

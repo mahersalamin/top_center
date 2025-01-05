@@ -3,7 +3,7 @@
 require 'header.php';
 $db = new MyDB();
 $tec_id = $_COOKIE['id'];
-
+$role = $_COOKIE['role'];
 if (!isset($_COOKIE['id'])) {
 
     header("location:signin.php");
@@ -62,7 +62,8 @@ if (!isset($_COOKIE['id'])) {
 
     ?>
     <?php
-        if($tec_id == 3){
+    
+        if($role == 3){
 
     ?>
     <div class="container" style="text-align: center; margin-top: 20px;">
@@ -134,8 +135,8 @@ if (!isset($_COOKIE['id'])) {
     ?>
 
     <?php
-    $rr = $_COOKIE['role'];
-    if ($rr == 1 || $rr == 3) {
+    
+    if ($role == 1 || $role == 3) {
     } else {
         header("location:signin.php");
     }
