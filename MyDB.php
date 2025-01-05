@@ -824,6 +824,7 @@ class MyDB
                         s.phone AS student_phone,
                         s.name AS student_name,
                         ss.session_id,
+                        se.type as session_type,
                         se.session_name,
                         ss.session_cost,
                         ss.total_payments,

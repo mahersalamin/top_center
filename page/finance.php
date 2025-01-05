@@ -9,7 +9,7 @@ $outcomeStats = $db->getOutcomeStatistics();
 $teachersStats = $db->getTeachersOutcomeStatistics();
 $othersStats = $db->getOthersOutcomeStatistics();
 $totalBalance = $incomeStats['total_amount'] - $outcomeStats['total_amount'];
-$remainsData= $db->getRemainsData();
+$remainsData = $db->getRemainsData();
 
 ?>
 
@@ -19,19 +19,19 @@ $remainsData= $db->getRemainsData();
     <ul class="nav nav-tabs nav-pills nav-fill justify-content-center mt-4" id="financeTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <a class="nav-link active" id="income-tab" data-toggle="tab" href="#income" role="tab"
-               aria-controls="income" aria-selected="true">الوارد</a>
+                aria-controls="income" aria-selected="true">الوارد</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="outcome-tab" data-toggle="tab" href="#outcome" role="tab" aria-controls="outcome"
-               aria-selected="false">المصاريف</a>
+                aria-selected="false">المصاريف</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary"
-               aria-selected="false">الملخص</a>
+                aria-selected="false">الملخص</a>
         </li>
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="remains-summary" data-toggle="tab" href="#remains" role="tab" aria-controls="remains-summary"
-               aria-selected="false">المتبقي</a>
+                aria-selected="false">المتبقي</a>
         </li>
     </ul>
 
@@ -109,7 +109,7 @@ $remainsData= $db->getRemainsData();
                         <div class="form-group">
                             <label for="income_amount">القيمة</label>
                             <input type="number" min="0" class="form-control" id="income_amount" name="income_amount"
-                                   required>
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="income_notes">ملاحظات</label>
@@ -132,50 +132,50 @@ $remainsData= $db->getRemainsData();
                             <label>سجلات</label>
                         </div>
                     </div>
-                    <table class="table table-bordered" id="dt-filter-search-income" >
+                    <table class="table table-bordered" id="dt-filter-search-income">
                         <thead>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>المستلم</th>
-                            <th>الدافع</th>
-                            <th>الطالب</th>
-                            <th>القيمة</th>
-                            <th>ملاحظات</th>
-                        </tr>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>التاريخ</th>
+                                <th>المستلم</th>
+                                <th>الدافع</th>
+                                <th>الطالب</th>
+                                <th>القيمة</th>
+                                <th>ملاحظات</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        $incomes = $db->getAllIncomes();
-                        foreach ($incomes as $income) {
-                            $date = new DateTime($income['date']);
+                            <?php
+                            $incomes = $db->getAllIncomes();
+                            foreach ($incomes as $income) {
+                                $date = new DateTime($income['date']);
 
-                            // Format the date in the desired format (yyyy-mm-dd)
-                            $formatted_date = $date->format('Y-m-d');
-                            echo
-                            "<tr>";
-                            echo "<td>{$income['id']}</td>";
-                            echo "<td>{$formatted_date}</td>";
-                            echo "<td>{$income['cashier']}</td>";
-                            echo "<td>{$income['payer']}</td>";
-                            echo "<td>{$income['student']}</td>";
+                                // Format the date in the desired format (yyyy-mm-dd)
+                                $formatted_date = $date->format('Y-m-d');
+                                echo
+                                "<tr>";
+                                echo "<td>{$income['id']}</td>";
+                                echo "<td>{$formatted_date}</td>";
+                                echo "<td>{$income['cashier']}</td>";
+                                echo "<td>{$income['payer']}</td>";
+                                echo "<td>{$income['student']}</td>";
 
-                            echo "<td>{$income['amount']}</td>";
-                            echo "<td>{$income['notes']}</td>";
-                            echo "</tr>";
-                        }
-                        ?>
+                                echo "<td>{$income['amount']}</td>";
+                                echo "<td>{$income['notes']}</td>";
+                                echo "</tr>";
+                            }
+                            ?>
                         </tbody>
                         <tfoot>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>المستلم</th>
-                            <th>الدافع</th>
-                            <th>الطالب</th>
-                            <th>القيمة</th>
-                            <th>ملاحظات</th>
-                        </tr>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>التاريخ</th>
+                                <th>المستلم</th>
+                                <th>الدافع</th>
+                                <th>الطالب</th>
+                                <th>القيمة</th>
+                                <th>ملاحظات</th>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -273,44 +273,44 @@ $remainsData= $db->getRemainsData();
                     </div>
                     <table class="table table-bordered" id="dt-filter-search-outcome">
                         <thead>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>النوع</th>
-                            <th>المستلم</th>
-                            <th>القيمة</th>
-                            <th>ملاحظات</th>
-                        </tr>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>التاريخ</th>
+                                <th>النوع</th>
+                                <th>المستلم</th>
+                                <th>القيمة</th>
+                                <th>ملاحظات</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <?php
-                        $outcomes = $db->getAllOutcomes();
-                        foreach ($outcomes as $outcome) {
-                            echo "<tr>";
-                            echo "<td>{$outcome['id']}</td>";
-                            echo "<td>{$outcome['date']}</td>";
-                            echo "<td>{$outcome['type']}</td>";
-                            if ($outcome['receiver'] == 0) {
-                                echo "<td>مستفيد خارجي</td>";
-                            } else {
-                                echo "<td>{$outcome['name']}</td>";
-                            }
+                            <?php
+                            $outcomes = $db->getAllOutcomes();
+                            foreach ($outcomes as $outcome) {
+                                echo "<tr>";
+                                echo "<td>{$outcome['id']}</td>";
+                                echo "<td>{$outcome['date']}</td>";
+                                echo "<td>{$outcome['type']}</td>";
+                                if ($outcome['receiver'] == 0) {
+                                    echo "<td>مستفيد خارجي</td>";
+                                } else {
+                                    echo "<td>{$outcome['name']}</td>";
+                                }
 
-                            echo "<td>{$outcome['amount']}</td>";
-                            echo "<td>{$outcome['notes']}</td>";
-                            echo "</tr>";
-                        }
-                        ?>
+                                echo "<td>{$outcome['amount']}</td>";
+                                echo "<td>{$outcome['notes']}</td>";
+                                echo "</tr>";
+                            }
+                            ?>
                         </tbody>
                         <tfoot>
-                        <tr>
-                            <th>الرقم</th>
-                            <th>التاريخ</th>
-                            <th>النوع</th>
-                            <th>المستلم</th>
-                            <th>القيمة</th>
-                            <th>ملاحظات</th>
-                        </tr>
+                            <tr>
+                                <th>الرقم</th>
+                                <th>التاريخ</th>
+                                <th>النوع</th>
+                                <th>المستلم</th>
+                                <th>القيمة</th>
+                                <th>ملاحظات</th>
+                            </tr>
                         </tfoot>
                     </table>
                 </div>
@@ -322,7 +322,7 @@ $remainsData= $db->getRemainsData();
         <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab" style="direction: rtl; text-align: right; font-family: 'Open Sans', sans-serif;">
             <?php if ($_COOKIE['role'] == 1): ?>
 
-            <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
+                <button id="generatePdf" class="btn btn-primary mt-4">PDF</button>
 
                 <!-- Month and Year Selector for Secretary Report -->
                 <div id="secretary-report" class="row mt-4">
@@ -403,7 +403,7 @@ $remainsData= $db->getRemainsData();
         </div>
 
         <script>
-            $('#generateSecretaryPdf').on('click', function () {
+            $('#generateSecretaryPdf').on('click', function() {
                 let selectedMonth = $('#reportMonth').val(); // Get selected month
                 let selectedYear = $('#reportYear').val(); // Get selected year
 
@@ -448,65 +448,79 @@ $remainsData= $db->getRemainsData();
                     </select>
                     <label>سجلات</label>
                 </div>
+                <div class="col-md-6">
+                    <label for="filterSessionType">تصفية حسب نوع الجلسة</label>
+                    <select id="filterSessionType" class="form-control form-control-sm" style="width: auto; display: inline-block;">
+                        <option value="">الكل</option>
+                        <?php
+                        // Populate session types dynamically
+                        $sessionTypes = array_unique(array_column($remainsData, 'session_type'));
+                        foreach ($sessionTypes as $type) {
+                            echo "<option value='$type'>$type</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
             </div>
-            <table class="table table-bordered" id="dt-filter-search-remains" >
-                <thead>
-                <tr>
-                    <th>اسم الطالب</th>
-                    <th>اسم الدورة</th>
-                    <th>رقم الهاتف</th>
-                    <th>السعر الأصلي</th>
-                    <th>مجموع الدفعات</th>
-                    <th>المبلغ المتبقي</th>
-                    <th>تاريخ آخر دفعة</th>
-                    <th>تاريخ الإضافة</th>
-                    <th>ملاحظات</th>
-                    <th></th>
 
-                </tr>
+            <table class="table table-bordered" id="dt-filter-search-remains">
+                <thead>
+                    <tr>
+                        <th>اسم الطالب</th>
+                        <th>اسم الدورة</th>
+                        <th>رقم الهاتف</th>
+                        <th>السعر الأصلي</th>
+                        <th>مجموع الدفعات</th>
+                        <th>المبلغ المتبقي</th>
+                        <th>تاريخ آخر دفعة</th>
+                        <th>تاريخ الإضافة</th>
+                        <th>ملاحظات</th>
+                        <th></th>
+
+                    </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach ($remainsData as $remains) {
-                    // Format last payment date
-                    $strip = "لا توجد دفعات";
-                    $date = $remains['last_payment_date'] ?? null;
-                    if ($date) {
-                        $createDate = new DateTime($date);
-                        $strip = $createDate->format('Y-m-d');
+                    <?php
+                    foreach ($remainsData as $remains) {
+                        // Format last payment date
+                        $strip = "لا توجد دفعات";
+                        $date = $remains['last_payment_date'] ?? null;
+                        if ($date) {
+                            $createDate = new DateTime($date);
+                            $strip = $createDate->format('Y-m-d');
+                        }
+
+                        // Format session added date
+                        $sessionAddedAt = $remains['session_added_at'] ?? null;
+                        $addedDate = "لم يتم تسجيل التاريخ";
+                        if ($sessionAddedAt) {
+                            $createDateAdded = new DateTime($sessionAddedAt);
+                            $addedDate = $createDateAdded->format('Y-m-d H:i:s');
+                        }
+
+                        echo "<tr>";
+                        echo "<td>{$remains['student_name']}</td>";
+                        echo "<td>{$remains['session_name']}</td>";
+                        echo "<td>{$remains['student_phone']}</td>";
+                        echo "<td>{$remains['session_cost']}</td>";
+                        echo "<td>{$remains['total_payments']}</td>";
+                        echo "<td>{$remains['amount_due']}</td>";
+                        echo "<td>{$strip}</td>";
+                        echo "<td>{$addedDate}</td>";
+
+                        // Display the note with an id for updating it later
+                        $note = !empty($remains['session_note']) ? $remains['session_note'] : "لا توجد ملاحظات";
+                        echo "<td id='note-cell-{$remains['student_id']}-{$remains['session_id']}'>{$note}</td>";
+
+                        // Button and field for adding a new note
+                        echo "<td>";
+                        echo "<button type='button' class='btn btn-sm btn-primary' onclick='addNoteField({$remains['student_id']}, {$remains['session_id']})'>إضافة ملاحظة</button>";
+                        echo "<div id='note-field-{$remains['student_id']}-{$remains['session_id']}'></div>";
+                        echo "</td>";
+
+                        echo "</tr>";
                     }
-
-                    // Format session added date
-                    $sessionAddedAt = $remains['session_added_at'] ?? null;
-                    $addedDate = "لم يتم تسجيل التاريخ";
-                    if ($sessionAddedAt) {
-                        $createDateAdded = new DateTime($sessionAddedAt);
-                        $addedDate = $createDateAdded->format('Y-m-d H:i:s');
-                    }
-
-                    echo "<tr>";
-                    echo "<td>{$remains['student_name']}</td>";
-                    echo "<td>{$remains['session_name']}</td>";
-                    echo "<td>{$remains['student_phone']}</td>";
-                    echo "<td>{$remains['session_cost']}</td>";
-                    echo "<td>{$remains['total_payments']}</td>";
-                    echo "<td>{$remains['amount_due']}</td>";
-                    echo "<td>{$strip}</td>";
-                    echo "<td>{$addedDate}</td>";
-
-                    // Display the note with an id for updating it later
-                    $note = !empty($remains['session_note']) ? $remains['session_note'] : "لا توجد ملاحظات";
-                    echo "<td id='note-cell-{$remains['student_id']}-{$remains['session_id']}'>{$note}</td>";
-
-                    // Button and field for adding a new note
-                    echo "<td>";
-                    echo "<button type='button' class='btn btn-sm btn-primary' onclick='addNoteField({$remains['student_id']}, {$remains['session_id']})'>إضافة ملاحظة</button>";
-                    echo "<div id='note-field-{$remains['student_id']}-{$remains['session_id']}'></div>";
-                    echo "</td>";
-
-                    echo "</tr>";
-                }
-                ?>
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -537,10 +551,10 @@ $remainsData= $db->getRemainsData();
             inputElement.value = selectElement.value; // Update input value with selected option
         }
     }
-    $(document).ready(function () {
+    $(document).ready(function() {
 
 
-        $('#income_payer_select').change(function () {
+        $('#income_payer_select').change(function() {
             if ($(this).val() === "وارد خارجي") {
                 // Hide the required divs when "وارد خارجي" is selected
                 $('#income_student').closest('.form-group').hide();
@@ -608,68 +622,70 @@ $remainsData= $db->getRemainsData();
     }
 </script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         var sessionData = {}; // Define sessionData in the outer scope
         $('#teacher-sessions-div').css("visibility", "hidden");
-        $('#income_student').change(function () {
+        $('#income_student').change(function() {
             var studentId = $(this).val();
             $.ajax({
-            url: '../get_enrolled_sessions.php', // Endpoint URL
-            type: 'POST',
-            data: { student_id: studentId },
-            dataType: 'json',
-            success: function (response) {
-                $('#income_session').empty();
-                sessionData = {}; // Re-initialize sessionData for the new student
+                url: '../get_enrolled_sessions.php', // Endpoint URL
+                type: 'POST',
+                data: {
+                    student_id: studentId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    $('#income_session').empty();
+                    sessionData = {}; // Re-initialize sessionData for the new student
 
-                // Function to populate sessions
-                function populateSessions(sessions) {
-                    $.each(sessions, function (index, session) {
-                        $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
-                        sessionData[session.id] = {
-                            price: session.session_cost,
-                            total_payments: session.total_payments
-                        };
+                    // Function to populate sessions
+                    function populateSessions(sessions) {
+                        $.each(sessions, function(index, session) {
+                            $('#income_session').append('<option value="' + session.id + '">' + session.session_name + '</option>');
+                            sessionData[session.id] = {
+                                price: session.session_cost,
+                                total_payments: session.total_payments
+                            };
+                        });
+
+                        // Unbind the previous change event handler to avoid stacking
+                        $('#income_session').off('change').change(function() {
+                            var selectedSessionId = $(this).val();
+                            if (selectedSessionId) {
+                                var selectedSession = sessionData[selectedSessionId];
+                                $('#session_cost').val(selectedSession.price);
+                                $('#total_payments').val(selectedSession.total_payments);
+                            } else {
+                                $('#session_cost').val('');
+                                $('#total_payments').val('');
+                            }
+                        });
+
+                        // Trigger change to update fields for the initially selected option
+                        $('#income_session').trigger('change');
+                    }
+
+                    // Initial population without filter
+                    populateSessions(response);
+
+                    // Add filtering logic
+                    $('#session_type_filter').change(function() {
+                        var selectedType = $(this).val();
+                        var filteredSessions = selectedType ? response.filter(function(session) {
+                            return session.type === selectedType;
+                        }) : response; // Show all sessions if no type is selected
+
+                        $('#income_session').empty(); // Clear current options
+                        populateSessions(filteredSessions); // Re-populate with filtered sessions
                     });
-
-                    // Unbind the previous change event handler to avoid stacking
-                    $('#income_session').off('change').change(function () {
-                        var selectedSessionId = $(this).val();
-                        if (selectedSessionId) {
-                            var selectedSession = sessionData[selectedSessionId];
-                            $('#session_cost').val(selectedSession.price);
-                            $('#total_payments').val(selectedSession.total_payments);
-                        } else {
-                            $('#session_cost').val('');
-                            $('#total_payments').val('');
-                        }
-                    });
-
-                    // Trigger change to update fields for the initially selected option
-                    $('#income_session').trigger('change');
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
-
-                // Initial population without filter
-                populateSessions(response);
-
-                // Add filtering logic
-                $('#session_type_filter').change(function () {
-                    var selectedType = $(this).val();
-                    var filteredSessions = selectedType ? response.filter(function (session) {
-                        return session.type === selectedType;
-                    }) : response; // Show all sessions if no type is selected
-
-                    $('#income_session').empty(); // Clear current options
-                    populateSessions(filteredSessions); // Re-populate with filtered sessions
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+            });
         });
 
-        $('#outcome_type').change(function () {
+        $('#outcome_type').change(function() {
             let outComeType = $(this).val()
             if (outComeType !== 'أجور') {
                 $('#teacher-sessions-div').css("visibility", "hidden");
@@ -682,19 +698,21 @@ $remainsData= $db->getRemainsData();
         });
 
 
-        $('#outcome_receiver').change(function () {
+        $('#outcome_receiver').change(function() {
             let teacherID = $(this).val();
 
             $.ajax({
                 url: '../get_enrolled_sessions.php', // Endpoint URL
                 type: 'POST',
-                data: {teacher_id: teacherID},
+                data: {
+                    teacher_id: teacherID
+                },
                 dataType: 'json',
-                success: function (response) {
+                success: function(response) {
                     $('#teacher-sessions').empty();
                     teacherSessionData = {}; // Re-initialize teacherSessionData for the new student
 
-                    $.each(response, function (index, session) {
+                    $.each(response, function(index, session) {
 
                         $('#teacher-sessions').append('<option value="' + session.id + '">' + session.session_name + '</option>');
                         teacherSessionData[session.id] = {
@@ -708,7 +726,7 @@ $remainsData= $db->getRemainsData();
                     });
 
                     // Unbind the previous change event handler to avoid stacking
-                    $('#teacher-sessions').off('change').change(function () {
+                    $('#teacher-sessions').off('change').change(function() {
                         let selectedSessionId = $(this).val();
                         console.log(teacherSessionData)
                         if (selectedSessionId) {
@@ -730,7 +748,7 @@ $remainsData= $db->getRemainsData();
                     // Trigger change to update fields for the initially selected option
                     $('#teacher-sessions').trigger('change');
                 },
-                error: function (xhr, status, error) {
+                error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
@@ -752,12 +770,11 @@ $remainsData= $db->getRemainsData();
         });
 
     });
-
 </script>
 
 <script>
     // Ensure the DOM is fully loaded before executing the script
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         // Function to activate the tab based on the hash in the URL
         function activateTabFromHash() {
             var hash = window.location.hash;
@@ -774,8 +791,8 @@ $remainsData= $db->getRemainsData();
         activateTabFromHash();
 
         // Update the URL hash when a tab is shown
-        document.querySelectorAll('#financeTabs a').forEach(function (tab) {
-            tab.addEventListener('shown.bs.tab', function (event) {
+        document.querySelectorAll('#financeTabs a').forEach(function(tab) {
+            tab.addEventListener('shown.bs.tab', function(event) {
                 var href = event.target.getAttribute('href');
                 // Update the URL hash without reloading the page
                 history.replaceState(null, null, href);
@@ -786,14 +803,14 @@ $remainsData= $db->getRemainsData();
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         let income_table = $('#dt-filter-search-income').DataTable({
-            "paging": true,          // Enable pagination
-            "lengthChange": true,    // Show length change options
-            "searching": true,       // Enable search functionality
-            "ordering": true,        // Enable column sorting
-            "info": true,            // Show table information
-            "autoWidth": false,      // Disable automatic column width adjustment
+            "paging": true, // Enable pagination
+            "lengthChange": true, // Show length change options
+            "searching": true, // Enable search functionality
+            "ordering": true, // Enable column sorting
+            "info": true, // Show table information
+            "autoWidth": false, // Disable automatic column width adjustment
             "language": {
                 "paginate": {
                     "previous": "السابق",
@@ -809,11 +826,13 @@ $remainsData= $db->getRemainsData();
                 "zeroRecords": "لم يتم العثور على تطابقات"
             },
             dom: 'Bfrtip',
-            "order": [[0, 'desc']],
+            "order": [
+                [0, 'desc']
+            ],
             buttons: [
-                 'excel', 'print', {
+                'excel', 'print', {
                     text: 'PDF',
-                    action: function (e, dt, button, config) {
+                    action: function(e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
                         $('#dt-filter-search-income thead th').each(function() {
@@ -822,7 +841,9 @@ $remainsData= $db->getRemainsData();
 
                         // Get the table data
                         var data = [];
-                        dt.rows({ search: 'applied' }).every(function() {
+                        dt.rows({
+                            search: 'applied'
+                        }).every(function() {
                             let row = [];
                             $(this.node()).find('td').each(function() {
                                 row.push($(this).text());
@@ -854,12 +875,12 @@ $remainsData= $db->getRemainsData();
             ],
 
 
-            initComplete: function () {
-                this.api().columns().every(function () {
+            initComplete: function() {
+                this.api().columns().every(function() {
                     let column = this;
                     let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                         .appendTo($(column.footer()).empty())
-                        .on('change input', function () {
+                        .on('change input', function() {
                             let val = $(this).val()
 
                             column
@@ -877,12 +898,12 @@ $remainsData= $db->getRemainsData();
         });
 
         let outcome_table = $('#dt-filter-search-outcome').DataTable({
-            "paging": true,          // Enable pagination
-            "lengthChange": true,    // Show length change options
-            "searching": true,       // Enable search functionality
-            "ordering": true,        // Enable column sorting
-            "info": true,            // Show table information
-            "autoWidth": false,      // Disable automatic column width adjustment
+            "paging": true, // Enable pagination
+            "lengthChange": true, // Show length change options
+            "searching": true, // Enable search functionality
+            "ordering": true, // Enable column sorting
+            "info": true, // Show table information
+            "autoWidth": false, // Disable automatic column width adjustment
             "language": {
                 "paginate": {
                     "previous": "السابق",
@@ -898,11 +919,13 @@ $remainsData= $db->getRemainsData();
                 "zeroRecords": "لم يتم العثور على تطابقات"
             },
             dom: 'Bfrtip',
-            "order": [[0, 'desc']],
+            "order": [
+                [0, 'desc']
+            ],
             buttons: [
                 'excel', 'print', {
                     text: 'PDF',
-                    action: function (e, dt, button, config) {
+                    action: function(e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
                         $('#dt-filter-search-outcome thead th').each(function() {
@@ -911,7 +934,9 @@ $remainsData= $db->getRemainsData();
 
                         // Get the table data
                         var data = [];
-                        dt.rows({ search: 'applied' }).every(function() {
+                        dt.rows({
+                            search: 'applied'
+                        }).every(function() {
                             let row = [];
                             $(this.node()).find('td').each(function() {
                                 row.push($(this).text());
@@ -943,12 +968,12 @@ $remainsData= $db->getRemainsData();
             ],
 
 
-            initComplete: function () {
-                this.api().columns().every(function () {
+            initComplete: function() {
+                this.api().columns().every(function() {
                     let column = this;
                     let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                         .appendTo($(column.footer()).empty())
-                        .on('change input', function () {
+                        .on('change input', function() {
                             let val = $(this).val()
 
                             column
@@ -987,11 +1012,13 @@ $remainsData= $db->getRemainsData();
                 "zeroRecords": "لم يتم العثور على تطابقات"
             },
             dom: 'Bfrtip',
-            "order": [[0, 'desc']],
+            "order": [
+                [0, 'desc']
+            ],
             buttons: [
                 'excel', 'print', {
                     text: 'PDF',
-                    action: function (e, dt, button, config) {
+                    action: function(e, dt, button, config) {
                         // Get the table headers
                         var headers = [];
                         $('#dt-filter-search-remains thead th').each(function(index) {
@@ -1003,7 +1030,9 @@ $remainsData= $db->getRemainsData();
 
                         // Get the table data
                         var data = [];
-                        dt.rows({ search: 'applied' }).every(function() {
+                        dt.rows({
+                            search: 'applied'
+                        }).every(function() {
                             let row = [];
                             $(this.node()).find('td').each(function(index) {
                                 // Exclude last column
@@ -1036,12 +1065,12 @@ $remainsData= $db->getRemainsData();
                     }
                 }
             ],
-            initComplete: function () {
-                this.api().columns().every(function () {
+            initComplete: function() {
+                this.api().columns().every(function() {
                     let column = this;
                     let search = $(`<input class="form-control form-control-sm" type="text" placeholder="بحث">`)
                         .appendTo($(column.footer()).empty())
-                        .on('change input', function () {
+                        .on('change input', function() {
                             let val = $(this).val()
 
                             column
@@ -1051,9 +1080,13 @@ $remainsData= $db->getRemainsData();
 
                 });
             }
+
         });
 
-
+        $('#filterSessionType').on('change', function() {
+            let sessionType = $(this).val();
+            remains_table.column(1).search(sessionType).draw(); // Assumes "session_type" is in the 2nd column
+        });
         $('#lengthMenuRemains').on('change', function() {
             var length = $(this).val();
             remains_table.page.len(length).draw();
