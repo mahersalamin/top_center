@@ -166,7 +166,7 @@ foreach ($user
 
 
                 <?php }
-                if ($_COOKIE['role'] == 1) { ?>
+                if ($_COOKIE['role'] == 1 || $_COOKIE['role'] == 3) { ?>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-right" href="#" id="navbarDropdown" role="button"
