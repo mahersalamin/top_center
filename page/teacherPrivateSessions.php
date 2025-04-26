@@ -31,7 +31,6 @@ $db = new MyDB();
 $type = 'دورة خاصة';
 $privateSessions = $db->getTeacherPrivateSessions($_COOKIE['id'], $type);
 
-
 $activeAttendanceStudents = $db->getActiveAttendanceStudents($_COOKIE['id']);
 // echo json_encode($activeAttendanceStudents);die();
 $teacherMaterials = $db->getTeacherSpecializations($_COOKIE['id']);
@@ -191,59 +190,62 @@ $teacherMaterialsNames = $db->getTeacherSpecializationsNames($_COOKIE['id']);
 
                     // Check if the session material matches any of the teacher's materials
                     $sessionMaterials = explode(',', $pSessions['materials']);
-                    foreach ($sessionMaterials as $sessionMaterial) {
-                        foreach ($teacherMaterialsNames as $teacherMaterial) {
-                            if ($sessionMaterial === $teacherMaterial['spec_name']) {
-                                $hasPrivateSessions = true;
-                                ?>
-                                <div class="col-md-3">
-                                    <div class="card">
-                                        <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
-                                            <div class="card-header">
-                                                <h5 class="card-title"><?php echo $pSessions['session_name']; ?></h5>
-                                            </div>
-                                            <ul class="list-group list-group-flush">
-                                                الطلاب:
-                                                <?php
-                                                foreach ($studentNames as $studentName) {
-                                                    echo '<li class="list-group-item">' . $studentName . '</li>';
-                                                }
-                                                ?>
-                                            </ul>
-                                            <!-- Material -->
-                                            <div class="card-body">
-                                                <?php $materials = explode(',', $pSessions['materials']); ?>
-                                                المادة:
-                                                <select class="mb-3 form-select" name="material">
+                    if($pSessions['is_group']){
+                        foreach ($sessionMaterials as $sessionMaterial) {
+                            foreach ($teacherMaterialsNames as $teacherMaterial) {
+                                if ($sessionMaterial === $teacherMaterial['spec_name']) {
+                                    $hasPrivateSessions = true;
+                                    ?>
+                                    <div class="col-md-3">
+                                        <div class="card">
+                                            <form action="../openAtt.php" method="POST" enctype="multipart/form-data">
+                                                <div class="card-header">
+                                                    <h5 class="card-title"><?php echo $pSessions['session_name']; ?></h5>
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    الطلاب:
                                                     <?php
-                                                    foreach ($materials as $material) {
-                                                        echo '<option value="' . $material . '">' . $material . '</option>';
+                                                    foreach ($studentNames as $studentName) {
+                                                        echo '<li class="list-group-item">' . $studentName . '</li>';
                                                     }
                                                     ?>
-                                                </select>
-                                            </div>
-                                            <div class="card-body">
-                                                <button <?php echo $activeAttendanceStudents ? 'disabled' : ''; ?> type="submit" class="btn btn-outline-info text-center">بدء</button>
-                                                <input type="hidden" name="teacher_id"
-                                                       value="<?php echo $_COOKIE['id']; ?>">
-                                                <input type="hidden" name="type"
-                                                       value="<?php echo $pSessions['type']; ?>">
-                                                <input <?php echo count($studentNames) !== 1 ? 'disabled' : ''; ?>
-                                                        type="hidden" name="student_name"
-                                                        value="<?php echo $pSessions['student_names']; ?>">
-                                                <input type="hidden" name="pSessionID"
-                                                       value="<?php echo $pSessions['id']; ?>">
-                                                <input type="hidden" name="student_names"
-                                                       value="<?php echo $pSessions['student_names']; ?>">
-                                            </div>
-                                        </form>
+                                                </ul>
+                                                <!-- Material -->
+                                                <div class="card-body">
+                                                    <?php $materials = explode(',', $pSessions['materials']); ?>
+                                                    المادة:
+                                                    <select class="mb-3 form-select" name="material">
+                                                        <?php
+                                                        foreach ($materials as $material) {
+                                                            echo '<option value="' . $material . '">' . $material . '</option>';
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="card-body">
+                                                    <button <?php echo $activeAttendanceStudents ? 'disabled' : ''; ?> type="submit" class="btn btn-outline-info text-center">بدء</button>
+                                                    <input type="hidden" name="teacher_id"
+                                                           value="<?php echo $_COOKIE['id']; ?>">
+                                                    <input type="hidden" name="type"
+                                                           value="<?php echo $pSessions['type']; ?>">
+                                                    <input <?php echo count($studentNames) !== 1 ? 'disabled' : ''; ?>
+                                                            type="hidden" name="student_name"
+                                                            value="<?php echo $pSessions['student_names']; ?>">
+                                                    <input type="hidden" name="pSessionID"
+                                                           value="<?php echo $pSessions['id']; ?>">
+                                                    <input type="hidden" name="student_names"
+                                                           value="<?php echo $pSessions['student_names']; ?>">
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                                <?php
-                                // Break the loop once a matching material is found
-                                break 2;
+                                    <?php
+                                    // Break the loop once a matching material is found
+                                    break 2;
+                                }
                             }
                         }
+
                     }
                 } // End foreach $privateSessions
 

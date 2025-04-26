@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="secretary can view reports">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b65f8d30-ea28-4281-9a78-c482ab64c7ad.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b65f8d30-ea28-4281-9a78-c482ab64c7ad.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assignPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/assignPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/checkSingin.php" beforeDir="false" afterPath="$PROJECT_DIR$/checkSingin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/finance_endpoint.php" beforeDir="false" afterPath="$PROJECT_DIR$/finance_endpoint.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openAtt.php" beforeDir="false" afterPath="$PROJECT_DIR$/openAtt.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/homeAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/homeAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/sessions/addNewSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addNewSession.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/teacherBackPack.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherBackPack.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/teacherPrivateSessions.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherPrivateSessions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/updateStudent.php" beforeDir="false" afterPath="$PROJECT_DIR$/updateStudent.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +66,7 @@
     </include_path>
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -177,7 +189,10 @@
       <workItem from="1736105739467" duration="92000" />
       <workItem from="1736105865196" duration="113000" />
       <workItem from="1736106021408" duration="239000" />
-      <workItem from="1738432862852" duration="2533000" />
+      <workItem from="1738432862852" duration="3209000" />
+      <workItem from="1745645808733" duration="601000" />
+      <workItem from="1745646456215" duration="458000" />
+      <workItem from="1745646928813" duration="27017000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -206,14 +221,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00016" summary="archiving teacher">
-      <option name="closed" value="true" />
-      <created>1723271058586</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1723271058586</updated>
     </task>
     <task id="LOCAL-00017" summary="prevent archived teacher from signing in">
       <option name="closed" value="true" />
@@ -567,7 +574,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734894892591</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="secretary can view reports">
+      <option name="closed" value="true" />
+      <created>1738652688091</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1738652688091</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

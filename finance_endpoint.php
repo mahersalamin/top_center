@@ -186,7 +186,26 @@ $receiptData = [
     exit();
 }
 
+// At the top of finance_endpoint.php
+require_once 'MyDB.php'; // Include your MyDB class
+$db = new MyDB($conn);
 
+// Handle payment reversal
+if (isset($_POST['action']) && $_POST['action'] == 'reverse_payment') {
+    $paymentId = (int)$_POST['payment_id'];
+    $studentId = (int)$_POST['student_id'];
+    $sessionId = (int)$_POST['session_id'];
+    $amount = (float)$_POST['amount'];
+
+    $success = $db->reversePayment($paymentId, $studentId, $sessionId, $amount);
+
+    if ($success) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to reverse payment']);
+    }
+    exit();
+}
 
 // Handle form submission for outcomes
 if (isset($_POST['outcome_submit'])) {

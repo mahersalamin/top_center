@@ -100,7 +100,6 @@ class MyDB
     }
 
 
-
     public function getAllStudents() // for admin
     {
         $conn = $this->connect();
@@ -529,6 +528,7 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
+
     public function updateSpecialization(int $id, string $name, string $type, int $active)
     {
         $query = "";
@@ -542,6 +542,7 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
+
     public function deleteSchool($id)
     {
         $query = "UPDATE schools SET is_archived = 1 WHERE id = $id";
@@ -549,6 +550,7 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
+
     public function unArchiveSchool($id)
     {
         $query = "UPDATE schools SET is_archived = 0 WHERE id = $id";
@@ -556,12 +558,12 @@ class MyDB
         $result = $conn->query($query);
         return true;
     }
+
     public function getAllTeachers()
     {
         $query = "SELECT t.id, t.`user`, t.is_archived, t.name, t.img, t.att_id 
                     FROM teacher t
                     WHERE t.role <> 1 ORDER BY t.id ASC";
-
 
 
         $conn = $this->connect();
@@ -669,10 +671,6 @@ class MyDB
 
         return true; // Return true if all queries succeed
     }
-
-
-
-
 
 
     public function updateSessions($students, $sessions)
@@ -796,10 +794,6 @@ class MyDB
     }
 
 
-
-
-
-
     public function getClasses()
     {
         $conn = $this->connect();
@@ -814,6 +808,7 @@ class MyDB
 
         return $rows;
     }
+
     public function getRemainsData()
     {
         $conn = $this->connect();
@@ -823,6 +818,7 @@ class MyDB
                         i.id AS payment_id,
                         s.phone AS student_phone,
                         s.name AS student_name,
+                        s.class AS student_class,
                         ss.session_id,
                         se.type as session_type,
                         se.session_name,
@@ -973,8 +969,9 @@ class MyDB
         //        $conn->close();
 
         // Return true if all queries were successful, otherwise false
-        return $result && $result2 && $result3 /*&& $result4*/;
+        return $result && $result2 && $result3 /*&& $result4*/ ;
     }
+
     public function archiveStudent($id)
     {
         $conn = $this->connect();
@@ -1077,9 +1074,34 @@ class MyDB
         $conn = $this->connect();
 
         // Update student basic information
-        $updateQuery = "UPDATE students SET name = '$name', phone = '$phone', class = '$class', school = '$school  WHERE id = '$id'";
-        $updateResult = $conn->query($updateQuery);
+        // Prepare the base query
+        $updateQuery = "UPDATE students SET name = ?, phone = ?";
+        $params = [$name, $phone];
+        $types = "ss"; // assuming both are strings
 
+        // Add class if provided
+        if (!is_null($class)) {
+            $updateQuery .= ", class = ?";
+            $params[] = $class;
+            $types .= "s";
+        }
+
+        // Add school if provided
+        if (!is_null($school)) {
+            $updateQuery .= ", school = ?";
+            $params[] = $school;
+            $types .= "s";
+        }
+
+        // Add WHERE condition
+        $updateQuery .= " WHERE id = ?";
+        $params[] = $id;
+        $types .= "i"; // assuming id is integer
+
+        // Prepare and execute the statement
+        $stmt = $conn->prepare($updateQuery);
+        $stmt->bind_param($types, ...$params);
+        $updateResult = $stmt->execute();
         if (!$updateResult) {
             // Error occurred while updating student basic information
             return false;
@@ -1265,7 +1287,6 @@ GROUP BY students.id
     }
 
 
-
     public function getActiveAttendance($t_id)
     {
         $conn = $this->connect();
@@ -1356,6 +1377,7 @@ GROUP BY students.id
             ORDER BY s.id desc";
         $result = $conn->query($query);
     }
+
     public function getSessionsDataDetailed()
     {
         $conn = $this->connect(); // Assuming you have a method to establish a database connection
@@ -1754,6 +1776,7 @@ GROUP BY students.id
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC);
     }
+
     public function addTeacher($user, $password, $name, $specs, $img, $role, $id_number, $degree, $phone_number, $address)
     {
         $conn = $this->connect();
@@ -1802,7 +1825,8 @@ GROUP BY students.id
         $phone,
         $school_name,
         $class
-    ) {
+    )
+    {
         try {
             $conn = $this->connect();
             $query = "INSERT INTO students (name, phone, tec_id, school, class) VALUES ('$name', '$phone', '0',$school_name, '$class')";
@@ -1816,7 +1840,8 @@ GROUP BY students.id
     public function addSchool(
         $name,
         $type
-    ) {
+    )
+    {
         try {
             $conn = $this->connect();
             $query = "INSERT INTO schools (name, type) VALUES ('$name', $type)";
@@ -1827,23 +1852,102 @@ GROUP BY students.id
         }
     }
 
-    // Method to get all incomes
-    public function getAllIncomes()
-    {
-        $conn = $this->connect();
-        $query = "SELECT i.*, s.name AS student
-                    FROM students s
-                    JOIN income i ON i.student_id = s.id
-                    ORDER BY date DESC";
-        $result = $conn->query($query);
+    /**
+     * Get payment history
+     */
+    public function getPaymentHistory() {
+        $query = "SELECT i.*, s.name AS student_name, ss.session_name 
+                 FROM income i
+                 LEFT JOIN students s ON i.student_id = s.id
+                 LEFT JOIN sessions ss ON i.session_id = ss.id
+                 ORDER BY i.date DESC";
 
-        $incomes = [];
-        while ($row = $result->fetch_assoc()) {
-            $incomes[] = $row;
+        $result = $this->conn->query($query);
+        $payments = [];
+
+        while($row = $result->fetch_assoc()) {
+            $payments[] = $row;
         }
 
-        return $incomes;
+        return $payments;
     }
+
+    /**
+     * Reverse a payment
+     */
+    public function reversePayment($paymentId, $studentId, $sessionId, $amount) {
+        $conn = $this->connect();
+        $conn->begin_transaction();
+        try {
+            // 1. Delete the payment record
+            $this->deletePayment($paymentId);
+
+            // 2. If this was a student payment, update their records
+            if ($studentId != -1 && $sessionId != -1) {
+                $this->updateStudentPayment($studentId, $sessionId, -$amount);
+            }
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollback();
+            error_log("Payment reversal failed: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Delete payment record
+     */
+    private function deletePayment($paymentId) {
+        $query = "DELETE FROM income WHERE id = ?";
+        $conn = $this->connect();
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $paymentId);
+        return $stmt->execute();
+    }
+
+    /**
+     * Update student payment status
+     */
+    private function updateStudentPayment($studentId, $sessionId, $amountChange) {
+        $conn = $this->connect();
+
+        // Get current payment status
+        $query = "SELECT total_payments, session_cost FROM session_students 
+                 WHERE student_id = ? AND session_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('ii', $studentId, $sessionId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        $newTotalPayments = $row['total_payments'] + $amountChange;
+        $newPaymentStatus = $this->calculatePaymentStatus($newTotalPayments, $row['session_cost']);
+
+        // Update student's payment record
+        $updateQuery = "UPDATE session_students 
+                       SET total_payments = ?, payment_status = ?
+                       WHERE student_id = ? AND session_id = ?";
+        $stmt = $conn->prepare($updateQuery);
+        $stmt->bind_param('dsii', $newTotalPayments, $newPaymentStatus, $studentId, $sessionId);
+        return $stmt->execute();
+    }
+
+    /**
+     * Calculate payment status based on amounts
+     */
+    private function calculatePaymentStatus($totalPaid, $sessionCost) {
+        if ($totalPaid >= $sessionCost) {
+            return 'مدفوع بالكامل';
+        } elseif ($totalPaid > 0) {
+            return 'مدفوع جزئياً';
+        } else {
+            return 'غير مدفوع';
+        }
+    }
+
 
     public function getAllOutcomes()
     {
@@ -1909,6 +2013,7 @@ GROUP BY students.id
         }
         return $rows;
     }
+
     public function getOutcomeGraph($year, $month = null)
     {
         $conn = $this->connect();

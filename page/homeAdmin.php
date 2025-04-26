@@ -84,47 +84,61 @@ if (!isset($_COOKIE['id'])) {
     if (!count($opensec)) {
         ?>
         <div class="container text-center">
-            <div class="alert alert-info ">
+            <div class="alert alert-info">
                 <h5>لا توجد حصص جارية</h5>
             </div>
         </div>
         <?php
-
     } else {
-
-        foreach ($opensec as $row) {
+        foreach ($opensec as $index => $row) {
+            $collapseId = 'collapseSession_' . $index;
             ?>
-            <div class="row m-5 ">
-                <div class="col-md-2 shadow p-3  bg-body rounded">
-                    <img class="img-fluid" src="../upload/<?php echo $row['img']; ?> " alt="">
+            <div class="row m-5">
+                <!-- Collapsible Header -->
+                <div class="col-12 shadow p-3 bg-body rounded mb-2" data-bs-toggle="collapse" href="#<?php echo $collapseId; ?>" role="button" aria-expanded="false" aria-controls="<?php echo $collapseId; ?>" style="cursor: pointer;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><?php echo $row['session_name']; ?></h5>
+                        <span class="badge bg-primary"><?php echo count(explode(',', $row['student_names'])); ?> طلاب</span>
+                    </div>
+                    <small class="text-muted">معلم: <?php echo $row['teacher_name']; ?></small>
                 </div>
-                <div class="col-md-10 shadow p-3  bg-body rounded  panel panel-default ">
-                    <div class="row m-5">
-                        <div class="col-md-5">
-                            <h3>أسماء الطلبة: </h3>
-                            <ul>
-                                <?php
-                                $studentsNames = explode(',', $row['student_names']);
-                                foreach ($studentsNames as $stName) {
-                                    echo '<li>' . $stName . '</li>';
-                                }
-                                ?>
-                            </ul>
-                            <p style="color:gray">اسم المعلم: <?php echo $row['teacher_name']; ?> </p>
-                        </div>
-                        <div class="col-md-5">
 
-                            <h5 style="color : green"> وقت بدء الحصة: <?php echo $row['enter']; ?> </h5>
-                            <br>
-                            <h5 style="color : green"> الحصة: <?php echo $row['session_name']; ?> </h5>
-
-                            <form action="singleRequest.php" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="id" value="<?php echo $row['tec_id']; ?>">
-                                <button type="submit" value="3" name="status" class="btn btn-outline-info text-center">
-                                    تفاصيل ←
-                                </button>
-                            </form>
-
+                <!-- Collapsible Content -->
+                <div class="collapse col-12" id="<?php echo $collapseId; ?>">
+                    <div class="card card-body shadow-sm">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img class="img-fluid rounded" src="../upload/<?php echo $row['img']; ?>" alt="صورة الحصة">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>أسماء الطلبة:</h4>
+                                        <ul class="list-group">
+                                            <?php
+                                            $studentsNames = explode(',', $row['student_names']);
+                                            foreach ($studentsNames as $stName) {
+                                                echo '<li class="list-group-item">' . htmlspecialchars($stName) . '</li>';
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <h5><span class="text-success">وقت بدء الحصة:</span> <?php echo $row['enter']; ?></h5>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h5><span class="text-success">نوع الحصة:</span> <?php echo $row['session_name']; ?></h5>
+                                        </div>
+                                        <form action="singleRequest.php" method="POST" enctype="multipart/form-data">
+                                            <input type="hidden" name="id" value="<?php echo $row['tec_id']; ?>">
+                                            <button type="submit" value="3" name="status" class="btn btn-info">
+                                                <i class="fas fa-info-circle"></i> تفاصيل الحصة
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -172,9 +186,15 @@ if (!isset($_COOKIE['id'])) {
             <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
                 <div class="text-center m-2">
                     <!-- Search bar for students -->
-                    <label for="studentSearchInput"></label><input type="text" class="form-control"
-                                                                   id="studentSearchInput" placeholder="بحث عن طالب..."
-                                                                   onkeyup="filterStudents()">
+                    <label for="studentSearchInput"></label>
+                    <input type="text" class="form-control"
+                       id="studentSearchInput" placeholder="بحث عن طالب..."
+                       onkeyup="filterStudents()">
+                    <label for="classFilter"></label>
+                    <select class="form-control" id="classFilter" onchange="filterStudents()">
+                        <option value="">جميع الصفوف</option>
+
+                    </select>
                 </div>
                 <div class="row justify-content-center" id="studentContainer">
                     <!-- Example card for adding new student -->
@@ -504,17 +524,70 @@ if (!isset($_COOKIE['id'])) {
         <?php require 'footer.php'; ?>
 
         <script>
-            function filterStudents() {
-                let searchInput = document.getElementById('studentSearchInput').value.toUpperCase();
-                let studentCards = document.querySelectorAll('.student-card');
+            document.addEventListener('DOMContentLoaded', function() {
+                const studentCards = document.querySelectorAll('.student-card');
+                const classSet = new Set();
 
-                studentCards.forEach(function (card) {
-                    let studentName = card.querySelector('.card-title').textContent.toUpperCase();
-                    if (searchInput === "" || studentName.includes(searchInput)) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
+                // Extract all unique class values
+                studentCards.forEach(card => {
+                    const classText = card.querySelector('.card-text:nth-of-type(2)').textContent;
+                    const studentClass = classText.replace('الصف: ', '').trim();
+                    if (studentClass) {
+                        classSet.add(studentClass);
                     }
+                });
+
+                // Convert set to array and sort numerically
+                const classFilter = document.getElementById('classFilter');
+                const classes = Array.from(classSet);
+
+                // Custom sorting function for mixed numeric and non-numeric classes
+                classes.sort((a, b) => {
+                    // Try to convert to numbers first
+                    const numA = parseInt(a, 10);
+                    const numB = parseInt(b, 10);
+
+                    // If both are numbers, compare numerically
+                    if (!isNaN(numA) && !isNaN(numB)) {
+                        return numA - numB;
+                    }
+                    // If one is number and one isn't, numbers come first
+                    else if (!isNaN(numA)) {
+                        return -1;
+                    }
+                    else if (!isNaN(numB)) {
+                        return 1;
+                    }
+                    // If neither is number, compare as strings
+                    else {
+                        return a.localeCompare(b);
+                    }
+                });
+
+                // Populate the dropdown with sorted classes
+                classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls;
+                    option.textContent = cls;
+                    classFilter.appendChild(option);
+                });
+            });
+
+            function filterStudents() {
+                const searchInput = document.getElementById('studentSearchInput').value.toUpperCase();
+                const classFilter = document.getElementById('classFilter').value;
+                const studentCards = document.querySelectorAll('.student-card');
+
+                studentCards.forEach(card => {
+                    const studentName = card.querySelector('.card-title a').textContent.toUpperCase();
+                    const classText = card.querySelector('.card-text:nth-of-type(2)').textContent;
+                    const studentClass = classText.replace('الصف: ', '').trim();
+
+                    // Check both filters
+                    const nameMatch = searchInput === "" || studentName.includes(searchInput);
+                    const classMatch = classFilter === "" || studentClass === classFilter;
+
+                    card.style.display = (nameMatch && classMatch) ? 'flex' : 'none';
                 });
             }
 

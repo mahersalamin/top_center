@@ -176,11 +176,16 @@
         <!-- Step 6: Teachers list -->
         <div class="tab">
             <div class="col-md-8 mt-3 font-weight-bold" style="height: 400px; overflow-y: auto;">
-                <div>
+                <!-- Search Input Field -->
+                <div class="mb-3">
+                    <input type="text" id="teacherSearch" class="form-control" placeholder="ابحث باسم المعلم..." onkeyup="filterTeachers()">
+                </div>
+
+                <div id="teachersContainer">
                     <p><strong>المعلمين</strong></p>
 
                     <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
-                        <div class="card mb-3 teacher-card">
+                        <div class="card mb-3 teacher-card" data-teacher-name="<?php echo htmlspecialchars($teacher['name']); ?>">
                             <!-- Card Header: Teacher Name -->
                             <div class="card-header">
                                 <input class="form-check-input" type="checkbox"
@@ -215,21 +220,20 @@
 
                             <!-- Card Footer: Percentage -->
                             <div class="card-footer text-center">
-                                <select class="form-select percentage-select"
-                                        name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
-                                        id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>">
-                                    <option value="" <?php echo $teacher['percentage'] === '' ? 'selected' : ''; ?> disabled>اختر النسب</option>
-                                    <option value="50" <?php echo $teacher['percentage'] === '50' ? 'selected' : ''; ?>>50%</option>
-                                    <option value="75" <?php echo $teacher['percentage'] === '75' ? 'selected' : ''; ?>>75%</option>
-                                </select>
+                                <input type="number"
+                                       class="form-control percentage-input"
+                                       name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
+                                       id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>"
+                                       min="0"
+                                       max="100"
+                                       step="1"
+                                       value="<?php echo !empty($teacher['percentage']) ? htmlspecialchars($teacher['percentage']) : ''; ?>"
+                                       placeholder="أدخل النسبة (0-100)">
                             </div>
                         </div>
                     <?php } ?>
-
-
                 </div>
             </div>
-
         </div>
         <!-- Navigation Buttons -->
         <div style="overflow:auto;">
@@ -295,4 +299,19 @@
         // Initial call to set the default state
         filterTeachers();
     });
+
+    function filterTeachers() {
+        const input = document.getElementById('teacherSearch');
+        const filter = input.value.toUpperCase();
+        const cards = document.querySelectorAll('.teacher-card');
+
+        cards.forEach(card => {
+            const teacherName = card.getAttribute('data-teacher-name').toUpperCase();
+            if (teacherName.includes(filter)) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
 </script>

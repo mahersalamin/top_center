@@ -46,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $price = $_POST['price'];
         }
-    
+//        var_dump($session_name, $student_ids, $session_package, $materials, $is_group, $price, $hours, $teachers);
+//        die();
         // Add session to the database
         $success = $db->addSession($session_name, $student_ids, $session_package, $materials, $is_group, $price, $hours, $teachers);
     

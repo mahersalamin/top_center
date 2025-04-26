@@ -6,12 +6,13 @@ $db = new MyDB();
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
+
     $id = $_POST['id'];
     $name = $_POST['name'];
     $phone = $_POST['phone'];
-    $class = $_POST['class'];
-    $school = $_POST['school'];
-    $selectedTeachers = isset($_POST['emp']) ? $_POST['emp'] : [];
+    $class = isset($_POST['class']) ? $_POST['class'] : null;
+    $school = isset($_POST['school']) ? $_POST['school'] : null;
+    $selectedTeachers = $_POST['emp'] ?? [];
 
     // Update student data in the database
     $success = $db->updateStudent($id, $name, $phone, $class, $school, $selectedTeachers);

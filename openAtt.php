@@ -3,6 +3,7 @@ require "MyDB.php";
 
 $db = new MyDB();
 $sName = '';
+
 $material = $_POST['material'];
 $teacher_id = $_POST['teacher_id'];
 
