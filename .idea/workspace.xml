@@ -4,21 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="secretary can view reports">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b65f8d30-ea28-4281-9a78-c482ab64c7ad.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b65f8d30-ea28-4281-9a78-c482ab64c7ad.xml" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="major updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assignPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/assignPackages.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkSingin.php" beforeDir="false" afterPath="$PROJECT_DIR$/checkSingin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/finance_endpoint.php" beforeDir="false" afterPath="$PROJECT_DIR$/finance_endpoint.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openAtt.php" beforeDir="false" afterPath="$PROJECT_DIR$/openAtt.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/finance.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/finance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/homeAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/homeAdmin.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/sessions/addNewSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addNewSession.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/teacherBackPack.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherBackPack.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/teacherPrivateSessions.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/teacherPrivateSessions.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/updateStudent.php" beforeDir="false" afterPath="$PROJECT_DIR$/updateStudent.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +179,7 @@
       <workItem from="1738432862852" duration="3209000" />
       <workItem from="1745645808733" duration="601000" />
       <workItem from="1745646456215" duration="458000" />
-      <workItem from="1745646928813" duration="27017000" />
+      <workItem from="1745646928813" duration="29098000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -221,14 +208,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00017" summary="prevent archived teacher from signing in">
-      <option name="closed" value="true" />
-      <created>1723271077181</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1723271077181</updated>
     </task>
     <task id="LOCAL-00018" summary="complete prevent archived teacher login">
       <option name="closed" value="true" />
@@ -582,7 +561,15 @@
       <option name="project" value="LOCAL" />
       <updated>1738652688091</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="major updates">
+      <option name="closed" value="true" />
+      <created>1745688563792</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1745688563793</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -611,7 +598,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update specialization and clean code" />
     <MESSAGE value="update logo" />
     <MESSAGE value="remove non-necessary files, split charts to new page" />
     <MESSAGE value="clean code" />
@@ -636,7 +622,8 @@
     <MESSAGE value="secretary timesheet report" />
     <MESSAGE value="fix summary report from secretary div showing up" />
     <MESSAGE value="secretary can view reports" />
-    <option name="LAST_COMMIT_MESSAGE" value="secretary can view reports" />
+    <MESSAGE value="major updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="major updates" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

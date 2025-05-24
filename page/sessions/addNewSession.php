@@ -185,53 +185,56 @@
                     <p><strong>المعلمين</strong></p>
 
                     <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
-                        <div class="card mb-3 teacher-card" data-teacher-name="<?php echo htmlspecialchars($teacher['name']); ?>">
-                            <!-- Card Header: Teacher Name -->
-                            <div class="card-header">
-                                <input class="form-check-input" type="checkbox"
-                                       name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]"
-                                       id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>"
-                                       value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                                <label class="form-check-label mr-4"
-                                       for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
-                                    <?php echo htmlspecialchars($teacher['name']); ?>
-                                </label>
-                            </div>
-
-                            <!-- Card Body: Specializations -->
-                            <div class="card-body">
-                                <h5 class="card-title">التخصصات</h5>
-                                <div class="specializations-container">
-                                    <?php foreach ($teacher['specializations'] as $spec) { ?>
-                                        <div class="specialization-item">
-                                            <input class="form-check-input"
-                                                   type="checkbox"
-                                                   name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]"
-                                                   id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>"
-                                                   value="<?php echo htmlspecialchars($spec[0]); ?>">
-                                            <label class="form-check-label mr-4"
-                                                   for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
-                                                <?php echo htmlspecialchars($spec[1]); ?>
-                                            </label>
-                                        </div>
-                                    <?php } ?>
+                        <div data-teacher-id="<?php echo htmlspecialchars($teacher['id']); ?>">
+                            <div class="card mb-3 teacher-card" data-teacher-name="<?php echo htmlspecialchars($teacher['name']); ?>">
+                                <!-- Card Header: Teacher Name -->
+                                <div class="card-header">
+                                    <input class="form-check-input" type="checkbox"
+                                           name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]"
+                                           id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>"
+                                           value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                                    <label class="form-check-label mr-4"
+                                           for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
+                                        <?php echo htmlspecialchars($teacher['name']); ?>
+                                    </label>
                                 </div>
-                            </div>
 
-                            <!-- Card Footer: Percentage -->
-                            <div class="card-footer text-center">
-                                <input type="number"
-                                       class="form-control percentage-input"
-                                       name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
-                                       id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>"
-                                       min="0"
-                                       max="100"
-                                       step="1"
-                                       value="<?php echo !empty($teacher['percentage']) ? htmlspecialchars($teacher['percentage']) : ''; ?>"
-                                       placeholder="أدخل النسبة (0-100)">
+                                <!-- Card Body: Specializations -->
+                                <div class="card-body">
+                                    <h5 class="card-title">التخصصات</h5>
+                                    <div class="specializations-container">
+                                        <?php foreach ($teacher['specializations'] as $spec) { ?>
+                                            <div class="specialization-item">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]"
+                                                       id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>"
+                                                       value="<?php echo htmlspecialchars($spec[0]); ?>">
+                                                <label class="form-check-label mr-4"
+                                                       for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
+                                                    <?php echo htmlspecialchars($spec[1]); ?>
+                                                </label>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+
+                                <!-- Card Footer: Percentage -->
+                                <div class="card-footer text-center">
+                                    <input type="number"
+                                           class="form-control percentage-input"
+                                           name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]"
+                                           id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>"
+                                           min="0"
+                                           max="100"
+                                           step="1"
+                                           value="<?php echo !empty($teacher['percentage']) ? htmlspecialchars($teacher['percentage']) : ''; ?>"
+                                           placeholder="أدخل النسبة (0-100)">
+                                </div>
                             </div>
                         </div>
                     <?php } ?>
+
                 </div>
             </div>
         </div>
@@ -256,8 +259,6 @@
         </div>
     </form>
 </div>
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Convert the PHP data into a JavaScript object

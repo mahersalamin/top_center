@@ -292,12 +292,26 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
         let x = document.getElementsByClassName("tab");
         x[currentTab].style.display = "none";
         currentTab = currentTab + n;
+
         if (currentTab >= x.length) {
+            // Only enable teacher fields if checkbox is checked
+            const teacherGroups = document.querySelectorAll('[data-teacher-id]');
+            teacherGroups.forEach(group => {
+                const checkbox = group.querySelector('input[type="checkbox"]');
+                const inputs = group.querySelectorAll('input');
+                if (!checkbox.checked) {
+                    inputs.forEach(input => input.disabled = true);
+                }
+            });
+
             document.getElementById("multiStepForm").submit();
             return false;
         }
+
         showTab(currentTab);
     }
+
+
 
     function fixStepIndicator(n) {
         let i, x = document.getElementsByClassName("step");
