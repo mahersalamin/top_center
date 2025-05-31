@@ -66,7 +66,7 @@ require '../dbconnection.php';
                 </td>
                 <td>
                     <?php
-                    $processed = $row['processed'] == 1
+                    $processed = $row['aprove'] == 1
                         ? 'لا'
                         : 'نعم';
 
@@ -95,7 +95,7 @@ require '../dbconnection.php';
 
                     <form action="../changStatus.php" method="post">
                         <input type="hidden" name="row_id" value="<?php echo $row['id']; ?>">
-                        <button type="submit" value="1" name="status" class="btn btn-sm btn-outline-success">
+                        <button type="submit" value="1" <?php if ($row['aprove'] == 1){ ?> disabled <?php }?>  name="status" class="btn btn-sm btn-outline-success">
                             موافقة ✓
                         </button>
 

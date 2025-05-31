@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="major updates">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/MissionsReports.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/MissionsReports.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,6 +183,7 @@
       <workItem from="1745645808733" duration="601000" />
       <workItem from="1745646456215" duration="458000" />
       <workItem from="1745646928813" duration="29098000" />
+      <workItem from="1748682601717" duration="2170000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
