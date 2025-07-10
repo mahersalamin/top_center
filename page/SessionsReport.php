@@ -4,6 +4,7 @@ require 'header.php';
 require '../dbconnection.php';
 $db = new MyDB();
 $sessions = $db->getSessionsDataDetailed();
+//echo json_encode($sessions);die();
 ?>
 <!DOCTYPE html>
 <html lang="ar">
@@ -26,85 +27,127 @@ $sessions = $db->getSessionsDataDetailed();
             text-align: center;
         }
 
-        #sessionForm {
-            display: none;
-        }
+        /*#sessionForm {*/
+        /*    display: none;*/
+        /*}*/
     </style>
 </head>
 
 <body>
     <!-- For sessions report-->
     <div class="container text-right">
-        <div id="sessionForm" style="display:none;">
-            <form method="post" action="saveSession.php">
+        <div id="sessionFormDiv">
+            <form method="post" action="saveSession.php" id="sessionForm" style="display:none;">
+                <input type="hidden" name="session_id" id="session_id">
+
                 <div class="row">
-                    <!-- Session Name -->
-                    <div class="col-md-4 form-group">
-                        <label for="sessionName">Session Name:</label>
+                    <div class="col-md-3 form-group">
+                        <label for="sessionName">اسم الدورة:</label>
                         <input type="text" id="sessionName" name="session_name" class="form-control">
                     </div>
 
-                    <!-- Session Type -->
-                    <div class="col-md-4 form-group">
-                        <label for="sessionType">Type:</label>
+                    <div class="col-md-3 form-group">
+                        <label for="sessionType">نوع الدورة:</label>
                         <input type="text" id="sessionType" name="session_type" class="form-control">
                     </div>
 
-                    <!-- Number of Hours -->
-                    <div class="col-md-4 form-group">
-                        <label for="sessionHours">Hours:</label>
+                    <div class="col-md-3 form-group">
+                        <label for="sessionHours">عدد الساعات/اللقاءات:</label>
                         <input type="number" id="sessionHours" name="session_hours" class="form-control">
+                    </div>
+                    <div class="col-md-3 form-group">
+                        <label for="sessionPrice">السعر:</label>
+                        <input type="number" id="sessionPrice" name="session_price" class="form-control">
                     </div>
                 </div>
 
                 <div class="row">
                     <!-- Teachers -->
                     <div class="col-md-4 form-group">
-                        <label>Teachers:</label>
-                        <?php $teachers = $db->getAllTeachers(); ?>
-                        <?php foreach ($teachers as $teacher) { ?>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="teacher_<?php echo $teacher['id']; ?>" name="teachers[]" value="<?php echo $teacher['id']; ?>">
-                                <label class="form-check-label" for="teacher_<?php echo $teacher['id']; ?>">
-                                    <?php echo $teacher['name']; ?>
-                                </label>
-                            </div>
-                        <?php } ?>
+                        <label>المعلمون:</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;">
+                            <?php $teachers = $db->getAllTeachers(); ?>
+                            <?php foreach ($teachers as $teacher) { ?>
+                                <div class="form-check d-flex align-items-center mb-2">
+                                    <input
+                                            type="checkbox"
+                                            class="form-check-input mr-2"
+                                            id="teacher_<?php echo $teacher['id']; ?>"
+                                            name="teachers[<?php echo $teacher['id']; ?>][id]"
+                                            value="<?php echo $teacher['id']; ?>"
+                                            onchange="togglePercentageInput(this)"
+                                    >
+
+                                    <label class="form-check-label mr-2" for="teacher_<?php echo $teacher['id']; ?>">
+                                        <?php echo $teacher['name']; ?>
+                                    </label>
+
+                                    <input
+                                            type="number"
+                                            class="form-control ml-2"
+                                            name="teachers[<?php echo $teacher['id']; ?>][percentage]"
+                                            placeholder="النسبة %"
+                                            min="0"
+                                            max="100"
+                                            step="1"
+                                            style="width: 80px;"
+                                            disabled
+                                    >
+                                </div>
+                            <?php } ?>
+
+                        </div>
                     </div>
+
+
 
                     <!-- Students -->
                     <div class="col-md-4 form-group">
-                        <label>Students:</label>
-                        <?php $students = $db->allStudents(); ?>
-                        <?php foreach ($students as $student) { ?>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="student_<?php echo $student['id']; ?>" name="students[]" value="<?php echo $student['id']; ?>">
-                                <label class="form-check-label" for="student_<?php echo $student['id']; ?>">
-                                    <?php echo $student['name']; ?>
-                                </label>
-                            </div>
-                        <?php } ?>
+                        <label>الطلاب:</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;">
+                            <?php foreach ($db->allStudents() as $student) { ?>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="student_<?php echo $student['id']; ?>" name="students[]" value="<?php echo $student['id']; ?>">
+                                    <label class="form-check-label mr-4" for="student_<?php echo $student['id']; ?>">
+                                        <?php echo $student['name']; ?>
+                                    </label>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
 
-                    <!-- Specializations -->
+                    <!-- Materials -->
                     <div class="col-md-4 form-group">
-                        <label>Specializations:</label>
-                        <?php $materials = $db->getSpecializations(); ?>
-                        <?php foreach ($materials as $material) { ?>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="material_<?php echo $material['id']; ?>" name="materials[]" value="<?php echo $material['id']; ?>">
-                                <label class="form-check-label" for="material_<?php echo $material['id']; ?>">
-                                    <?php echo $material['name']; ?>
-                                </label>
-                            </div>
-                        <?php } ?>
+                        <label>المواد:</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 8px;">
+                            <?php foreach ($db->getSpecializations() as $material) { ?>
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           id="material_<?php echo $material['id']; ?>"
+                                           name="materials[]"
+                                           value="<?php echo $material['id']; ?>"
+                                           data-material-name="<?php echo $material['name']; ?>">
+                                    <label class="form-check-label mr-4" for="material_<?php echo $material['id']; ?>">
+                                        <?php echo $material['name']; ?>
+                                    </label>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
 
-
-                <button type="submit" class="btn btn-success">Save</button>
+                <button type="submit" class="btn btn-success">حفظ</button>
             </form>
         </div>
+        <?php
+        if (isset($_GET['status']) && isset($_GET['msg'])) {
+            $status = $_GET['status'];
+            $msg = urldecode($_GET['msg']);
+            $alertClass = $status === 'success' ? 'alert-success' : 'alert-danger';
+            echo "<div class='alert $alertClass' role='alert' style='margin: 20px;'>$msg</div>";
+        }
+        ?>
 
         <div class="col-md-12 mb-2 font-weight-bold">
             <h1>تقرير الدورات</h1>
@@ -142,23 +185,27 @@ $sessions = $db->getSessionsDataDetailed();
                         echo "<td>{$session['id']}</td>";
                         echo "<td>{$session['session_name']}</td>";
                         echo "<td>{$session['type']}</td>";
-                        echo "<td>{$session['materials']}</td>";
+                        echo "<td><ul>";
+                        foreach ($session['materials'] as $material) {
+                            echo "<li>" . htmlspecialchars($material) . "</li>";
+                        }
+                        echo "</ul></td>";
                         echo "<td>{$session['hours']}</td>";
                         echo "<td>{$session['price']}</td>";
 
                         // Display teacher details
-                        echo "<td>";
+                        echo "<td><ul>";
                         foreach ($session['teachers'] as $teacher) {
-                            echo "{$teacher['teacher_names']}"; // Add more teacher details here if needed
+                            echo "<li>{$teacher['teacher_names']}</li>"; // Add more teacher details here if needed
                         }
-                        echo "</td>";
+                        echo "</ul></td>";
 
                         // Display student details
-                        echo "<td>";
+                        echo "<td><ul>";
                         foreach ($session['students'] as $student) {
-                            echo "{$student['student_names']}<br>"; // Add more student details here if needed
+                            echo "<li>{$student['student_names']}</li>"; // Add more student details here if needed
                         }
-                        echo "</td>";
+                        echo "</ul></td>";
                         echo "<td><button class='btn btn-primary' onclick='showForm(" . $session['id'] . ")'>تحرير</button></td>";
                         echo "</tr>";
                     }
@@ -180,85 +227,56 @@ $sessions = $db->getSessionsDataDetailed();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
     <script>
-        // Array to hold session data
+        function togglePercentageInput(checkbox) {
+            const input = checkbox.closest('.form-check').querySelector('input[type="number"]');
+            input.disabled = !checkbox.checked;
+            if (!checkbox.checked) input.value = '';
+        }
         const sessions = <?php echo json_encode($sessions); ?>;
-
         function showForm(sessionId) {
+            const session = sessions[sessionId];
+            if (!session) return;
 
-            alert('ستتوفر في التحديث القادم');
-            // // Find the session by ID
-            // const session = sessions[sessionId];
+            document.getElementById('session_id').value = sessionId;
+            document.getElementById('sessionName').value = session.session_name;
+            document.getElementById('sessionType').value = session.type;
+            document.getElementById('sessionHours').value = session.hours;
+            document.getElementById('sessionPrice').value = session.price;
 
-            // // Populate the form fields
-            // document.getElementById('sessionName').value = session.session_name;
-            // document.getElementById('sessionType').value = session.type;
-            // document.getElementById('sessionHours').value = session.hours;
+            // Uncheck all
+            document.querySelectorAll("input[name='teachers[]'], input[name='students[]'], input[name='materials[]']").forEach(input => {
+                input.checked = false;
+            });
 
-            // // Uncheck all teachers and students first
-            // document.querySelectorAll("input[name='teachers[]']").forEach(input => input.checked = false);
-            // document.querySelectorAll("input[name='students[]']").forEach(input => input.checked = false);
-            // document.querySelectorAll("input[name='materials[]']").forEach(input => input.checked = false);
+            // Teachers
+            session.teachers.forEach(t => {
+                const cb = document.getElementById('teacher_' + t.teacher_id);
+                if (cb) cb.checked = true;
+            });
 
-            // // Check teachers
-            // session.teachers.forEach(function (teacher) {
-            //     const teacherId = teacher.teacher_id;
-            //     const checkbox = document.getElementById('teacher_' + teacherId);
-            //     if (checkbox) {
-            //         checkbox.checked = true;
-            //     }
-            // });
+            // Students
+            session.students.forEach(s => {
+                const cb = document.getElementById('student_' + s.student_id);
+                if (cb) cb.checked = true;
+            });
 
-            // // Check students
-            // session.students.forEach(function (student) {
-            //     const studentId = student.student_id;
-            //     const checkbox = document.getElementById('student_' + studentId);
-            //     if (checkbox) {
-            //         checkbox.checked = true;
-            //     }
-            // });
+            // Materials (stored as comma-separated names)
+            if (Array.isArray(session.materials)) {
+                session.materials.forEach(name => {
+                    document.querySelectorAll("input[name='materials[]']").forEach(cb => {
+                        if (cb.dataset.materialName.trim() === name.trim()) {
+                            cb.checked = true;
+                        }
+                    });
+                });
+            }
 
-            // // Check materials (specializations)
-            // const materialList = session.materials.split(',');
-            // materialList.forEach(function (material) {
-            //     document.querySelectorAll("input[name='materials[]']").forEach(function (checkbox) {
-            //         if (checkbox.getAttribute('data-material-name') === material) {
-            //             checkbox.checked = true;
-            //         }
-            //     });
-            // });
 
-            // // Show the form
-            // document.getElementById('sessionForm').style.display = 'block';
+            document.getElementById('sessionForm').style.display = 'block';
         }
     </script>
 
 
-
-    <script>
-        function editSession(sessionId) {
-            // Get the row data
-            var row = document.querySelector(`tr td:first-child:contains('${sessionId}')`).parentNode;
-            var sessionName = row.cells[1].innerText;
-            var sessionType = row.cells[2].innerText;
-            var sessionMaterials = row.cells[3].innerText;
-            var sessionHours = row.cells[4].innerText;
-            var sessionPrice = row.cells[5].innerText;
-
-            // Fill the form with data
-            document.getElementById('sessionName').value = sessionName;
-            document.getElementById('sessionType').value = sessionType;
-            document.getElementById('sessionMaterials').value = sessionMaterials;
-            document.getElementById('sessionHours').value = sessionHours;
-            document.getElementById('sessionPrice').value = sessionPrice;
-
-            // Show the form
-            document.getElementById('editForm').style.display = 'block';
-        }
-
-        function hideForm() {
-            document.getElementById('editForm').style.display = 'none';
-        }
-    </script>
     <script>
         $(document).ready(function() {
             let table = $('#report_table').DataTable({

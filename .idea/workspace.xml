@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="major updates">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="prevent approving approved classes">
+      <change afterPath="$PROJECT_DIR$/page/deleteSession.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/page/saveSession.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/MissionsReports.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/MissionsReports.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/SessionsReport.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/SessionsReport.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +184,11 @@
       <workItem from="1745645808733" duration="601000" />
       <workItem from="1745646456215" duration="458000" />
       <workItem from="1745646928813" duration="29098000" />
-      <workItem from="1748682601717" duration="2170000" />
+      <workItem from="1748682601717" duration="3691000" />
+      <workItem from="1751091469725" duration="2710000" />
+      <workItem from="1751693902622" duration="2458000" />
+      <workItem from="1751953822872" duration="7441000" />
+      <workItem from="1752128002183" duration="3460000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -212,14 +217,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00018" summary="complete prevent archived teacher login">
-      <option name="closed" value="true" />
-      <created>1723271108600</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1723271108600</updated>
     </task>
     <task id="LOCAL-00019" summary="archiving students">
       <option name="closed" value="true" />
@@ -573,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745688563793</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="prevent approving approved classes">
+      <option name="closed" value="true" />
+      <created>1748695795531</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1748695795531</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -602,7 +607,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="update logo" />
     <MESSAGE value="remove non-necessary files, split charts to new page" />
     <MESSAGE value="clean code" />
     <MESSAGE value="update views, and archive specialization" />
@@ -627,7 +631,8 @@
     <MESSAGE value="fix summary report from secretary div showing up" />
     <MESSAGE value="secretary can view reports" />
     <MESSAGE value="major updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="major updates" />
+    <MESSAGE value="prevent approving approved classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="prevent approving approved classes" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
