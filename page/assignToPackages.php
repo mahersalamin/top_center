@@ -239,15 +239,13 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
                aria-selected="false">إضافة طلاب الى دورات موجودة</a>
         </li>
     </ul>
-
     <div class="tab-content">
-
-        <?php require 'sessions/addNewSession.php' ?>
-
-        <?php require 'sessions/addToExistingSession.php' ?>
-
-
-
+        <div class="tab-pane fade show active" id="new-package" role="tabpanel" aria-labelledby="new-package-tab">
+            <?php require 'sessions/addNewSession.php'; ?>
+        </div>
+        <div class="tab-pane fade" id="student-to-package" role="tabpanel" aria-labelledby="student-to-package-tab">
+            <?php require 'sessions/addToExistingSession.php'; ?>
+        </div>
     </div>
 </div>
 
@@ -268,60 +266,7 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
     });
 </script>
 
-<script>
-    let currentTab = 0;
-    showTab(currentTab);
 
-    function showTab(n) {
-        let x = document.getElementsByClassName("tab");
-        x[n].style.display = "block";
-        if (n == 0) {
-            document.getElementsByClassName("btn-secondary")[0].style.display = "none";
-        } else {
-            document.getElementsByClassName("btn-secondary")[0].style.display = "inline";
-        }
-        if (n == (x.length - 1)) {
-            document.getElementById("nextBtn").innerHTML = "حفظ";
-        } else {
-            document.getElementById("nextBtn").innerHTML = "التالي";
-        }
-        fixStepIndicator(n);
-    }
-
-    function nextPrev(n) {
-        let x = document.getElementsByClassName("tab");
-        x[currentTab].style.display = "none";
-        currentTab = currentTab + n;
-
-        if (currentTab >= x.length) {
-            // Only enable teacher fields if checkbox is checked
-            const teacherGroups = document.querySelectorAll('[data-teacher-id]');
-            teacherGroups.forEach(group => {
-                const checkbox = group.querySelector('input[type="checkbox"]');
-                const inputs = group.querySelectorAll('input');
-                if (!checkbox.checked) {
-                    inputs.forEach(input => input.disabled = true);
-                }
-            });
-
-            document.getElementById("multiStepForm").submit();
-            return false;
-        }
-
-        showTab(currentTab);
-    }
-
-
-
-    function fixStepIndicator(n) {
-        let i, x = document.getElementsByClassName("step");
-
-        for (i = 0; i < x.length; i++) {
-            x[i].className = x[i].className.replace(" active", "");
-        }
-        x[n].className += " active";
-    }
-</script>
 
 <script>
     let currentTab1 = 0; // Current tab is set to be the first tab (0)
@@ -498,167 +443,3 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
     });
 </script>
 
-
-<script>
-
-    let selectedClassValues = [];
-
-
-    function filterStudents() {
-        let selectedClass = document.getElementById('classDropdown').value.toUpperCase();
-        let searchInput = document.getElementById('searchInput').value.toUpperCase();
-        let studentRows = document.querySelectorAll('.student-row');
-
-        studentRows.forEach(function (row) {
-            let studentName = row.querySelector('.form-check-label').textContent.toUpperCase();
-            let studentClass = row.getAttribute('data-class').toUpperCase();
-
-            if ((selectedClass === "" || studentClass === selectedClass) &&
-                (searchInput === "" || studentName.includes(searchInput))) {
-                row.style.display = 'flex';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    function filterStudents2() {
-        let selectedClass = document.getElementById('classDropdown2').value.toUpperCase();
-        let searchInput = document.getElementById('searchInput2').value.toUpperCase();
-        let studentRows = document.querySelectorAll('.student-row2');
-
-        studentRows.forEach(function (row) {
-            let studentName = row.querySelector('.form-check-label').textContent.toUpperCase();
-            let studentClass = row.getAttribute('data-class').toUpperCase();
-
-            if ((selectedClass === "" || studentClass === selectedClass) &&
-                (searchInput === "" || studentName.includes(searchInput))) {
-                row.style.display = 'flex';
-            } else {
-                row.style.display = 'none';
-            }
-        });
-    }
-
-    function getClassValue(classValue, checkbox) {
-        if (checkbox.checked) {
-            selectedClassValues.push(classValue);
-        } else {
-            let index = selectedClassValues.indexOf(classValue);
-            if (index > -1) {
-                selectedClassValues.splice(index, 1); // Remove only the first occurrence
-            }
-        }
-
-        let schoolBackpackDiv = document.getElementById('school_backpack');
-        let individualDiv = document.getElementById('individual-div');
-        let groupInput = document.getElementById('group');
-        if (selectedClassValues.length > 1) {
-            individualDiv.style.visibility = 'hidden';
-            groupInput.checked = true
-        } else {
-            individualDiv.style.visibility = 'visible';
-            groupInput.checked = false
-        }
-
-        if (selectedClassValues.some(value => parseInt(value) >= 10)) {
-            schoolBackpackDiv.style.visibility = 'hidden';
-            // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
-        } else {
-            schoolBackpackDiv.style.visibility = 'visible';
-        }
-
-        let elementary_div = document.getElementById('elementary_materials');
-        let mid_div = document.getElementById('mid_materials');
-        let secondary_div = document.getElementById('secondary_materials');
-
-        if (selectedClassValues.some(value => parseInt(value) >= 10)) {
-            elementary_div.style.visibility = 'hidden';
-            mid_div.style.visibility = 'hidden';
-            secondary_div.style.visibility = 'visible';
-
-            // alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
-        } else if (selectedClassValues.some(value => parseInt(value) <= 6)) {
-            elementary_div.style.visibility = 'visible';
-            mid_div.style.visibility = 'hidden';
-            secondary_div.style.visibility = 'hidden';
-        } else {
-            elementary_div.style.visibility = 'hidden';
-            mid_div.style.visibility = 'visible';
-            secondary_div.style.visibility = 'hidden';
-        }
-    }
-
-    function getPrivateValue() {
-        let privateValue = document.querySelector('input[name="session_package"]:checked').value;
-        let hoursDiv = document.getElementById('hours-div');
-        let individualDiv = document.getElementById('individual-div');
-
-        if (privateValue === 'دورة خاصة') {
-            if (selectedClassValues.length < 2) {
-                hoursDiv.style.visibility = 'hidden';
-                individualDiv.style.visibility = 'visible';
-            } else {
-                hoursDiv.style.visibility = 'visible';
-                individualDiv.style.visibility = 'hidden';
-            }
-        } else if (privateValue === 'حقيبة مدرسية') {
-
-            if (selectedClassValues.some(value => parseInt(value) >= 10)) {
-                alert('لا يمكنك تحديد حقيبة مدرسية مع طلاب الصف العاشر فما فوق!');
-                document.querySelector('input[name="session_package"]:checked').checked = false;
-
-            } else {
-                individualDiv.style.visibility = 'hidden';
-                hoursDiv.style.visibility = 'visible';
-            }
-        } else {
-            if (selectedClassValues.length < 2) {
-                hoursDiv.style.visibility = 'hidden';
-                individualDiv.style.visibility = 'visible';
-            } else {
-                hoursDiv.style.visibility = 'visible';
-                individualDiv.style.visibility = 'hidden';
-            }
-        }
-    }
-
-    function toggleDropdown() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-
-    function toggleAllMaterials() {
-        let checkboxes = document.querySelectorAll('input[name="materials[]"]');
-        let selectAllCheckbox = document.getElementById('all_materials');
-
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-    }
-
-    function toggleAll(classType) {
-        let checkboxes = document.querySelectorAll('.' + classType);
-        let allChecked = document.getElementById('all_' + classType).checked;
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = allChecked;
-        });
-    }
-
-    function filterFunction() {
-        let input, filter, div, label, i, txtValue;
-        input = document.getElementById("searchInput");
-        filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
-        label = div.getElementsByTagName("label");
-        for (i = 0; i < label.length; i++) {
-            txtValue = label[i].textContent || label[i].innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                label[i].style.display = "";
-            } else {
-                label[i].style.display = "none";
-            }
-        }
-    }
-
-
-</script>

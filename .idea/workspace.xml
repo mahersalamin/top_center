@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="prevent approving approved classes">
-      <change afterPath="$PROJECT_DIR$/page/deleteSession.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/page/saveSession.php" afterDir="false" />
+    <list default="true" id="64202ae3-5a04-462b-9272-d471902ffe72" name="Changes" comment="update the sessions">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MyDB.php" beforeDir="false" afterPath="$PROJECT_DIR$/MyDB.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/page/SessionsReport.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/SessionsReport.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/assignToPackages.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/assignToPackages.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/sessions/addNewSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addNewSession.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/page/sessions/addToExistingSession.php" beforeDir="false" afterPath="$PROJECT_DIR$/page/sessions/addToExistingSession.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +187,7 @@
       <workItem from="1751091469725" duration="2710000" />
       <workItem from="1751693902622" duration="2458000" />
       <workItem from="1751953822872" duration="7441000" />
-      <workItem from="1752128002183" duration="3460000" />
+      <workItem from="1752128002183" duration="10048000" />
     </task>
     <task id="LOCAL-00001" summary="major updates">
       <created>1716735514566</created>
@@ -217,14 +216,6 @@
       <option name="presentableId" value="LOCAL-00004" />
       <option name="project" value="LOCAL" />
       <updated>1717247461757</updated>
-    </task>
-    <task id="LOCAL-00019" summary="archiving students">
-      <option name="closed" value="true" />
-      <created>1723271126888</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1723271126888</updated>
     </task>
     <task id="LOCAL-00020" summary="fix archiving teacher bug">
       <option name="closed" value="true" />
@@ -578,7 +569,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748695795531</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="update the sessions">
+      <option name="closed" value="true" />
+      <created>1752174788661</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1752174788661</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -607,7 +606,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="remove non-necessary files, split charts to new page" />
     <MESSAGE value="clean code" />
     <MESSAGE value="update views, and archive specialization" />
     <MESSAGE value="fix bugs, add new data to the teacher" />
@@ -632,7 +630,8 @@
     <MESSAGE value="secretary can view reports" />
     <MESSAGE value="major updates" />
     <MESSAGE value="prevent approving approved classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="prevent approving approved classes" />
+    <MESSAGE value="update the sessions" />
+    <option name="LAST_COMMIT_MESSAGE" value="update the sessions" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
