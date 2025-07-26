@@ -83,16 +83,19 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }
     }
 
-    .input-group-text, .form-control {
+    .input-group-text,
+    .form-control {
         border-radius: 8px;
     }
 
-    .form-control:focus, .form-select:focus {
+    .form-control:focus,
+    .form-select:focus {
         border-color: #007bff;
         box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
     }
@@ -117,7 +120,9 @@
         background-color: #fff;
     }
 
-    .student-row, .specialization-item, .teacher-card {
+    .student-row,
+    .specialization-item,
+    .teacher-card {
         padding: 10px 0;
         border-bottom: 1px solid #eee;
     }
@@ -135,250 +140,349 @@
 
 <div class="stepper-container">
 
-        <div class="stepper-header" id="step-indicators">
-            <div class="step-indicator active">
-                <span class="step-number">1</span>
-                <span class="step-title">معرف الدورة</span>
-            </div>
-            <div class="step-indicator">
-                <span class="step-number">2</span>
-                <span class="step-title">الطلاب</span>
-            </div>
-            <div class="step-indicator">
-                <span class="step-number">3</span>
-                <span class="step-title">الدورات</span>
-            </div>
-            <div class="step-indicator">
-                <span class="step-number">4</span>
-                <span class="step-title">الإشتراك والسعر</span>
-            </div>
-            <div class="step-indicator">
-                <span class="step-number">5</span>
-                <span class="step-title">المواد</span>
-            </div>
-            <div class="step-indicator">
-                <span class="step-number">6</span>
-                <span class="step-title">المعلمين</span>
+    <div class="stepper-header" id="step-indicators">
+        <div class="step-indicator active">
+            <span class="step-number">1</span>
+            <span class="step-title">معرف الدورة</span>
+        </div>
+        <div class="step-indicator">
+            <span class="step-number">2</span>
+            <span class="step-title">الطلاب</span>
+        </div>
+        <div class="step-indicator">
+            <span class="step-number">3</span>
+            <span class="step-title">الدورات</span>
+        </div>
+        <div class="step-indicator">
+            <span class="step-number">4</span>
+            <span class="step-title">الإشتراك والسعر</span>
+        </div>
+        <div class="step-indicator">
+            <span class="step-number">5</span>
+            <span class="step-title">المواد</span>
+        </div>
+        <div class="step-indicator">
+            <span class="step-number">6</span>
+            <span class="step-title">المعلمين</span>
+        </div>
+    </div>
+
+    <form id="multiStepForm" method="post" enctype="application/x-www-form-urlencoded" action="../assignPackages.php">
+        <label>
+            <input hidden name="pkg" value="package">
+        </label>
+
+        <div class="tab">
+            <h4 class="mb-4">معرف الدورة</h4>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="session_name_label">معرف الدورة</span>
+                </div>
+                <input required name="session_name" id="session_name" type="text" class="form-control" placeholder="أدخل معرف الدورة">
             </div>
         </div>
 
-        <form id="multiStepForm" method="post" enctype="application/x-www-form-urlencoded" action="../assignPackages.php">
-            <label>
-                <input hidden name="pkg" value="package">
-            </label>
-
-            <div class="tab">
-                <h4 class="mb-4">معرف الدورة</h4>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="session_name_label">معرف الدورة</span>
-                    </div>
-                    <input required name="session_name" id="session_name" type="text" class="form-control" placeholder="أدخل معرف الدورة">
-                </div>
-            </div>
-
-            <div class="tab">
-                <div class="col-md-12 font-weight-bold">
-                    <h4>الطلاب</h4>
-                    <div class="mb-4 d-flex gap-3">
-                        <select id="classDropdown" class="form-select" onchange="filterStudents()">
-                            <option value="">اختر الصف</option>
-                            <?php
-                            $classes = array_unique(array_column($students, 'class'));
-                            sort($classes);
-                            foreach ($classes as $class) { ?>
-                                <option value="<?php echo $class; ?>"><?php echo 'الصف: ' . $class; ?></option>
-                            <?php } ?>
-                        </select>
-                        <input type="text" id="searchInput" class="form-control" onkeyup="filterStudents()" placeholder="ابحث عن طالب...">
-                    </div>
-
-                    <div id="studentCheckboxes" class="list-group">
-                        <?php foreach ($students as $student) {
-                            if ($student['archived'] != 1) { ?>
-                                <div class="list-group-item student-row d-flex align-items-center" data-class="<?php echo $student['class']; ?>">
-                                    <input class="form-check-input" type="checkbox" name="students[]" id="students2_<?php echo $student['id']; ?>" value="<?php echo $student['id']; ?>" oninput="getClassValue(<?= $student['class'] ?>, this); updateMaterialListVisibility();">
-                                    <label class="form-check-label mr-4" for="students2_<?php echo $student['id']; ?>">
-                                        <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
-                                    </label>
-                                </div>
-                            <?php } ?>
+        <div class="tab">
+            <div class="col-md-12 font-weight-bold">
+                <h4>الطلاب</h4>
+                <div class="mb-4 d-flex gap-3">
+                    <select id="classDropdown" class="form-select" onchange="filterStudents()">
+                        <option value="">اختر الصف</option>
+                        <?php
+                        $classes = array_unique(array_column($students, 'class'));
+                        sort($classes);
+                        foreach ($classes as $class) { ?>
+                            <option value="<?php echo $class; ?>"><?php echo 'الصف: ' . $class; ?></option>
                         <?php } ?>
-                    </div>
+                    </select>
+                    <input type="text" id="searchInput" class="form-control" onkeyup="filterStudents()" placeholder="ابحث عن طالب...">
                 </div>
-            </div>
 
-            <div class="tab">
-                <div class="col-md-6 font-weight-bold">
-                    <h4>الدورات</h4>
-                    <div class="session_package list-group">
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <label class="form-check-label mr-4" for="1">دورة خاصة</label>
-                            <input class="form-check-input" type="radio" name="session_package" id="1" value="دورة خاصة" oninput="getPrivateValue()">
-                        </div>
-                        <div id="school_backpack" class="list-group-item d-flex justify-content-between align-items-center">
-                            <label class="form-check-label mr-4" for="2">حقيبة مدرسية</label>
-                            <input class="form-check-input" type="radio" name="session_package" id="2" value="حقيبة مدرسية" oninput="getPrivateValue()">
-                        </div>
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
-                            <label class="form-check-label mr-4" for="3">اشتراك شهري</label>
-                            <input class="form-check-input" type="radio" name="session_package" id="3" value="اشتراك شهري" oninput="getPrivateValue()">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab">
-                <div class="col-md-6 font-weight-bold">
-                    <h4>اختر فئة الإشتراك والسعر</h4>
-                    <div class="mb-3">
-                        <div class="form-check d-flex align-items-center mb-2" id="individual-div">
-                            <input class="form-check-input" type="radio" name="is_group" id="individual" value="0">
-                            <label class="form-check-label  mr-4" for="individual">فردي</label>
-                        </div>
-                        <div class="form-check d-flex align-items-center" id="group-div">
-                            <input class="form-check-input" type="radio" name="is_group" id="group" value="1">
-                            <label class="form-check-label mr-4" for="group">جماعي</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group mb-4" id="hours-div">
-                        <label for="hours" class="form-label">عدد الساعات (اللقاءات في حال اختيار حقيبة مدرسية):</label>
-                        <input type="number" min="0" value="0" class="form-control" id="hours" name="hours" placeholder="عدد الساعات">
-                    </div>
-
-                    <div class="form-group" id="price-div">
-                        <label for="price" class="form-label">السعر لكل طالب:</label>
-                        <input type="number" class="form-control" min="0" id="price" name="price" placeholder="السعر لكل طالب">
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab">
-                <div class="row">
-                    <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold">
-                        <h4>قائمة المواد الأساسية</h4>
-                        <div class="list-group">
-                            <?php foreach ($materials as $material) {
-                                if ($material['class_type'] == 1 && $material['active'] == 0) { ?>
-                                    <div class="list-group-item d-flex align-items-center">
-                                        <input class="form-check-input class1" type="checkbox" name="materials2[]" id="material1_<?php echo $material['id']; ?>" value="<?php echo $material['id']; ?>">
-                                        <label class="form-check-label mr-4" for="material1_<?php echo $material['id']; ?>">
-                                            <?php echo $material['name']; ?>
-                                        </label>
-                                    </div>
-                                <?php }
-                            } ?>
-                        </div>
-                    </div>
-
-                    <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold">
-                        <h4>قائمة المواد الاعدادية</h4>
-                        <div class="list-group">
-                            <?php foreach ($materials as $material) {
-                                if ($material['class_type'] == 2 && $material['active'] == 0) { ?>
-                                    <div class="list-group-item d-flex align-items-center">
-                                        <input class="form-check-input class2" type="checkbox" name="materials2[]" id="material2_<?php echo $material['id']; ?>" value="<?php echo $material['id']; ?>">
-                                        <label class="form-check-label mr-4" for="material2_<?php echo $material['id']; ?>">
-                                            <?php echo $material['name']; ?>
-                                        </label>
-                                    </div>
-                                <?php }
-                            } ?>
-                        </div>
-                    </div>
-
-                    <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold">
-                        <h4>قائمة المواد الثانوية</h4>
-                        <div class="list-group">
-                            <?php foreach ($materials as $material) {
-                                if ($material['class_type'] == 3 && $material['active'] == 0) { ?>
-                                    <div class="list-group-item d-flex align-items-center">
-                                        <input class="form-check-input class3" type="checkbox" name="materials2[]" id="material3_<?php echo $material['id']; ?>" value="<?php echo $material['id']; ?>">
-                                        <label class="form-check-label mr-4" for="material3_<?php echo $material['id']; ?>">
-                                            <?php echo $material['name']; ?>
-                                        </label>
-                                    </div>
-                                <?php }
-                            } ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tab">
-                <div class="col-md-12 mt-3 font-weight-bold">
-                    <h4>المعلمين</h4>
-                    <div class="mb-3">
-                        <input type="text" id="teacherSearch" class="form-control" placeholder="ابحث باسم المعلم..." onkeyup="filterTeachersByName()">
-                    </div>
-
-                    <div id="teachersContainer">
-                        <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
-                            <div data-teacher-id="<?php echo htmlspecialchars($teacher['id']); ?>">
-                                <div class="card mb-3 teacher-card" data-teacher-name="<?php echo htmlspecialchars($teacher['name']); ?>">
-                                    <div class="card-header bg-light d-flex align-items-center">
-                                        <input class="form-check-input" type="checkbox" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]" id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>" value="<?php echo htmlspecialchars($teacher['id']); ?>">
-                                        <label class="form-check-label mr-4" for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
-                                            <?php echo htmlspecialchars($teacher['name']); ?>
-                                        </label>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <h6 class="card-title mb-3">التخصصات</h6>
-                                        <div class="specializations-container row g-2">
-                                            <?php foreach ($teacher['specializations'] as $spec) { ?>
-                                                <div class="specialization-item col-md-6">
-                                                    <input class="form-check-input" type="checkbox" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]" id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>" value="<?php echo htmlspecialchars($spec[0]); ?>">
-                                                    <label class="form-check-label mr-4" for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
-                                                        <?php echo htmlspecialchars($spec[1]); ?>
-                                                    </label>
-                                                </div>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-footer text-center">
-                                        <input type="number" class="form-control percentage-input" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]" id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>" min="0" max="100" step="1" value="<?php echo !empty($teacher['percentage']) ? htmlspecialchars($teacher['percentage']) : ''; ?>" placeholder="أدخل النسبة (0-100)">
-                                    </div>
-                                </div>
+                <div id="studentCheckboxes" class="list-group">
+                    <?php foreach ($students as $student) {
+                        if ($student['archived'] != 1) { ?>
+                            <div class="list-group-item student-row d-flex align-items-center" data-class="<?php echo $student['class']; ?>">
+                                <input class="form-check-input" type="checkbox" name="students[]" id="students2_<?php echo $student['id']; ?>" value="<?php echo $student['id']; ?>" onchange="updateMaterialListVisibility()">
+                                <label class="form-check-label mr-4" for="students2_<?php echo $student['id']; ?>">
+                                    <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
+                                </label>
                             </div>
                         <?php } ?>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <div class="col-md-6 font-weight-bold">
+                <h4>الدورات</h4>
+                <div class="session_package list-group">
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <label class="form-check-label mr-4" for="1">دورة خاصة</label>
+                        <input class="form-check-input" type="radio" name="session_package" id="1" value="دورة خاصة" oninput="getPrivateValue()">
+                    </div>
+                    <div id="school_backpack" class="list-group-item d-flex justify-content-between align-items-center">
+                        <label class="form-check-label mr-4" for="2">حقيبة مدرسية</label>
+                        <input class="form-check-input" type="radio" name="session_package" id="2" value="حقيبة مدرسية" oninput="getPrivateValue()">
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <label class="form-check-label mr-4" for="3">اشتراك شهري</label>
+                        <input class="form-check-input" type="radio" name="session_package" id="3" value="اشتراك شهري" oninput="getPrivateValue()">
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="d-flex justify-content-end mt-4 pt-3 border-top">
-                <button type="button" class="btn btn-secondary me-2" id="prevBtn" onclick="nextPrev(-1)">السابق</button>
-                <button type="button" class="btn btn-primary mr-4" id="nextBtn" onclick="nextPrev(1)">التالي</button>
+        <div class="tab">
+            <div class="col-md-6 font-weight-bold">
+                <h4>اختر فئة الإشتراك والسعر</h4>
+                <div class="mb-3">
+                    <div class="form-check d-flex align-items-center mb-2" id="individual-div">
+                        <input class="form-check-input" type="radio" name="is_group" id="individual" value="0">
+                        <label class="form-check-label  mr-4" for="individual">فردي</label>
+                    </div>
+                    <div class="form-check d-flex align-items-center" id="group-div">
+                        <input class="form-check-input" type="radio" name="is_group" id="group" value="1">
+                        <label class="form-check-label mr-4" for="group">جماعي</label>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4" id="hours-div">
+                    <label for="hours" class="form-label">عدد الساعات (اللقاءات في حال اختيار حقيبة مدرسية):</label>
+                    <input type="number" min="0" value="0" class="form-control" id="hours" name="hours" placeholder="عدد الساعات">
+                </div>
+
+                <div class="form-group" id="price-div">
+                    <label for="price" class="form-label">السعر لكل طالب:</label>
+                    <input type="number" class="form-control" min="0" id="price" name="price" placeholder="السعر لكل طالب">
+                </div>
             </div>
-        </form>
+        </div>
+
+        <div class="tab">
+            <div class="row">
+                <div id="elementary_materials" class="col-md-4 mt-3 font-weight-bold">
+                    <h4>قائمة المواد الأساسية</h4>
+                    <div class="list-group">
+                        <?php foreach ($materials as $material) {
+                            if ($material['class_type'] == 1 && $material['active'] == 0) { ?>
+                                <div class="list-group-item d-flex align-items-center">
+                                    <input 
+                                        class="form-check-input class1" 
+                                        type="checkbox" 
+                                        name="materials2[]" 
+                                        id="material1_<?php echo $material['id']; ?>" 
+                                        value="<?php echo $material['id']; ?>"
+                                        onchange="filterTeachersByMaterial()">
+
+                                    <label class="form-check-label mr-4" for="material1_<?php echo $material['id']; ?>">
+                                        <?php echo $material['name']; ?>
+                                    </label>
+                                </div>
+                        <?php }
+                        } ?>
+                    </div>
+                </div>
+
+                <div id="mid_materials" class="col-md-4 mt-3 font-weight-bold">
+                    <h4>قائمة المواد الاعدادية</h4>
+                    <div class="list-group">
+                        <?php foreach ($materials as $material) {
+                            if ($material['class_type'] == 2 && $material['active'] == 0) { ?>
+                                <div class="list-group-item d-flex align-items-center">
+                                    <input 
+                                        class="form-check-input class2" 
+                                        type="checkbox" 
+                                        name="materials2[]" 
+                                        id="material2_<?php echo $material['id']; ?>" 
+                                        value="<?php echo $material['id']; ?>" 
+                                        onchange="filterTeachersByMaterial()">
+                                    <label class="form-check-label mr-4" for="material2_<?php echo $material['id']; ?>">
+                                        <?php echo $material['name']; ?>
+                                    </label>
+                                </div>
+                        <?php }
+                        } ?>
+                    </div>
+                </div>
+
+                <div id="secondary_materials" class="col-md-4 mt-3 font-weight-bold">
+                    <h4>قائمة المواد الثانوية</h4>
+                    <div class="list-group">
+                        <?php foreach ($materials as $material) {
+                            if ($material['class_type'] == 3 && $material['active'] == 0) { ?>
+                                <div class="list-group-item d-flex align-items-center">
+                                    <input 
+                                        class="form-check-input class3"
+                                        type="checkbox"
+                                        name="materials2[]"
+                                        id="material3_<?php echo $material['id']; ?>" 
+                                        value="<?php echo $material['id']; ?>"
+                                        onchange="filterTeachersByMaterial()">
+                                    <label class="form-check-label mr-4" for="material3_<?php echo $material['id']; ?>">
+                                        <?php echo $material['name']; ?>
+                                    </label>
+                                </div>
+                        <?php }
+                        } ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab">
+            <div class="col-md-12 mt-3 font-weight-bold">
+                <h4>المعلمين</h4>
+                <div class="mb-3">
+                    <input type="text" id="teacherSearch" class="form-control" placeholder="ابحث باسم المعلم..." onkeyup="filterTeachersByName()">
+                </div>
+
+                <div id="teachersContainer">
+                    <?php foreach ($teacherSpecializations as $teacherId => $teacher) { ?>
+                        <div data-teacher-id="<?php echo htmlspecialchars($teacher['id']); ?>">
+                            <div class="card mb-3 teacher-card" data-teacher-name="<?php echo htmlspecialchars($teacher['name']); ?>">
+                                <div class="card-header bg-light d-flex align-items-center">
+                                    <input class="form-check-input" type="checkbox" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][id]" id="teacher_<?php echo htmlspecialchars($teacher['id']); ?>" value="<?php echo htmlspecialchars($teacher['id']); ?>">
+                                    <label class="form-check-label mr-4" for="teacher_<?php echo htmlspecialchars($teacher['id']); ?>">
+                                        <?php echo htmlspecialchars($teacher['name']); ?>
+                                    </label>
+                                </div>
+
+                                <div class="card-body">
+                                    <h6 class="card-title mb-3">التخصصات</h6>
+                                    <div class="specializations-container row g-2">
+                                        <?php foreach ($teacher['specializations'] as $spec) { ?>
+                                            <div class="specialization-item col-md-6">
+                                                <input class="form-check-input" type="checkbox" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][specializations][]" id="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>" value="<?php echo htmlspecialchars($spec[0]); ?>">
+                                                <label class="form-check-label mr-4" for="spec_<?php echo htmlspecialchars($teacher['id']) . '_' . htmlspecialchars($spec[0]); ?>">
+                                                    <?php echo htmlspecialchars($spec[1]); ?>
+                                                </label>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+
+                                <div class="card-footer text-center">
+                                    <input type="number" class="form-control percentage-input" name="teachers[<?php echo htmlspecialchars($teacher['id']); ?>][percentage]" id="percentage_<?php echo htmlspecialchars($teacher['id']); ?>" min="0" max="100" step="1" value="<?php echo !empty($teacher['percentage']) ? htmlspecialchars($teacher['percentage']) : ''; ?>" placeholder="أدخل النسبة (0-100)">
+                                </div>
+                            </div>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4 pt-3 border-top">
+            <button type="button" class="btn btn-secondary me-2" id="prevBtn" onclick="nextPrev(-1)">السابق</button>
+            <button type="button" class="btn btn-primary mr-4" id="nextBtn" onclick="nextPrev(1)">التالي</button>
+        </div>
+    </form>
 </div>
 
 <script>
     function updateMaterialListVisibility() {
-        const selectedStudents = document.querySelectorAll('input[name="students[]"]:checked');
-        const selectedClasses = Array.from(selectedStudents).map(cb => parseInt(cb.getAttribute('oninput').match(/\d+/)[0]));
+        console.log("updateMaterialListVisibility called");
 
-        // Determine grade range
-        let showElementary = false, showMiddle = false, showSecondary = false;
+        const selectedStudentsCheckboxes = document.querySelectorAll('input[name="students[]"]:checked');
+        const selectedClasses = new Set(); // Use a Set to store unique classes
 
-        for (let grade of selectedClasses) {
-            if (grade >= 1 && grade <= 6) showElementary = true;
-            else if (grade >= 7 && grade <= 9) showMiddle = true;
-            else if (grade > 9) showSecondary = true;
-        }
+        selectedStudentsCheckboxes.forEach(checkbox => {
+            // Get the parent div with data-class attribute
+            const studentRow = checkbox.closest('.student-row');
+            if (studentRow) {
+                selectedClasses.add(parseInt(studentRow.dataset.class));
+            }
+        });
 
-        // Priority: only one section shown based on highest priority grade range
-        document.getElementById("elementary_materials").style.display = (showElementary && !showMiddle && !showSecondary) ? "block" : "none";
-        document.getElementById("mid_materials").style.display = (showMiddle && !showSecondary && !showElementary) ? "block" : "none";
-        document.getElementById("secondary_materials").style.display = (showSecondary && !showElementary && !showMiddle) ? "block" : "none";
+        console.log("Selected Classes:", Array.from(selectedClasses));
 
-        // Fallback if multiple types selected → show all
-        if ((showElementary && showMiddle) || (showElementary && showSecondary) || (showMiddle && showSecondary)) {
-            document.getElementById("elementary_materials").style.display = "block";
-            document.getElementById("mid_materials").style.display = "block";
-            document.getElementById("secondary_materials").style.display = "block";
+        let showElementary = false;
+        let showMiddle = false;
+        let showSecondary = false;
+
+        selectedClasses.forEach(grade => {
+            if (grade >= 1 && grade <= 6) {
+                showElementary = true;
+            } else if (grade >= 7 && grade <= 9) {
+                showMiddle = true;
+            } else if (grade > 9) {
+                showSecondary = true;
+            }
+        });
+
+        // Update visibility based on selected classes
+        document.getElementById("elementary_materials").style.display = showElementary ? "block" : "none";
+        document.getElementById("mid_materials").style.display = showMiddle ? "block" : "none";
+        document.getElementById("secondary_materials").style.display = showSecondary ? "block" : "none";
+    }
+
+    // Initial call to set correct visibility when the page loads
+    function filterTeachersByMaterial() {
+        console.log("filterTeachersByMaterial called");
+
+        const selectedMaterialIds = new Set();
+        // Get all currently checked material checkboxes
+        document.querySelectorAll('input[name="materials2[]"]:checked').forEach(checkbox => {
+            selectedMaterialIds.add(checkbox.value);
+        });
+
+        const teachersContainer = document.getElementById('teachersContainer');
+        const teacherCards = teachersContainer.querySelectorAll('.teacher-card');
+
+        teacherCards.forEach(teacherCard => {
+            let showTeacherCard = false; // Flag to determine if the entire teacher's card should be shown
+            // Get all specialization items for the current teacher
+            const teacherSpecializationItems = teacherCard.querySelectorAll('.specialization-item');
+
+            if (selectedMaterialIds.size === 0) {
+                // If NO materials are selected, hide all specializations for this teacher
+                // and hide the entire teacher card
+                teacherSpecializationItems.forEach(specializationItem => {
+                    specializationItem.style.display = 'none';
+                    // Ensure the checkbox is unchecked if the specialization is hidden
+                    const specCheckbox = specializationItem.querySelector('input[type="checkbox"]');
+                    if (specCheckbox) {
+                        specCheckbox.checked = false;
+                    }
+                });
+                // Hide the whole teacher card
+                teacherCard.closest('[data-teacher-id]').style.display = 'none';
+            } else {
+                // Materials ARE selected, filter specializations based on these
+                teacherSpecializationItems.forEach(specializationItem => {
+                    const specCheckbox = specializationItem.querySelector('input[type="checkbox"]');
+                    if (!specCheckbox) return; // Skip if checkbox not found within item
+
+                    // Check if this specialization's material ID is among the selected materials
+                    if (selectedMaterialIds.has(specCheckbox.value)) {
+                        specializationItem.style.display = 'block'; // Show this specific specialization
+                        specCheckbox.checked = true; // Automatically check this specialization
+                        showTeacherCard = true; // Since at least one specialization matches, show the teacher's card
+                    } else {
+                        specializationItem.style.display = 'none'; // Hide this specific specialization
+                        specCheckbox.checked = false; // Ensure it's unchecked if hidden
+                    }
+                });
+                // Finally, control the visibility of the entire teacher card based on matches
+                teacherCard.closest('[data-teacher-id]').style.display = showTeacherCard ? 'block' : 'none';
+            }
+        });
+    }
+
+    // Initial call to set correct visibility when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        updateMaterialListVisibility();
+        filterTeachersByMaterial(); // Also call this on load
+    });
+
+    function getPrivateValue() {
+        let privateValue = document.querySelector('input[name="session_package"]:checked').value;
+        let hoursDiv = document.getElementById('hours-div');
+        if (privateValue === 'دورة خاصة') {
+            hoursDiv.style.visibility = 'hidden';
+        } else {
+            hoursDiv.style.visibility = 'visible';
+
         }
     }
 </script>
@@ -565,31 +669,32 @@
 
         // Filter and rebuild student list
         <?php foreach ($students as $student) {
-        if ($student['archived'] != 1) { ?>
-        // PHP generates JS condition - more efficient than filtering in JS
-        if ((!selectedClass || '<?php echo $student["class"]; ?>' === selectedClass) &&
-            (!searchTerm || '<?php echo strtolower($student["name"] . ' - ' . $student["school_name"] . ' - ' . $student["class"]); ?>'.includes(searchTerm))) {
+            if ($student['archived'] != 1) { ?>
+                // PHP generates JS condition - more efficient than filtering in JS
+                if ((!selectedClass || '<?php echo $student["class"]; ?>' === selectedClass) &&
+                    (!searchTerm || '<?php echo strtolower($student["name"] . ' - ' . $student["school_name"] . ' - ' . $student["class"]); ?>'.includes(searchTerm))) {
 
-            const studentDiv = document.createElement('div');
-            studentDiv.className = 'list-group-item student-row d-flex align-items-center';
-            studentDiv.setAttribute('data-class', '<?php echo $student["class"]; ?>');
+                    const studentDiv = document.createElement('div');
+                    studentDiv.className = 'list-group-item student-row d-flex align-items-center';
+                    studentDiv.setAttribute('data-class', '<?php echo $student["class"]; ?>');
 
-            studentDiv.innerHTML = `
+                    studentDiv.innerHTML = `
                     <input class="form-check-input" type="checkbox"
                            name="students[]"
                            id="students2_<?php echo $student['id']; ?>"
                            value="<?php echo $student['id']; ?>"
-                           oninput="getClassValue(<?= $student['class'] ?>, this)">
+                           >
                     <label class="form-check-label mr-4" for="students2_<?php echo $student['id']; ?>">
                         <?php echo $student['name'] . ' - ' . $student['school_name'] . ' - ' . $student['class']; ?>
                     </label>
                 `;
 
-            container.appendChild(studentDiv);
-        }
+                    container.appendChild(studentDiv);
+                }
         <?php }
         } ?>
     }
+
     function filterTeachersByName() {
         const input = document.getElementById('teacherSearch');
         const filter = input.value.toUpperCase();
@@ -622,7 +727,9 @@
         document.querySelectorAll('.teacher-row').forEach(row => {
             const teacherId = row.dataset.teacherId;
             // Assuming teacherSpecializations is available
-            const teacherData = teacherSpecializations[teacherId] || { specializations: [] };
+            const teacherData = teacherSpecializations[teacherId] || {
+                specializations: []
+            };
             const teacherSpecializationIds = teacherData.specializations.map(spec => spec[0]);
 
             const hasMatchingSpecialization = selectedSpecializations.some(specId => teacherSpecializationIds.includes(specId));

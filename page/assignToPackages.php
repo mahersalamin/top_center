@@ -268,7 +268,7 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
 
 
 
-<script>
+<!-- <script>
     let currentTab1 = 0; // Current tab is set to be the first tab (0)
     showTab1(currentTab1); // Display the current tab
 
@@ -344,7 +344,7 @@ $teacherSpecializationsJson = json_encode($teacherSpecializations);
         //... and adds the "active" class to the current step:
         x[n].className += " active";
     }
-</script>
+</script> -->
 
 
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
